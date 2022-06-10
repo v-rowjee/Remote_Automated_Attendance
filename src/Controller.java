@@ -22,6 +22,6 @@ public class Controller {
     }
 
     private void changeTxt() {
-        view.getTxt1().setText("Changed Ved");
+        view.getTxt1().setText("Changed Veeed");
     }
 }
