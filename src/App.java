@@ -1,13 +1,15 @@
-import Models.ModuleModel;
+import Controllers.LoginController;
+import Models.UserModel;
+import Views.LoginView;
 
 public class App {
     public static void main(String[] args) {
         // Assemble all the pieces of the MVC
-        View v = new View("Attendance");
+        LoginView v = new LoginView("Login");
 
-        ModuleModel m = new ModuleModel();
+        UserModel m = new UserModel();
 
-        Controller c = new Controller(m, v);
+        LoginController c = new LoginController(m, v);
         c.initController();
     }
 }
