@@ -1,12 +1,13 @@
+package Controllers;
+
 import Models.ModuleModel;
-import javax.swing.JPanel;
-import java.awt.*;
+import Views.AppView;
 
-public class Controller {
+public class AppController {
     private ModuleModel model;
-    private View view;
+    private AppView view;
 
-    public Controller(ModuleModel m, View v) {
+    public AppController(ModuleModel m, AppView v) {
         model = m;
         view = v;
         initView();
@@ -19,6 +20,11 @@ public class Controller {
 
     public void initController() {
         view.getBtnAttendance().addActionListener(e-> showAttendance());
+        view.getBtnStatistic().addActionListener(e->showStatistic());
+    }
+
+    private void showStatistic() {
+        view.getCl().show(view.getPanelcenter(),"stats");
     }
 
     private void showAttendance() {

@@ -8,6 +8,8 @@ public class UserModel {
     private String type;
     private List<ModuleModel> moduleList;
 
+    public UserModel(){}
+
     public UserModel(int id, String name, String type, List<ModuleModel> moduleList) {
         this.id = id;
         this.name = name;

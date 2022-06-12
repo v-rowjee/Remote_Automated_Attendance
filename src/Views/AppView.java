@@ -1,8 +1,10 @@
+package Views;
+
 import javax.swing.*;
 import javax.swing.JPanel;
 import java.awt.*;
 
-public class View {
+public class AppView {
     private JFrame frame;
     private JButton btnAttendance, btnStatistic;
     private JLabel lblNav, lblAttendance, lblStats;
@@ -11,7 +13,7 @@ public class View {
 
     CardLayout cl = new CardLayout();
 
-    public View(String title){
+    public AppView(String title){
         frame = new JFrame(title);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,8 +64,6 @@ public class View {
         frame.add(panelnavbar,BorderLayout.WEST);
         frame.add(panelbutton,BorderLayout.NORTH);
         frame.add(panelcenter,BorderLayout.CENTER);
-
-
 
     }
 
