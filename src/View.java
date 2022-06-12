@@ -4,53 +4,47 @@ import java.awt.*;
 
 public class View {
     private JFrame frame;
-    private JButton btn1, btn2, btn3;
-    private JTextField txt1, txt2, txt3, txt4;
-
-    private JPanel panelcenter;
+    private JButton btnAttendance, btnStatistic;
+    private JLabel lblNav, lblAttendance, lblStats;
+    private JPanel panelcenter ,panelnavbar, panelbutton;
+    private JPanel cardattendance, cardstats;
 
     CardLayout cl = new CardLayout();
 
     public View(String title){
         frame = new JFrame(title);
-        //frame.setLayout(new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS));
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
+//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 
         // Create UI elements
-        btn1=new JButton("yolo");
-        btn2=new JButton("Attendance");
-        btn3=new JButton("Stats");
+        btnAttendance = new JButton("Attendance");
+        btnStatistic = new JButton("Stats");
 
-        txt1=new JTextField("baboo");
-        txt2=new JTextField("Center Panel");
-        txt3=new JTextField("Attendance card");
-        txt4=new JTextField("Stats card");
-
-
+        lblNav = new JLabel("navbar");
+        lblAttendance = new JLabel("card attendance");
+        lblStats = new JLabel("card stats");
 
         //Creating panels
-        JPanel panelnavbar = new JPanel();
-        JPanel panelbutton = new JPanel();
-        JPanel panelcenter = new JPanel();
-        JPanel cardattendance = new JPanel();
-        JPanel cardstats = new JPanel();
+        panelnavbar = new JPanel();
+        panelbutton = new JPanel();
+        panelcenter = new JPanel();
+        cardattendance = new JPanel();
+        cardstats = new JPanel();
 
         panelcenter.setLayout(cl);
 
-
-
         // Add UI element to panels
-        panelbutton.add(btn1);
-        panelbutton.add(btn2);
-        panelbutton.add(btn3);
-        panelnavbar.add(txt1);
-        panelcenter.add(txt2);
-        cardattendance.add(txt3);
-        cardstats.add(txt4);
+        panelbutton.add(btnAttendance);
+        panelbutton.add(btnStatistic);
+
+        panelnavbar.add(lblNav);
+
+        cardattendance.add(lblAttendance);
+        cardstats.add(lblStats);
 
         //add colour to panels
         panelnavbar.setBackground(Color.green);
@@ -59,11 +53,10 @@ public class View {
         cardstats.setBackground(Color.black);
 
 
-
+        //adding card to panel
         panelcenter.add(cardattendance, "attendance");
         panelcenter.add(cardstats,"stats");
-        cl.show(panelcenter,"stats");
-       //cl.show(panelcenter,"attendance");
+
 
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
@@ -72,90 +65,37 @@ public class View {
 
 
 
-
-        frame.setVisible(true);
-
     }
 
     public JFrame getFrame() {
         return frame;
     }
 
-    public JButton getBtn1() {
-        return btn1;
+    public JButton getBtnAttendance() {
+        return btnAttendance;
     }
 
-    public JTextField getTxt1() {
-        return txt1;
+    public JButton getBtnStatistic() {
+        return btnStatistic;
     }
 
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
+    public JLabel getLblNav() {
+        return lblNav;
     }
 
-    public void setBtn1(JButton btn1) {
-        this.btn1 = btn1;
+    public JLabel getLblAttendance() {
+        return lblAttendance;
     }
 
-    public void setTxt1(JTextField txt1) {
-        this.txt1 = txt1;
+    public JLabel getLblStats() {
+        return lblStats;
     }
 
-    public JButton getBtn2() {
-        return btn2;
-    }
-
-    public JButton getBtn3() {
-        return btn3;
-    }
-
-    public JTextField getTxt2() {
-        return txt2;
-    }
-
-    public JTextField getTxt3() {
-        return txt3;
-    }
-
-    public JTextField getTxt4() {
-        return txt4;
-    }
-
-    public JPanel getPanelCenter(){return panelcenter;}
-
-    public void setBtn2(JButton btn2) {
-        this.btn2 = btn2;
-    }
-
-    public void setBtn3(JButton btn3) {
-        this.btn3 = btn3;
-    }
-
-    public void setTxt2(JTextField txt2) {
-        this.txt2 = txt2;
-    }
-
-    public void setTxt3(JTextField txt3) {
-        this.txt3 = txt3;
-    }
-
-    public void setTxt4(JTextField txt4) {
-        this.txt4 = txt4;
+    public JPanel getPanelcenter() {
+        return panelcenter;
     }
 
     public CardLayout getCl() {
         return cl;
-    }
-
-    public void setCl(CardLayout cl) {
-        this.cl = cl;
-    }
-
-    public void setPanelcenter(JPanel panelcenter) {
-        this.panelcenter = panelcenter;
-    }
-
-    public void setPanelAttendance(){
-       cl.show(panelcenter, "attendance");
     }
 }
