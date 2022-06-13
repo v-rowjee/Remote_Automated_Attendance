@@ -6,8 +6,11 @@ import java.awt.*;
 
 public class LoginView {
     JFrame frame;
-    JLabel lblUsername;
+    JPanel panel;
+    JLabel lblUsername, lblPassword;
     JTextField txtUsername;
+    JPasswordField txtPassword;
+    JCheckBox chxShowPassword;
     JButton btnLogin;
 
     public LoginView(String title){
@@ -31,8 +34,18 @@ public class LoginView {
         btnLogin = new JButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
-       // frame.add(btnLogin);
+        panel.add(lblUsername);
+        panel.add(txtUsername);
+        panel.add(lblPassword);
+        panel.add(txtPassword);
+        panel.add(chxShowPassword);
+        panel.add(btnLogin);
+
+
         frame.add(logo);
+        frame.add(panel);
+
+
     }
 
     public JFrame getFrame() {
