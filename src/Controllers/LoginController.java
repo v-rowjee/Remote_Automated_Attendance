@@ -17,7 +17,8 @@ public class LoginController {
     }
 
     public void initView() {
-        view.getFrame().setSize(400,400);
+        view.getFrame().setSize(400,500);
+
     }
 
     public void initController(){

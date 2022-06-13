@@ -1,6 +1,7 @@
 package Views;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginView {
     JFrame frame;
@@ -15,9 +16,14 @@ public class LoginView {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        Icon icon =new ImageIcon( new ImageIcon(getClass().getResource("thank_you_teacher.png")).getImage().getScaledInstance(400, 400, Image.SCALE_DEFAULT));
+        JLabel logo = new JLabel(icon);
+        logo.setBounds(0, 0, 400, 400);
+
         btnLogin = new JButton("Login");
 
-        frame.add(btnLogin);
+       // frame.add(btnLogin);
+        frame.add(logo);
     }
 
     public JFrame getFrame() {
