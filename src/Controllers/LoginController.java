@@ -6,6 +6,8 @@ import Views.LoginView;
 import Views.AppView;
 import Controllers.AppController;
 
+import java.awt.event.ItemEvent;
+
 public class LoginController {
     private UserModel model;
     private LoginView view;
@@ -18,11 +20,19 @@ public class LoginController {
 
     public void initView() {
         view.getFrame().setSize(700,400);
-
     }
 
     public void initController(){
         view.getBtnLogin().addActionListener(e->login());
+        view.getChxShowPassword().addItemListener(e->showPassword(e));
+    }
+
+    private void showPassword(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            view.getTxtPassword().setEchoChar((char) 0);
+        } else {
+            view.getTxtPassword().setEchoChar('\u2022'); // code for dot
+        }
     }
 
     private void login() {

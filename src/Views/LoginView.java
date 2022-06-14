@@ -7,7 +7,7 @@ import java.awt.*;
 public class LoginView {
     JFrame frame;
     JPanel panel;
-    JLabel lblUsername, lblPassword;
+    JLabel lblUsername, lblPassword, image;
     JTextField txtUsername;
     JPasswordField txtPassword;
     JCheckBox chxShowPassword;
@@ -15,18 +15,15 @@ public class LoginView {
 
     public LoginView(String title){
         frame = new JFrame(title);
-        frame.setLayout(new GridLayout(1,2,0,0));
+        frame.setLayout(new GridLayout(1,2));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        Icon icon =new ImageIcon( new ImageIcon(getClass().getResource("../images/thank_you_teacher.png")).getImage().getScaledInstance(400, 400, Image.SCALE_DEFAULT));
-        JLabel logo = new JLabel(icon);
-        logo.setBounds(0, 0, 400, 400);
+        Icon icon =new ImageIcon( new ImageIcon(getClass().getResource("../images/thank_you_teacher.png")).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
+        image = new JLabel(icon);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(6,1));
-        panel.setBorder(new EmptyBorder(50,50,50,50));
         lblUsername = new JLabel("Username");
         lblPassword = new JLabel("Password");
         txtUsername = new JTextField();
@@ -34,15 +31,21 @@ public class LoginView {
         btnLogin = new JButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
+
+        panel.setLayout(new GridLayout(9,1));
+        panel.setBorder(new EmptyBorder(50,50,50,50));
+
         panel.add(lblUsername);
         panel.add(txtUsername);
+        panel.add(Box.createVerticalGlue());
         panel.add(lblPassword);
         panel.add(txtPassword);
         panel.add(chxShowPassword);
+        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createVerticalGlue());
         panel.add(btnLogin);
 
-
-        frame.add(logo);
+        frame.add(image);
         frame.add(panel);
 
 
