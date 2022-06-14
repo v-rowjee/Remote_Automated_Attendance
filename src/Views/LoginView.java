@@ -7,7 +7,7 @@ import java.awt.*;
 public class LoginView {
     JFrame frame;
     JPanel panel;
-    JLabel lblUsername, lblPassword, image;
+    JLabel lblUsername, lblPassword,lblTitle, image;
     JTextField txtUsername;
     JPasswordField txtPassword;
     JCheckBox chxShowPassword;
@@ -28,15 +28,20 @@ public class LoginView {
         panel = new JPanel();
         lblUsername = new JLabel("Username");
         lblPassword = new JLabel("Password");
+        lblTitle = new JLabel("Automated Attendance System");
+
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
         btnLogin = new JButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
+//Login Title
+        lblTitle.setFont(new Font("Bodoni", Font.BOLD, 16));
 
-        panel.setLayout(new GridLayout(9,1));
+        panel.setLayout(new GridLayout(10,1));
         panel.setBorder(new EmptyBorder(50,50,50,50));
 
+        panel.add(lblTitle);
         panel.add(lblUsername);
         panel.add(txtUsername);
         panel.add(Box.createVerticalGlue());
