@@ -1,12 +1,13 @@
 package Controllers;
 
-import Models.ModuleModel;
 import Models.UserModel;
 import Views.LoginView;
 import Views.AppView;
-import Controllers.AppController;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.sql.*;
 
 public class LoginController {
     private UserModel model;
@@ -20,6 +21,14 @@ public class LoginController {
 
     public void initView() {
         view.getFrame().setSize(700,400);
+        centreWindow(view.getFrame());
+    }
+
+    public static void centreWindow(Window frame) {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+        frame.setLocation(x, y);
     }
 
     public void initController(){
@@ -36,12 +45,71 @@ public class LoginController {
     }
 
     private void login() {
-        view.getFrame().dispose();
-
-        AppView v = new AppView("App");
-        ModuleModel m = new ModuleModel();
-        AppController c = new AppController(m,v);
-        c.initController();
+        // check empty fields
+        // validate login with db
+        // open new frame
+        checkEmptyFields();
     }
+
+    private void checkEmptyFields() {
+        if(view.getTxtUsername().getText().trim().isEmpty() || String.valueOf(view.getTxtPassword().getPassword()).trim().isEmpty()){
+            JOptionPane.showMessageDialog(view.getFrame(),"Some field(s) may be empty. Please fill all the fields","Alert",JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            authentication();
+        }
+    }
+
+    private void authentication() {
+        final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
+        final String username = "root";
+        final String password = "";
+        final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE username = ? AND password = ? ";
+
+        try{
+            Connection conn = DriverManager.getConnection(dbURL,username,password);
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1,view.getTxtUsername().getText());
+            stmt.setString(2, String.valueOf(view.getTxtPassword().getPassword()));
+            stmt.executeQuery();
+
+            ResultSet rs = stmt.getResultSet();
+            rs.next();
+            int rowCount = rs.getInt("row_count");
+
+            if(rowCount > 0){
+                String userType = rs.getString("type");
+                openDashboard(userType);
+            }
+            else{
+                JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.WARNING_MESSAGE);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openDashboard(String type) {
+        view.getFrame().dispose();
+        UserModel m = new UserModel();
+
+        // open Admin frame
+        if(type.equals("admin")) {
+            AppView v = new AppView(type);
+            AppController c = new AppController(m, v);
+            c.initController();
+        }
+        // open Lecturer frame
+        else{
+            AppView v = new AppView(type);
+            AppController c = new AppController(m, v);
+            c.initController();
+        }
+
+    }
+
 
 }
