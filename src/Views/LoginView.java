@@ -19,6 +19,8 @@ public class LoginView {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setResizable(false);
+        frame.getContentPane().setBackground(Color.darkGray);
 
         Icon icon =new ImageIcon( new ImageIcon(getClass().getResource("../images/thank_you_teacher.png")).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
         image = new JLabel(icon);
