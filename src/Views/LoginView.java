@@ -2,12 +2,13 @@ package Views;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class LoginView {
     JFrame frame;
     JPanel panel;
-    JLabel lblUsername, lblPassword, image;
+    JLabel lblUsername, lblPassword, lblErrorMsg, image;
     JTextField txtUsername;
     JPasswordField txtPassword;
     JCheckBox chxShowPassword;
@@ -28,15 +29,22 @@ public class LoginView {
         panel = new JPanel();
         lblUsername = new JLabel("Username");
         lblPassword = new JLabel("Password");
+        lblErrorMsg = new JLabel("");
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
         btnLogin = new JButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
+        lblErrorMsg.setForeground(Color.white);
+        lblErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
+        lblErrorMsg.setBackground(Color.pink);
+        lblErrorMsg.setOpaque(true);
+        lblErrorMsg.setVisible(false);
+        panel.setLayout(new GridLayout(11,1));
+        panel.setBorder(new EmptyBorder(20,50,50,50));
 
-        panel.setLayout(new GridLayout(9,1));
-        panel.setBorder(new EmptyBorder(50,50,50,50));
-
+        panel.add(lblErrorMsg);
+        panel.add(Box.createVerticalGlue());
         panel.add(lblUsername);
         panel.add(txtUsername);
         panel.add(Box.createVerticalGlue());
@@ -49,7 +57,6 @@ public class LoginView {
 
         frame.add(image);
         frame.add(panel);
-
 
     }
 
@@ -83,5 +90,9 @@ public class LoginView {
 
     public JCheckBox getChxShowPassword() {
         return chxShowPassword;
+    }
+
+    public JLabel getLblErrorMsg() {
+        return lblErrorMsg;
     }
 }
