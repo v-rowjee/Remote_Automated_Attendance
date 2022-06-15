@@ -83,7 +83,7 @@ public class LoginController {
                 openDashboard(userType);
             }
             else{
-                JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.ERROR_MESSAGE);
             }
 
 
