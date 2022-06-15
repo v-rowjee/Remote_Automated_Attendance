@@ -10,8 +10,12 @@ public class LecturerView {
     private JButton  btnLogout;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
 
+    private JComboBox comboBoxModule;
+
+    private static final String[] modName = {"module1", "module2", "module3"};
+
     private ButtonGroup radioGroup;
-    private JLabel lblNav, lblAttendance, lblStats, lblUser, lblDate, lblTime;
+    private JLabel  lblAttendance, lblStats, lblUser, lblDate, lblTime;
     private JPanel panelcenter ,panelnavbar, panelbutton;
     private JPanel cardattendance, cardstats;
 
@@ -37,13 +41,19 @@ public class LecturerView {
         radioGroup.add(rdBtnAttendance);
         radioGroup.add(rdBtnStatistics);
 
-        lblNav = new JLabel("navbar");
+        comboBoxModule= new JComboBox(modName);
+        comboBoxModule.setMaximumRowCount(3);
+
+
+
         lblAttendance = new JLabel("card attendance");
         lblStats = new JLabel("card stats");
         lblUser= new JLabel("Welcome User");
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblDate= new JLabel();
+        lblDate.setHorizontalAlignment(SwingConstants.CENTER);
         lblTime= new JLabel();
+        lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 
         //Creating panels
         panelnavbar = new JPanel();
@@ -57,20 +67,23 @@ public class LecturerView {
         panelbutton.setLayout(new GridLayout(1,6,10,0));
         panelbutton.setBorder(new EmptyBorder(20,20,20,20));
 
+        panelnavbar.setLayout(new FlowLayout());
+        panelnavbar.setBorder(BorderFactory.createTitledBorder("Modules") );
+
         // Add UI element to panels
         panelbutton.add(lblUser);
-        panelbutton.add(Box.createVerticalGlue());
-        panelbutton.add(Box.createVerticalGlue());
+        panelbutton.add(lblDate);
+        panelbutton.add(lblTime);
         panelbutton.add(rdBtnAttendance);
         panelbutton.add(rdBtnStatistics);
 
         panelbutton.add(btnLogout);
 
-        panelnavbar.add(lblNav);
+        panelnavbar.add(comboBoxModule);
+
 
         cardattendance.add(lblAttendance);
-        cardattendance.add(lblDate);
-        cardattendance.add(lblTime);
+
         cardstats.add(lblStats);
 
 
@@ -99,9 +112,7 @@ public class LecturerView {
 
 
 
-    public JLabel getLblNav() {
-        return lblNav;
-    }
+
 
     public JLabel getLblAttendance() {
         return lblAttendance;
