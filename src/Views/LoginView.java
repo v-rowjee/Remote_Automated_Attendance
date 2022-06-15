@@ -18,9 +18,9 @@ public class LoginView {
         frame.setLayout(new GridLayout(1,2));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         frame.setResizable(false);
         frame.getContentPane().setBackground(Color.darkGray);
+        frame.setVisible(true);
 
         Icon icon =new ImageIcon( new ImageIcon(getClass().getResource("../images/thank_you_teacher.png")).getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH));
         image = new JLabel(icon);
@@ -35,13 +35,14 @@ public class LoginView {
         btnLogin = new JButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
-//Login Title
+        //Login Title
         lblTitle.setFont(new Font("Bodoni", Font.BOLD, 16));
 
-        panel.setLayout(new GridLayout(10,1));
-        panel.setBorder(new EmptyBorder(50,50,50,50));
+        panel.setLayout(new GridLayout(11,1));
+        panel.setBorder(new EmptyBorder(25,50,50,50));
 
         panel.add(lblTitle);
+        panel.add(Box.createVerticalGlue());
         panel.add(lblUsername);
         panel.add(txtUsername);
         panel.add(Box.createVerticalGlue());

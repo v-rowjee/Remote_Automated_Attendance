@@ -1,13 +1,14 @@
 package Controllers;
 
 import Models.ModuleModel;
+import Models.UserModel;
 import Views.AppView;
 
 public class AppController {
-    private ModuleModel model;
+    private UserModel model;
     private AppView view;
 
-    public AppController(ModuleModel m, AppView v) {
+    public AppController(UserModel m, AppView v) {
         model = m;
         view = v;
         initView();
