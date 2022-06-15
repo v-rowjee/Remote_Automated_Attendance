@@ -1,14 +1,13 @@
 package Controllers;
 
-import Models.ModuleModel;
 import Models.UserModel;
-import Views.AppView;
+import Views.LecturerView;
 
-public class AppController {
+public class LecturerController {
     private UserModel model;
-    private AppView view;
+    private LecturerView view;
 
-    public AppController(UserModel m, AppView v) {
+    public LecturerController(UserModel m, LecturerView v) {
         model = m;
         view = v;
         initView();

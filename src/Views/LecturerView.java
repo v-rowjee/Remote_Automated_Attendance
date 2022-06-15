@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.JPanel;
 import java.awt.*;
 
-public class AppView {
+public class LecturerView {
     private JFrame frame;
     private JButton btnAttendance, btnStatistic;
     private JLabel lblNav, lblAttendance, lblStats;
@@ -13,7 +13,7 @@ public class AppView {
 
     CardLayout cl = new CardLayout();
 
-    public AppView(String title){
+    public LecturerView(String title){
         frame = new JFrame(title);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

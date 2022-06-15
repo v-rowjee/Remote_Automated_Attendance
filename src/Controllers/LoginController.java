@@ -2,7 +2,7 @@ package Controllers;
 
 import Models.UserModel;
 import Views.LoginView;
-import Views.AppView;
+import Views.LecturerView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,14 +98,14 @@ public class LoginController {
 
         // open Admin frame
         if(type.equals("admin")) {
-            AppView v = new AppView(type);
-            AppController c = new AppController(m, v);
+            LecturerView v = new LecturerView(type);
+            LecturerController c = new LecturerController(m, v);
             c.initController();
         }
         // open Lecturer frame
         else{
-            AppView v = new AppView(type);
-            AppController c = new AppController(m, v);
+            LecturerView v = new LecturerView(type);
+            LecturerController c = new LecturerController(m, v);
             c.initController();
         }
 
