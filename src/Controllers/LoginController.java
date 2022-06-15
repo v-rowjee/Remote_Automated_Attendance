@@ -83,12 +83,12 @@ public class LoginController {
                 openDashboard(userType);
             }
             else{
-                JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.ERROR_MESSAGE);
             }
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Connection Error","Alert",JOptionPane.WARNING_MESSAGE);
         }
     }
 

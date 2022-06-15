@@ -5,7 +5,7 @@ import Views.LoginView;
 public class App {
     public static void main(String[] args) {
         // Assemble all the pieces of the MVC
-        LoginView v = new LoginView("Login");
+        LoginView v = new LoginView("Automated Attendance System");
 
         UserModel m = new UserModel();
 
