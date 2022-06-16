@@ -52,6 +52,7 @@ public class LoginView {
         chxShowPassword.setForeground(Color.decode("#aaaaaa"));
         chxShowPassword.setBorder(null);
         chxShowPassword.setBorderPainted(false);
+        chxShowPassword.setFocusPainted( false );
         panel.setBackground(Color.darkGray);
         txtUsername.setBackground(Color.decode("#eeeeee"));
         txtUsername.setBorder(null);
