@@ -3,21 +3,20 @@ package Views;
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class LecturerView {
     private JFrame frame;
-    private JButton  btnLogout;
+    private JButton  btnLogout, btnMod[];
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
-
-    private JComboBox comboBoxModule;
-
-    private static final String[] modName = {"module1", "module2", "module3"};
-
     private ButtonGroup radioGroup;
-    private JLabel  lblAttendance, lblStats, lblUser, lblDate, lblTime;
-    private JPanel panelcenter ,panelnavbar, panelbutton;
+    private JComboBox comboBoxModule;
+    private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
+    private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats;
+
+    private static String[] modName={"hjhj","sdfsd","sfs"};
 
     CardLayout cl = new CardLayout();
 
@@ -26,7 +25,6 @@ public class LecturerView {
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   //      frame.setLocationRelativeTo(null);
-
         frame.setVisible(true);
 //        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -42,56 +40,65 @@ public class LecturerView {
         radioGroup.add(rdBtnStatistics);
 
         comboBoxModule= new JComboBox(modName);
-        comboBoxModule.setMaximumRowCount(3);
+        comboBoxModule.setMaximumRowCount(5);
 
-
-
-        lblAttendance = new JLabel("card attendance");
-        lblStats = new JLabel("card stats");
         lblUser= new JLabel("Welcome User");
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblDate= new JLabel();
         lblDate.setHorizontalAlignment(SwingConstants.CENTER);
         lblTime= new JLabel();
         lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+        lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
+        lblModuleSelected.setHorizontalAlignment(SwingConstants.LEFT);
+        lblOptionSelected=new JLabel("Attendance");
+        lblOptionSelected.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblFor=new JLabel("for");
+        lblFor.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         //Creating panels
         panelnavbar = new JPanel();
-        panelbutton = new JPanel();
         panelcenter = new JPanel();
+        paneldate=new JPanel();
+        panelMain=new JPanel();
         cardattendance = new JPanel();
         cardstats = new JPanel();
 
         panelcenter.setLayout(cl);
 
-        panelbutton.setLayout(new GridLayout(1,6,10,0));
-        panelbutton.setBorder(new EmptyBorder(20,20,20,20));
+        //paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
+        paneldate.setLayout(new GridLayout(1,6));
+        paneldate.setBorder(new EmptyBorder(20,20,20,20));
 
-        panelnavbar.setLayout(new FlowLayout());
-        panelnavbar.setBorder(BorderFactory.createTitledBorder("Modules") );
+
+        panelnavbar.setLayout(new GridLayout(5,1,10,10));
+        panelnavbar.setBorder(new EmptyBorder(20,20,20,20) );
+
+        panelMain.setLayout(new BorderLayout());
+        panelMain.add(paneldate,BorderLayout.NORTH);
+        panelMain.add(panelcenter,BorderLayout.CENTER);
+
 
         // Add UI element to panels
-        panelbutton.add(lblUser);
-        panelbutton.add(lblDate);
-        panelbutton.add(lblTime);
-        panelbutton.add(rdBtnAttendance);
-        panelbutton.add(rdBtnStatistics);
+        paneldate.add(lblOptionSelected);
+        paneldate.add(lblFor);
+        paneldate.add(lblModuleSelected);
+        paneldate.add(lblDate);
+        paneldate.add(lblTime);
 
-        panelbutton.add(btnLogout);
 
+        panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
-
-
-        cardattendance.add(lblAttendance);
-
-        cardstats.add(lblStats);
+        panelnavbar.add(rdBtnAttendance);
+        panelnavbar.add(rdBtnStatistics);
+        panelnavbar.add(btnLogout);
 
 
         //add colour to panels
         panelnavbar.setBackground(Color.green);
-        panelbutton.setBackground(Color.red);
+        paneldate.setBackground(Color.red);
         cardattendance.setBackground(Color.blue);
-        cardstats.setBackground(Color.black);
+        cardstats.setBackground(Color.yellow);
 
 
         //adding card to panel
@@ -99,10 +106,69 @@ public class LecturerView {
         panelcenter.add(cardstats,"stats");
 
 
+        //creating JTable for attendance
+        String columns[] = { "Student ID", "Name","Present" };
+
+        Object[][] data = {
+                {"Buy", "IBM", false},
+                {"Sell", "MicroSoft",true},
+                {"Sell", "Apple",  true},
+                {"Buy", "Nortel", false}
+        };
+
+        DefaultTableModel model = new DefaultTableModel(data, columns);
+        JTable table = new JTable(model){
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                    default:
+                        return Boolean.class;
+                }
+            }
+        };
+
+        table.setShowGrid(true);
+        table.setShowVerticalLines(true);
+        JScrollPane pane = new JScrollPane(table);
+        cardattendance.add(pane);
+
+
+
+
+        //creating JTable for statistics
+        String columns2[] = { "Date", "Present","Absent","% Present" };
+
+        Object[][] data2 = {
+                {"11/02/2022", "15", "45","15"},
+                {"12/02/2022", "23","37","38"},
+                {"13/02/2022", "45",  "15","75"},
+                {"14/02/2022", "33", "27","55"}
+        };
+
+        DefaultTableModel model2 = new DefaultTableModel(data2, columns2);
+        JTable table2 = new JTable(model2);
+
+        table2.setShowGrid(true);
+        table2.setShowVerticalLines(true);
+        JScrollPane pane2 = new JScrollPane(table2);
+        cardstats.add(pane2);
+
+
+
+
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
-        frame.add(panelbutton,BorderLayout.NORTH);
-        frame.add(panelcenter,BorderLayout.CENTER);
+        frame.add(panelMain,BorderLayout.CENTER);
+
+
+
+
+
+
+
 
     }
 
@@ -110,17 +176,14 @@ public class LecturerView {
         return frame;
     }
 
-
-
-
-
-    public JLabel getLblAttendance() {
-        return lblAttendance;
+    public JLabel getLblOptionSelected() {
+        return lblOptionSelected;
     }
 
-    public JLabel getLblStats() {
-        return lblStats;
+    public JLabel getLblModuleSelected() {
+        return lblModuleSelected;
     }
+
 
     public JPanel getPanelcenter() {
         return panelcenter;
@@ -132,6 +195,10 @@ public class LecturerView {
 
     public JButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public static String[] getModName() {
+        return modName;
     }
 
     public JLabel getLblDate() {
@@ -160,5 +227,29 @@ public class LecturerView {
 
     public JRadioButton getRdBtnStatistics() {
         return rdBtnStatistics;
+    }
+
+    public JPanel getPanelnavbar() {
+        return panelnavbar;
+    }
+
+    public JButton[] getBtnMod() {
+        return btnMod;
+    }
+
+    public JLabel getLblUser() {
+        return lblUser;
+    }
+
+    public JComboBox getComboBoxModule() {
+        return comboBoxModule;
+    }
+
+    public void setComboBoxModule(JComboBox comboBoxModule) {
+        this.comboBoxModule = comboBoxModule;
+    }
+
+    public static void setModName(String[] modName) {
+        LecturerView.modName = modName;
     }
 }
