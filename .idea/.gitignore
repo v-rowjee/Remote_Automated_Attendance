@@ -6,5 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/Attendance.iml
-/.idea/misc.xml
+
+Attendance.iml
+out/
+/misc.xml

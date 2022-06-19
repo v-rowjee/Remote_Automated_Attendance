@@ -59,6 +59,7 @@ public class LoginView {
         txtPassword.setBackground(Color.decode("#eeeeee"));
         txtPassword.setBorder(null);
         btnLogin.setBorder(null);
+        btnLogin.setFocusPainted(false);
         btnLogin.setBackground(Color.decode("#00adb5"));
         btnLogin.setForeground(Color.decode("#f5f5f5"));
 
