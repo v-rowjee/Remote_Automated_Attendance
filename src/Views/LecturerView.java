@@ -14,7 +14,7 @@ public class LecturerView {
     private JComboBox comboBoxModule;
     private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
-    private JPanel cardattendance, cardstats;
+    private JPanel cardattendance, cardstats,cardsearch;
 
     private static String[] modName={"hjhj","sdfsd","sfs"};
 
@@ -63,6 +63,7 @@ public class LecturerView {
         panelMain=new JPanel();
         cardattendance = new JPanel();
         cardstats = new JPanel();
+        cardsearch=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -99,11 +100,13 @@ public class LecturerView {
         paneldate.setBackground(Color.red);
         cardattendance.setBackground(Color.blue);
         cardstats.setBackground(Color.yellow);
+        cardsearch.setBackground(Color.black);
 
 
         //adding card to panel
         panelcenter.add(cardattendance, "attendance");
         panelcenter.add(cardstats,"stats");
+        panelcenter.add(cardsearch,"search");
 
 
         //creating JTable for attendance
