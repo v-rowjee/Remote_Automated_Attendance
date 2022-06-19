@@ -4,11 +4,14 @@ import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 public class LecturerView {
     private JFrame frame;
-    private JButton  btnLogout, btnMod[];
+    private DefaultTableModel model;
+    private JTable table;
+    private JButton  btnLogout, btnSubmitAttendance;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
@@ -31,6 +34,7 @@ public class LecturerView {
 
         // Create UI elements
         btnLogout = new JButton("Logout");
+        btnSubmitAttendance=new JButton("Submit");
 
         rdBtnAttendance= new JRadioButton("Attendance",true);
         rdBtnStatistics= new JRadioButton("Statistics", false);
@@ -66,6 +70,10 @@ public class LecturerView {
         cardsearch=new JPanel();
 
         panelcenter.setLayout(cl);
+        BoxLayout boxlayout1 = new BoxLayout(cardattendance,BoxLayout.Y_AXIS);
+        cardattendance.setLayout(boxlayout1);
+        BoxLayout boxlayout2 = new BoxLayout(cardstats,BoxLayout.Y_AXIS);
+        cardstats.setLayout(boxlayout2);
 
         //paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
         paneldate.setLayout(new GridLayout(1,6));
@@ -110,23 +118,24 @@ public class LecturerView {
 
 
         //creating JTable for attendance
-        String columns[] = { "Student ID", "Name","Present" };
+        String columns[] = { "Student ID", "Name","Present", "Absent" };
 
         Object[][] data = {
-                {"Buy", "IBM", false},
-                {"Sell", "MicroSoft",true},
-                {"Sell", "Apple",  true},
-                {"Buy", "Nortel", false}
+                {"1", "IBM", false, true},
+                {"2", "MicroSoft",true, false},
+                {"3", "Apple",  true, false},
+                {"4", "Nortel", false, false}
         };
 
         DefaultTableModel model = new DefaultTableModel(data, columns);
-        JTable table = new JTable(model){
+        table = new JTable(model){
             public Class getColumnClass(int column) {
                 switch (column) {
                     case 0:
-                        return String.class;
                     case 1:
                         return String.class;
+                    case 3:
+                        return Boolean.class;
                     default:
                         return Boolean.class;
                 }
@@ -136,7 +145,11 @@ public class LecturerView {
         table.setShowGrid(true);
         table.setShowVerticalLines(true);
         JScrollPane pane = new JScrollPane(table);
+        pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         cardattendance.add(pane);
+        btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cardattendance.add(btnSubmitAttendance);
 
 
 
@@ -157,6 +170,8 @@ public class LecturerView {
         table2.setShowGrid(true);
         table2.setShowVerticalLines(true);
         JScrollPane pane2 = new JScrollPane(table2);
+        pane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        pane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         cardstats.add(pane2);
 
 
@@ -236,9 +251,6 @@ public class LecturerView {
         return panelnavbar;
     }
 
-    public JButton[] getBtnMod() {
-        return btnMod;
-    }
 
     public JLabel getLblUser() {
         return lblUser;
@@ -254,5 +266,13 @@ public class LecturerView {
 
     public static void setModName(String[] modName) {
         LecturerView.modName = modName;
+    }
+
+    public JButton getBtnSubmitAttendance() {
+        return btnSubmitAttendance;
+    }
+
+    public JTable getTable(){
+        return table;
     }
 }

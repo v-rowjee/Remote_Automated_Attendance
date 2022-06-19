@@ -191,7 +191,7 @@ public class AdminView {
 
         table3.setShowGrid(true);
         table3.setShowVerticalLines(true);
-        JScrollPane pane3 = new JScrollPane(table2);
+        JScrollPane pane3 = new JScrollPane(table3);
         cardDefaulter.add(pane3);
 
 
