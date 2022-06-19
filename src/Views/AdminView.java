@@ -14,9 +14,9 @@ public class AdminView {
     private JComboBox comboBoxModule;
     private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats;
-    private JTextField TF;
-    private JButton searchBtn;
+    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter;
+    private JRadioButton rdBtnSearch,rdBtnDefaulter;
+    private JTextField SearchBar;
 
     private static String[] modName={"hjhj","sdfsd","sfs"};
 
@@ -34,14 +34,16 @@ public class AdminView {
 
         // Create UI elements
         btnLogout = new JButton("Logout");
-        TF=new JTextField();
-        searchBtn=new JButton("Search");
-        rdBtnAttendance= new JRadioButton("Attendance",true);
+        //TF=new JTextField();
+        rdBtnSearch=new JRadioButton("Search",true);
+        //rdBtnAttendance= new JRadioButton("Attendance",true);
         rdBtnStatistics= new JRadioButton("Statistics", false);
+        rdBtnDefaulter=new JRadioButton("Defaulter list",false);
 
         radioGroup= new ButtonGroup();
-        radioGroup.add(rdBtnAttendance);
+        radioGroup.add(rdBtnSearch);
         radioGroup.add(rdBtnStatistics);
+        radioGroup.add(rdBtnDefaulter);
 
         comboBoxModule= new JComboBox(modName);
         comboBoxModule.setMaximumRowCount(5);
@@ -54,11 +56,12 @@ public class AdminView {
         lblTime.setHorizontalAlignment(SwingConstants.CENTER);
         lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
         lblModuleSelected.setHorizontalAlignment(SwingConstants.LEFT);
-        lblOptionSelected=new JLabel("Attendance");
+        lblOptionSelected=new JLabel("Search");
         lblOptionSelected.setHorizontalAlignment(SwingConstants.RIGHT);
         lblFor=new JLabel("for");
         lblFor.setHorizontalAlignment(SwingConstants.CENTER);
 
+        SearchBar=new JTextField(20);
 
         //Creating panels
         panelnavbar = new JPanel();
@@ -67,6 +70,8 @@ public class AdminView {
         panelMain=new JPanel();
         cardattendance = new JPanel();
         cardstats = new JPanel();
+        cardsearch=new JPanel();
+        cardDefaulter=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -75,7 +80,7 @@ public class AdminView {
         paneldate.setBorder(new EmptyBorder(20,20,20,20));
 
 
-        panelnavbar.setLayout(new GridLayout(6,1,10,10));
+        panelnavbar.setLayout(new GridLayout(7,1,10,10));
         panelnavbar.setBorder(new EmptyBorder(0,20,20,20) );
 
         panelMain.setLayout(new BorderLayout());
@@ -90,30 +95,35 @@ public class AdminView {
         paneldate.add(lblDate);
         paneldate.add(lblTime);
 
-        panelnavbar.add(TF);
-        TF.setSize(10,10);
-        panelnavbar.add(searchBtn);
+       // panelnavbar.add(TF);
+
+        panelnavbar.add(rdBtnSearch);
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
         //panelnavbar.add(rdBtnAttendance);
         panelnavbar.add(rdBtnStatistics);
+        panelnavbar.add(rdBtnDefaulter);
         panelnavbar.add(btnLogout);
 
 
         //add colour to panels
         panelnavbar.setBackground(Color.green);
         paneldate.setBackground(Color.red);
-        cardattendance.setBackground(Color.orange);
+        //cardattendance.setBackground(Color.orange);
         cardstats.setBackground(Color.yellow);
+        cardsearch.setBackground(Color.black);
+        cardDefaulter.setBackground(Color.white);
 
 
         //adding card to panel
-        panelcenter.add(cardattendance, "attendance");
+        //panelcenter.add(cardattendance, "attendance");
         panelcenter.add(cardstats,"stats");
+        panelcenter.add(cardsearch,"search");
+        panelcenter.add(cardDefaulter,"Defaulter list");
 
 
         //creating JTable for attendance
-        String columns[] = { "Student ID", "Name","Present" };
+       /* String columns[] = { "Student ID", "Name","Present" };
 
         Object[][] data = {
                 {"Buy", "IBM", false},
@@ -139,7 +149,7 @@ public class AdminView {
         table.setShowGrid(true);
         table.setShowVerticalLines(true);
         JScrollPane pane = new JScrollPane(table);
-        cardattendance.add(pane);
+        cardattendance.add(pane);*/
 
 
 
@@ -161,6 +171,30 @@ public class AdminView {
         table2.setShowVerticalLines(true);
         JScrollPane pane2 = new JScrollPane(table2);
         cardstats.add(pane2);
+
+        //search card
+        cardsearch.add(SearchBar);
+
+        //defaulter card
+
+        String columns3[] = { "Date", "Present","Absent","% Present" };
+
+        Object[][] data3 = {
+                {"11/02/2022", "15", "45","15"},
+                {"12/02/2022", "23","37","38"},
+                {"13/02/2022", "45",  "15","75"},
+                {"14/02/2022", "33", "27","55"}
+        };
+
+        DefaultTableModel model3 = new DefaultTableModel(data3, columns3);
+        JTable table3 = new JTable(model3);
+
+        table3.setShowGrid(true);
+        table3.setShowVerticalLines(true);
+        JScrollPane pane3 = new JScrollPane(table2);
+        cardDefaulter.add(pane3);
+
+
 
 
 
@@ -229,6 +263,14 @@ public class AdminView {
 
     public JRadioButton getRdBtnAttendance() {
         return rdBtnAttendance;
+    }
+
+    public JRadioButton getRdBtnSearch() {
+        return rdBtnSearch;
+    }
+
+    public JRadioButton getrdBtnDefaulter() {
+        return rdBtnDefaulter;
     }
 
     public JRadioButton getRdBtnStatistics() {

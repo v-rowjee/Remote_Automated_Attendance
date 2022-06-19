@@ -29,14 +29,15 @@ public class AdminController {
 
     public void initView() {
         view.getFrame().setSize(700,500);
-        view.getCl().show(view.getPanelcenter(),"attendance");
+        view.getCl().show(view.getPanelcenter(),"search");
         centreWindow(view.getFrame());
         view.getLblUser().setText("Welcome hardcoded");
     }
 
     public void initController() {
-        view.getRdBtnAttendance().addActionListener(e-> showAttendance());
+        view.getRdBtnSearch().addActionListener(e-> showSearch());
         view.getRdBtnStatistics().addActionListener(e->showStatistic());
+        view.getrdBtnDefaulter().addActionListener(e->showDefaulter());
         view.getBtnLogout().addActionListener(e-> logout());
     }
 
@@ -45,10 +46,16 @@ public class AdminController {
         view.getLblOptionSelected().setText("Statistic");
     }
 
-    private void showAttendance() {
-        view.getCl().show(view.getPanelcenter(),"attendance");
-        view.getLblOptionSelected().setText("Attendance");
+    private void showSearch() {
+        view.getCl().show(view.getPanelcenter(),"search");
+        view.getLblOptionSelected().setText("search");
     }
+
+    private void showDefaulter() {
+        view.getCl().show(view.getPanelcenter(),"Defaulter list");
+        view.getLblOptionSelected().setText("Defaulter list");
+    }
+
 
     private void logout() {
         view.getFrame().dispose();
