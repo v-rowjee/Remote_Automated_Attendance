@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.UserModel;
+import Views.AdminView;
 import Views.LoginView;
 import Views.LecturerView;
 
@@ -98,8 +99,8 @@ public class LoginController {
 
         // open Admin frame
         if(type.equals("admin")) {
-            LecturerView v = new LecturerView(type);
-            LecturerController c = new LecturerController(m, v);
+            AdminView v = new AdminView(type);
+            AdminController c = new AdminController(m, v);
             c.initController();
         }
         // open Lecturer frame
