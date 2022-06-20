@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.sql.*;
-import java.util.List;
 
 public class LoginController {
     private UserModel model;
