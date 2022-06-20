@@ -1,19 +1,21 @@
 package Views;
 
+import Components.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.net.URL;
 
 public class LoginView {
     JFrame frame;
     JPanel panel;
-    JLabel lblUsername, lblPassword,lblTitle, image;
-    JTextField txtUsername;
+    AASLabel lblUsername;
+    JLabel lblPassword, image;
+    AASTextField txtUsername;
     JPasswordField txtPassword;
     JCheckBox chxShowPassword;
-    JButton btnLogin;
+    AASButton btnLogin;
 
     public LoginView(String title){
         frame = new JFrame(title);
@@ -29,23 +31,20 @@ public class LoginView {
         image = new JLabel(img);
 
         panel = new JPanel();
-        lblUsername = new JLabel("Username");
+        lblUsername = new AASLabel("Username");
         lblPassword = new JLabel("Password");
-        lblTitle = new JLabel("LOGIN");
 
-        txtUsername = new JTextField();
+        txtUsername = new AASTextField();
         txtPassword = new JPasswordField();
-        btnLogin = new JButton("Login");
+        btnLogin = new AASButton("Login");
         chxShowPassword = new JCheckBox("Show Password");
 
         //Login Title
-        lblTitle.setFont(new Font("Bodoni", Font.BOLD, 16));
-        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         panel.setLayout(new GridLayout(10,1));
         panel.setBorder(new EmptyBorder(25,50,50,50));
 
         // adding colors
-        lblTitle.setForeground(Color.decode("#eeeeee"));
+        panel.setBackground(Color.darkGray);
         lblUsername.setForeground(Color.decode("#eeeeee"));
         lblPassword.setForeground(Color.decode("#eeeeee"));
         chxShowPassword.setBackground(Color.darkGray);
@@ -53,17 +52,9 @@ public class LoginView {
         chxShowPassword.setBorder(null);
         chxShowPassword.setBorderPainted(false);
         chxShowPassword.setFocusPainted( false );
-        panel.setBackground(Color.darkGray);
-        txtUsername.setBackground(Color.decode("#eeeeee"));
-        txtUsername.setBorder(null);
         txtPassword.setBackground(Color.decode("#eeeeee"));
         txtPassword.setBorder(null);
-        btnLogin.setBorder(null);
-        btnLogin.setFocusPainted(false);
-        btnLogin.setBackground(Color.decode("#00adb5"));
-        btnLogin.setForeground(Color.decode("#f5f5f5"));
 
-//        panel.add(lblTitle);
         panel.add(Box.createVerticalGlue());
         panel.add(lblUsername);
         panel.add(txtUsername);
