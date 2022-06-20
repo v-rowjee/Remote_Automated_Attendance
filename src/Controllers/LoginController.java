@@ -1,9 +1,7 @@
 package Controllers;
 
-import Models.UserModel;
-import Views.AdminView;
-import Views.LoginView;
-import Views.LecturerView;
+import Models.*;
+import Views.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,18 +93,18 @@ public class LoginController {
 
     private void openDashboard(String type) {
         view.getFrame().dispose();
-        UserModel m = new UserModel();
+        UserModel u = new UserModel();
 
         // open Admin frame
         if(type.equals("admin")) {
             AdminView v = new AdminView(type);
-            AdminController c = new AdminController(m, v);
+            AdminController c = new AdminController(u, v);
             c.initController();
         }
         // open Lecturer frame
         else{
             LecturerView v = new LecturerView(type);
-            LecturerController c = new LecturerController(m, v);
+            LecturerController c = new LecturerController(u, v);
             c.initController();
         }
 

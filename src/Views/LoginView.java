@@ -14,7 +14,7 @@ public class LoginView {
     JLabel lblPassword, image;
     AASTextField txtUsername;
     JPasswordField txtPassword;
-    JCheckBox chxShowPassword;
+    AASCheckBox chxShowPassword;
     AASButton btnLogin;
 
     public LoginView(String title){
@@ -37,7 +37,7 @@ public class LoginView {
         txtUsername = new AASTextField();
         txtPassword = new JPasswordField();
         btnLogin = new AASButton("Login");
-        chxShowPassword = new JCheckBox("Show Password");
+        chxShowPassword = new AASCheckBox("Show Password");
 
         //Login Title
         panel.setLayout(new GridLayout(10,1));
@@ -45,13 +45,7 @@ public class LoginView {
 
         // adding colors
         panel.setBackground(Color.darkGray);
-        lblUsername.setForeground(Color.decode("#eeeeee"));
         lblPassword.setForeground(Color.decode("#eeeeee"));
-        chxShowPassword.setBackground(Color.darkGray);
-        chxShowPassword.setForeground(Color.decode("#aaaaaa"));
-        chxShowPassword.setBorder(null);
-        chxShowPassword.setBorderPainted(false);
-        chxShowPassword.setFocusPainted( false );
         txtPassword.setBackground(Color.decode("#eeeeee"));
         txtPassword.setBorder(null);
 
@@ -78,10 +72,6 @@ public class LoginView {
 
     public JButton getBtnLogin() {
         return btnLogin;
-    }
-
-    public JPanel getPanel() {
-        return panel;
     }
 
     public JLabel getLblUsername() {
