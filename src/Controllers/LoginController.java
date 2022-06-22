@@ -9,6 +9,10 @@ import java.awt.event.ItemEvent;
 import java.sql.*;
 
 public class LoginController {
+    final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
+    final String username = "root";
+    final String password = "";
+
     private UserModel model;
     private LoginView view;
 
@@ -33,6 +37,8 @@ public class LoginController {
     public void initController(){
         view.getBtnLogin().addActionListener(e->login());
         view.getChxShowPassword().addItemListener(e->showPassword(e));
+        view.getTxtUsername().addActionListener(e->view.getTxtPassword().requestFocusInWindow());
+        view.getTxtPassword().addActionListener(e->login());
     }
 
     private void showPassword(ItemEvent e) {
@@ -60,9 +66,6 @@ public class LoginController {
     }
 
     private void authentication() {
-        final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
-        final String username = "root";
-        final String password = "";
         final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE username = ? AND password = ? ";
 
         try{
@@ -79,7 +82,8 @@ public class LoginController {
 
             if(rowCount > 0){
                 String userType = rs.getString("type");
-                openDashboard(userType);
+                int userID =  rs.getInt("id");
+                openDashboard(userID, userType);
             }
             else{
                 JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.ERROR_MESSAGE);
@@ -91,9 +95,9 @@ public class LoginController {
         }
     }
 
-    private void openDashboard(String type) {
+    private void openDashboard(int id, String type) {
         view.getFrame().dispose();
-        UserModel u = new UserModel();
+        UserModel u = new UserModel(id);
 
         // open Admin frame
         if(type.equals("admin")) {
@@ -101,6 +105,7 @@ public class LoginController {
             AdminController c = new AdminController(u, v);
             c.initController();
         }
+
         // open Lecturer frame
         else{
             LecturerView v = new LecturerView(type);
