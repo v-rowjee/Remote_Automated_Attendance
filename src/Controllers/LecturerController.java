@@ -1,14 +1,12 @@
 package Controllers;
 
+import Models.ModuleModel;
 import Models.UserModel;
 import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,9 +26,19 @@ public class LecturerController {
 
     public void initView() {
         view.getFrame().setSize(700, 500);
-        view.getCl().show(view.getPanelcenter(), "attendance");
         centreWindow(view.getFrame());
-        view.getLblUser().setText("Welcome hardcoded");
+        view.getCl().show(view.getPanelcenter(), "attendance");
+        view.getLblUser().setText("Welcome " + model.getName());
+        view.setModName(getModulesName());
+    }
+
+    private String[] getModulesName() {
+        List<String> list = new ArrayList<>();
+        for (ModuleModel module : model.getModuleList()){
+            list.add(module.getName());
+            System.out.println(module.getName());
+        }
+        return list.toArray(new String[0]);
     }
 
     public void initController() {

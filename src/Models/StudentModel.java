@@ -6,35 +6,32 @@ public class StudentModel {
      // id, name, modules[],
        private int id;
        private String name;
-       private List<ModuleModel> moduleList;
 
-    public StudentModel(int id, String name, List<ModuleModel> moduleList) {
-        this.id = id;
-        this.name = name;
-        this.moduleList = moduleList;
+    public StudentModel(int id) {
+        getData(id);
     }
+
+    public StudentModel() {}
+
+    public void getData(int id) {
+        this.id = id;
+        name = "Eric";
+    }
+
 
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<ModuleModel> getModuleList() {
-        return moduleList;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name;
     }
 
-    public void setModuleList(List<ModuleModel> moduleList) {
-        this.moduleList = moduleList;
+    public void setName(String name) {
+        this.name = name;
     }
 }

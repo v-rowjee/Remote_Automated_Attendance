@@ -7,8 +7,6 @@ public class AASLabel extends JLabel {
 	public AASLabel(String text){
 		super(text);
 		setForeground(Color.decode("#eeeeee"));
-		setFont(new Font("Bodini",Font.BOLD,16));
-		setHorizontalAlignment(SwingConstants.CENTER);
 	};
 	AASLabel(String text, String color){
 		super(text);
