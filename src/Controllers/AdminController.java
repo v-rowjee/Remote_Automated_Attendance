@@ -35,6 +35,7 @@ public class AdminController {
         view.getRdBtnSearch().addActionListener(e-> showSearch());
         view.getRdBtnStatistics().addActionListener(e->showStatistic());
         view.getrdBtnDefaulter().addActionListener(e->showDefaulter());
+        view.getRdBtnAdd().addActionListener(e->showAdd());
         view.getBtnLogout().addActionListener(e-> logout());
     }
 
@@ -53,6 +54,11 @@ public class AdminController {
         view.getLblOptionSelected().setText("Defaulter list");
     }
 
+    private void showAdd() {
+        view.getCl().show(view.getPanelcenter(),"Add lecturer");
+        view.getLblOptionSelected().setText("Add lecturer");
+    }
+
 
     private void logout() {
         view.getFrame().dispose();
@@ -63,7 +69,7 @@ public class AdminController {
     }
 
     public void CurrentDate(){
-        Thread clock=new Thread()   {
+        Thread clock=new Thread() {
             public void run() {
                 for(;;)   {
 

@@ -8,15 +8,19 @@ import java.awt.*;
 
 public class AdminView {
     private JFrame frame;
-    private JButton  btnLogout, btnMod[];
+    private JButton  btnLogout, btnMod[],BtnaddLecturer;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
     private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter;
-    private JRadioButton rdBtnSearch,rdBtnDefaulter;
+    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd;
+    private JRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd;
     private JTextField SearchBar;
+
+
+    private JLabel lblFname,lblLname,lblUsrName,lblPass;
+    private JTextField FirstName,LastName,UserName,Password;
 
     private static String[] modName={"hjhj","sdfsd","sfs"};
 
@@ -36,14 +40,17 @@ public class AdminView {
         btnLogout = new JButton("Logout");
         //TF=new JTextField();
         rdBtnSearch=new JRadioButton("Search",true);
-        //rdBtnAttendance= new JRadioButton("Attendance",true);
         rdBtnStatistics= new JRadioButton("Statistics", false);
         rdBtnDefaulter=new JRadioButton("Defaulter list",false);
+        rdBtnAdd=new JRadioButton("Add lecturer",false);
+
+        BtnaddLecturer=new JButton("Add");
 
         radioGroup= new ButtonGroup();
         radioGroup.add(rdBtnSearch);
         radioGroup.add(rdBtnStatistics);
         radioGroup.add(rdBtnDefaulter);
+        radioGroup.add(rdBtnAdd);
 
         comboBoxModule= new JComboBox(modName);
         comboBoxModule.setMaximumRowCount(5);
@@ -72,6 +79,7 @@ public class AdminView {
         cardstats = new JPanel();
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
+        cardAdd=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -103,7 +111,9 @@ public class AdminView {
         //panelnavbar.add(rdBtnAttendance);
         panelnavbar.add(rdBtnStatistics);
         panelnavbar.add(rdBtnDefaulter);
+        panelnavbar.add(rdBtnAdd);
         panelnavbar.add(btnLogout);
+
 
 
         //add colour to panels
@@ -120,6 +130,7 @@ public class AdminView {
         panelcenter.add(cardstats,"stats");
         panelcenter.add(cardsearch,"search");
         panelcenter.add(cardDefaulter,"Defaulter list");
+        panelcenter.add(cardAdd,"Add lecturer");
 
 
 
@@ -162,6 +173,34 @@ public class AdminView {
         table3.setShowVerticalLines(true);
         JScrollPane pane3 = new JScrollPane(table3);
         cardDefaulter.add(pane3);
+
+        //add lecturer card
+
+
+        lblFname=new JLabel("first name");
+        lblLname=new JLabel("last name");
+        lblUsrName=new JLabel("user name");
+        lblPass=new JLabel("password");
+
+        FirstName=new JTextField(10);
+        LastName=new JTextField(10);
+        UserName=new JTextField(10);
+        Password=new JTextField(10);
+
+        cardAdd.setLayout(new GridLayout(5,2,50,50));
+        cardAdd.setBorder(new EmptyBorder(10,20,20,20) );
+
+        cardAdd.add(lblFname);
+        cardAdd.add(FirstName);
+        cardAdd.add(lblLname);
+        cardAdd.add(LastName);
+        cardAdd.add(lblUsrName);
+        cardAdd.add(UserName);
+        cardAdd.add(lblPass);
+        cardAdd.add(Password);
+        cardAdd.add(BtnaddLecturer);
+
+
 
 
         //Adding panels to frame
@@ -236,6 +275,8 @@ public class AdminView {
     public JRadioButton getRdBtnStatistics() {
         return rdBtnStatistics;
     }
+
+    public JRadioButton getRdBtnAdd(){return rdBtnAdd;}
 
     public JPanel getPanelnavbar() {
         return panelnavbar;
