@@ -9,7 +9,7 @@ import java.awt.event.ItemEvent;
 import java.sql.*;
 
 public class LoginController {
-    final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
+    final String dbURL = "jdbc:mysql://localhost:3306/attendance";
     final String username = "root";
     final String password = "";
 
