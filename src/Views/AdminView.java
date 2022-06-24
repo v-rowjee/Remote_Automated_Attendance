@@ -19,8 +19,9 @@ public class AdminView {
     private JTextField SearchBar;
 
 
-    private JLabel lblFname,lblLname,lblUsrName,lblPass;
-    private JTextField FirstName,LastName,UserName,Password;
+    private JLabel lblName,lblUsrName,lblPass;
+
+    private JTextField txtName, txtUserName, txtPassword;
 
     private static String[] modName={"hjhj","sdfsd","sfs"};
 
@@ -31,14 +32,12 @@ public class AdminView {
         frame = new JFrame(title);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //      frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 
 
         // Create UI elements
         btnLogout = new JButton("Logout");
-        //TF=new JTextField();
         rdBtnSearch=new JRadioButton("Search",true);
         rdBtnStatistics= new JRadioButton("Statistics", false);
         rdBtnDefaulter=new JRadioButton("Defaulter list",false);
@@ -83,7 +82,6 @@ public class AdminView {
 
         panelcenter.setLayout(cl);
 
-        //paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
         paneldate.setLayout(new GridLayout(1,6));
         paneldate.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -103,12 +101,9 @@ public class AdminView {
         paneldate.add(lblDate);
         paneldate.add(lblTime);
 
-       // panelnavbar.add(TF);
-
         panelnavbar.add(rdBtnSearch);
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
-        //panelnavbar.add(rdBtnAttendance);
         panelnavbar.add(rdBtnStatistics);
         panelnavbar.add(rdBtnDefaulter);
         panelnavbar.add(rdBtnAdd);
@@ -119,14 +114,12 @@ public class AdminView {
         //add colour to panels
         panelnavbar.setBackground(Color.green);
         paneldate.setBackground(Color.red);
-        //cardattendance.setBackground(Color.orange);
         cardstats.setBackground(Color.yellow);
         cardsearch.setBackground(Color.black);
         cardDefaulter.setBackground(Color.white);
 
 
         //adding card to panel
-        //panelcenter.add(cardattendance, "attendance");
         panelcenter.add(cardstats,"stats");
         panelcenter.add(cardsearch,"search");
         panelcenter.add(cardDefaulter,"Defaulter list");
@@ -177,27 +170,24 @@ public class AdminView {
         //add lecturer card
 
 
-        lblFname=new JLabel("first name");
-        lblLname=new JLabel("last name");
+        lblName =new JLabel("name");
         lblUsrName=new JLabel("user name");
         lblPass=new JLabel("password");
 
-        FirstName=new JTextField(10);
-        LastName=new JTextField(10);
-        UserName=new JTextField(10);
-        Password=new JTextField(10);
+        txtName =new JTextField(10);
+
+        txtUserName =new JTextField(10);
+        txtPassword =new JTextField(10);
 
         cardAdd.setLayout(new GridLayout(5,2,50,50));
         cardAdd.setBorder(new EmptyBorder(10,20,20,20) );
 
-        cardAdd.add(lblFname);
-        cardAdd.add(FirstName);
-        cardAdd.add(lblLname);
-        cardAdd.add(LastName);
+        cardAdd.add(lblName);
+        cardAdd.add(txtName);
         cardAdd.add(lblUsrName);
-        cardAdd.add(UserName);
+        cardAdd.add(txtUserName);
         cardAdd.add(lblPass);
-        cardAdd.add(Password);
+        cardAdd.add(txtPassword);
         cardAdd.add(BtnaddLecturer);
 
 
@@ -301,4 +291,12 @@ public class AdminView {
     public static void setModName(String[] modName) {
         AdminView.modName = modName;
     }
+
+    public JButton getBtnaddLecturer(){return BtnaddLecturer;}
+
+    public JTextField getTxtName(){return txtName;}
+
+    public JTextField getTxtUserName(){return txtUserName;}
+
+    public JTextField getTxtPassword(){return txtPassword;}
 }
