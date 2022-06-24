@@ -13,7 +13,7 @@ public class UserModel {
     private String type;
     private List<ModuleModel> moduleList;
 
-    final String dbURL = "jdbc:mysql://localhost/attendance_db";
+    final String dbURL = "jdbc:mysql://localhost/attendance";
     final String dbUsername = "root";
     final String dbPassword = "";
 
