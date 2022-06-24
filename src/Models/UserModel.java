@@ -1,5 +1,9 @@
 package Models;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,21 +13,48 @@ public class UserModel {
     private String type;
     private List<ModuleModel> moduleList;
 
+    final String dbURL = "jdbc:mysql://localhost/attendance_db";
+    final String dbUsername = "root";
+    final String dbPassword = "";
+
     public UserModel(){}
 
-    public UserModel(int id ,String name) {
-        getData(id, name);
+    public UserModel(int id) {
+        getData(id);
     }
 
-    public void getData(int id, String name) {
-        this.id = id;
-        this.name = name;
-        type = "Lecturer";
-        moduleList = new ArrayList<>(){{
-            new ModuleModel(2000);
-            new ModuleModel(3000);
-            new ModuleModel(4000);
-        }};
+    public void getData(int id) {
+        try{
+            Connection conn = DriverManager.getConnection(dbURL,dbUsername,dbPassword);
+            String query = "SELECT * FROM user WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                this.id = id;
+                this.name = rs.getString("name");
+                this.type = rs.getString("type");
+            }
+
+            String query2 = "SELECT * FROM module WHERE uid = ?";
+            PreparedStatement stmt2 = conn.prepareStatement(query2);
+            stmt2.setInt(1,id);
+            ResultSet rs2 = stmt2.executeQuery();
+
+            moduleList = new ArrayList<>();
+            while(rs2.next()){
+                moduleList.add(new ModuleModel(rs2.getInt("id")));
+            }
+
+            stmt.close();
+            stmt2.close();
+            conn.close();
+        }
+        catch(Exception e){
+            System.err.println(e);
+        }
+
     }
 
 

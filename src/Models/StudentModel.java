@@ -1,21 +1,41 @@
 package Models;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class StudentModel {
-     // id, name, modules[],
-       private int id;
-       private String name;
+    private int id;
+    private String name;
+
+    final String dbURL = "jdbc:mysql://localhost/attendance";
+    final String dbUsername = "root";
+    final String dbPassword = "";
 
     public StudentModel(int id) {
         getData(id);
     }
 
-    public StudentModel() {}
-
     public void getData(int id) {
-        this.id = id;
-        name = "Eric";
+        try{
+            Connection conn = DriverManager.getConnection(dbURL,dbUsername,dbPassword);
+            String query = "SELECT * FROM student WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                this.id = id;
+                this.name = rs.getString("name");
+            }
+
+            stmt.close();
+            conn.close();
+        }
+        catch(Exception e){
+            System.err.println(e);
+        }
     }
 
 

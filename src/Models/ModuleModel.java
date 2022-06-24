@@ -1,4 +1,8 @@
 package Models;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,19 +11,44 @@ public class ModuleModel {
     private String name;
     private List<StudentModel> studentList;
 
-    public ModuleModel(){}
+    final String dbURL = "jdbc:mysql://localhost/attendance";
+    final String dbUsername = "root";
+    final String dbPassword = "";
 
     public ModuleModel(int id) {
         getData(id);
     }
 
     public void getData(int id) {
-        this.id = id;
-        name = "WEB";
-        studentList = new ArrayList<>(){{
-            new StudentModel(1);
-            new StudentModel(2);
-        }};
+        try{
+            Connection conn = DriverManager.getConnection(dbURL,dbUsername,dbPassword);
+            String query = "SELECT * FROM module WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                this.id = id;
+                this.name = rs.getString("name");
+            }
+
+            String query2 = "SELECT * FROM studentmodule WHERE mid = ?";
+            PreparedStatement stmt2 = conn.prepareStatement(query2);
+            stmt2.setInt(1,id);
+            ResultSet rs2 = stmt2.executeQuery();
+
+            studentList = new ArrayList<>();
+            while(rs2.next()){
+                studentList.add(new StudentModel(rs2.getInt("id")));
+            }
+
+            stmt.close();
+            stmt2.close();
+            conn.close();
+        }
+        catch(Exception e){
+            System.err.println(e);
+        }
     }
 
 

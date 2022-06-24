@@ -9,7 +9,7 @@ import java.awt.event.ItemEvent;
 import java.sql.*;
 
 public class LoginController {
-    final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+    final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
     final String username = "root";
     final String password = "";
 
@@ -66,7 +66,7 @@ public class LoginController {
     }
 
     private void authentication() {
-        final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE Username = ? AND Password = ? ";
+        final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE username = ? AND password = ? ";
 
         try{
             Connection conn = DriverManager.getConnection(dbURL,username,password);
@@ -81,10 +81,8 @@ public class LoginController {
             int rowCount = rs.getInt("row_count");
 
             if(rowCount > 0){
-                String userType = rs.getString("Type");
-                int userID =  rs.getInt("UserId");
-                String userName=rs.getString("Last_Name");
-                openDashboard(userID, userName, userType);
+                int userID =  rs.getInt("id");
+                openDashboard(userID);
             }
             else{
                 JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.ERROR_MESSAGE);
@@ -92,24 +90,24 @@ public class LoginController {
 
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database : \n" + e,"Alert",JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void openDashboard(int id,String userName, String type) {
+    private void openDashboard(int id) {
         view.getFrame().dispose();
-        UserModel u = new UserModel(id, userName);
+        UserModel u = new UserModel(id);
 
         // open Admin frame
-        if(type.equals("Admin")) {
-            AdminView v = new AdminView(type);
+        if(u.getType().equals("Admin")) {
+            AdminView v = new AdminView(u.getType());
             AdminController c = new AdminController(u, v);
             c.initController();
         }
 
         // open Lecturer frame
         else{
-            LecturerView v = new LecturerView(type);
+            LecturerView v = new LecturerView(u.getType());
             LecturerController c = new LecturerController(u, v);
             c.initController();
         }
