@@ -11,13 +11,13 @@ public class UserModel {
 
     public UserModel(){}
 
-    public UserModel(int id) {
-        getData(id);
+    public UserModel(int id ,String name) {
+        getData(id, name);
     }
 
-    public void getData(int id) {
+    public void getData(int id, String name) {
         this.id = id;
-        name = "Bikash";
+        this.name = name;
         type = "Lecturer";
         moduleList = new ArrayList<>(){{
             new ModuleModel(2000);

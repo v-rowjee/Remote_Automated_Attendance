@@ -122,37 +122,6 @@ public class AdminView {
         panelcenter.add(cardDefaulter,"Defaulter list");
 
 
-        //creating JTable for attendance
-       /* String columns[] = { "Student ID", "Name","Present" };
-
-        Object[][] data = {
-                {"Buy", "IBM", false},
-                {"Sell", "MicroSoft",true},
-                {"Sell", "Apple",  true},
-                {"Buy", "Nortel", false}
-        };
-
-        DefaultTableModel model = new DefaultTableModel(data, columns);
-        JTable table = new JTable(model){
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return String.class;
-                    case 1:
-                        return String.class;
-                    default:
-                        return Boolean.class;
-                }
-            }
-        };
-
-        table.setShowGrid(true);
-        table.setShowVerticalLines(true);
-        JScrollPane pane = new JScrollPane(table);
-        cardattendance.add(pane);*/
-
-
-
 
         //creating JTable for statistics
         String columns2[] = { "Date", "Present","Absent","% Present" };
@@ -195,18 +164,9 @@ public class AdminView {
         cardDefaulter.add(pane3);
 
 
-
-
-
-
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
         frame.add(panelMain,BorderLayout.CENTER);
-
-
-
-
-
 
 
 

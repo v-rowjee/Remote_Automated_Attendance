@@ -6,6 +6,7 @@ import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
+import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,7 @@ public class LecturerController {
         centreWindow(view.getFrame());
         view.getCl().show(view.getPanelcenter(), "attendance");
         view.getLblUser().setText("Welcome " + model.getName());
-        view.setModName(getModulesName());
+        setComboBoxModule();
     }
 
     private String[] getModulesName() {
@@ -47,6 +48,44 @@ public class LecturerController {
         view.getBtnLogout().addActionListener(e -> logout());
         view.getComboBoxModule().addActionListener(e -> comBoModAction());
         view.getBtnSubmitAttendance().addActionListener(e -> findPresent());
+    }
+
+    private void setComboBoxModule(){
+        view.getModuleName().removeAllElements();
+
+            final String query = "SELECT Mname FROM module WHERE UserId = ?";
+
+            try{
+                final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+                final String username = "root";
+                final String password = "";
+                Connection conn = DriverManager.getConnection(dbURL,username,password);
+
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setInt(1,model.getId());
+                ResultSet rs = stmt.executeQuery();
+
+                rs.next();
+
+                if(rs != null){
+                   do {
+                       String Mname = rs.getString("Mname");
+                       view.getModuleName().addElement(Mname);
+                   }while(rs.next());
+                }
+
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
+            }
+
+
+
+
+       // view.getModuleName().addElement("hoho");
+       // view.getModuleName().addElement("hoho2");
+        view.getComboBoxModule().setSelectedIndex(0);
+        view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
     }
 
     private void showStatistic() {

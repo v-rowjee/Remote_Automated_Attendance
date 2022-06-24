@@ -1,16 +1,22 @@
 package Views;
 
+import Components.AASButton;
+import Models.ModuleModel;
+
+
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LecturerView {
     private JFrame frame;
     private DefaultTableModel model;
     private JTable table;
-    private JButton  btnLogout, btnSubmitAttendance;
+    private AASButton btnLogout, btnSubmitAttendance;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
@@ -18,7 +24,8 @@ public class LecturerView {
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
 
-    private static String[] modName={"hjhj","sdfsd","sfs"};
+
+    final DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
 
     CardLayout cl = new CardLayout();
 
@@ -32,8 +39,8 @@ public class LecturerView {
 
 
         // Create UI elements
-        btnLogout = new JButton("Logout");
-        btnSubmitAttendance=new JButton("Submit");
+        btnLogout = new AASButton("Logout");
+        btnSubmitAttendance=new AASButton("Submit");
 
         rdBtnAttendance= new JRadioButton("Attendance",true);
         rdBtnStatistics= new JRadioButton("Statistics", false);
@@ -42,11 +49,12 @@ public class LecturerView {
         radioGroup.add(rdBtnAttendance);
         radioGroup.add(rdBtnStatistics);
 
-        comboBoxModule= new JComboBox(modName);
+        comboBoxModule= new JComboBox(moduleName);
         comboBoxModule.setMaximumRowCount(5);
 
         lblUser= new JLabel("Welcome User");
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
+        lblUser.setVerticalAlignment(SwingConstants.TOP);
         lblDate= new JLabel();
         lblDate.setHorizontalAlignment(SwingConstants.CENTER);
         lblTime= new JLabel();
@@ -87,12 +95,13 @@ public class LecturerView {
         panelMain.add(panelcenter,BorderLayout.CENTER);
 
 
-        // Add UI element to panels
+         //Add UI element to panels
         paneldate.add(lblOptionSelected);
         paneldate.add(lblFor);
         paneldate.add(lblModuleSelected);
         paneldate.add(lblDate);
         paneldate.add(lblTime);
+
 
 
         panelnavbar.add(lblUser);
@@ -210,12 +219,8 @@ public class LecturerView {
         return cl;
     }
 
-    public JButton getBtnLogout() {
+    public AASButton getBtnLogout() {
         return btnLogout;
-    }
-
-    public static String[] getModName() {
-        return modName;
     }
 
     public JLabel getLblDate() {
@@ -263,15 +268,15 @@ public class LecturerView {
         this.comboBoxModule = comboBoxModule;
     }
 
-    public static void setModName(String[] modName) {
-        LecturerView.modName = modName;
-    }
-
-    public JButton getBtnSubmitAttendance() {
+    public AASButton getBtnSubmitAttendance() {
         return btnSubmitAttendance;
     }
 
     public JTable getTable(){
         return table;
+    }
+
+    public DefaultComboBoxModel getModuleName() {
+        return moduleName;
     }
 }

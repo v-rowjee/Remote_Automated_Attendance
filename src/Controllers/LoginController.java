@@ -9,7 +9,7 @@ import java.awt.event.ItemEvent;
 import java.sql.*;
 
 public class LoginController {
-    final String dbURL = "jdbc:mysql://localhost:3306/attendance_db";
+    final String dbURL = "jdbc:mysql://localhost:3306/attendance";
     final String username = "root";
     final String password = "";
 
@@ -66,7 +66,7 @@ public class LoginController {
     }
 
     private void authentication() {
-        final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE username = ? AND password = ? ";
+        final String query = "SELECT *, COUNT(*) AS row_count FROM user WHERE Username = ? AND Password = ? ";
 
         try{
             Connection conn = DriverManager.getConnection(dbURL,username,password);
@@ -81,9 +81,10 @@ public class LoginController {
             int rowCount = rs.getInt("row_count");
 
             if(rowCount > 0){
-                String userType = rs.getString("type");
-                int userID =  rs.getInt("id");
-                openDashboard(userID, userType);
+                String userType = rs.getString("Type");
+                int userID =  rs.getInt("UserId");
+                String userName=rs.getString("Last_Name");
+                openDashboard(userID, userName, userType);
             }
             else{
                 JOptionPane.showMessageDialog(view.getFrame(),"Incorrect Credentials","Alert",JOptionPane.ERROR_MESSAGE);
@@ -95,12 +96,12 @@ public class LoginController {
         }
     }
 
-    private void openDashboard(int id, String type) {
+    private void openDashboard(int id,String userName, String type) {
         view.getFrame().dispose();
-        UserModel u = new UserModel(id);
+        UserModel u = new UserModel(id, userName);
 
         // open Admin frame
-        if(type.equals("admin")) {
+        if(type.equals("Admin")) {
             AdminView v = new AdminView(type);
             AdminController c = new AdminController(u, v);
             c.initController();

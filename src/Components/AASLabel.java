@@ -14,6 +14,7 @@ public class AASLabel extends JLabel {
 		setFont(new Font("Bodini",Font.BOLD,16));
 		setHorizontalAlignment(SwingConstants.CENTER);
 	};
+
 	public void setTextColor(String color){
 		setForeground(Color.decode(color));
 	}

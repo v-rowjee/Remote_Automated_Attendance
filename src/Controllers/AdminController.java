@@ -17,8 +17,6 @@ public class AdminController {
     private UserModel model;
     private AdminView view;
 
-
-
     public AdminController(UserModel m, AdminView v) {
         model = m;
         view = v;
@@ -26,7 +24,6 @@ public class AdminController {
         CurrentDate();
         setcomBoModule();
     }
-
     public void initView() {
         view.getFrame().setSize(700,500);
         view.getCl().show(view.getPanelcenter(),"search");
@@ -96,60 +93,11 @@ public class AdminController {
         clock.start();
     }
 
-//    private void setBtnModule(){
-//        int x = 5;
-//         String[] modNameArray = {"module1","module2","module3","module4","module5"};
-//
-//       JButton[] btnMod= view.getBtnMod();
-//       btnMod = new JButton[x];
-//
-//
-//        for (int i = 0; i<x;i++){
-//
-//            btnMod[i]= new JButton();
-//          final String  modName=modNameArray[i];
-//            btnMod[i].setText(modNameArray[i]);
-//            btnMod[i].setOpaque(false);
-//            btnMod[i].setContentAreaFilled(false);
-//            btnMod[i].setBorderPainted(false);
-//            view.getPanelnavbar().add(btnMod[i]);
-//            view.getPanelnavbar().add(Box.createVerticalGlue());
-//
-//            btnMod[i].addActionListener(e->btnModAction(modName));
-//        }
-//
-//
-//    }
-//    void btnModAction(String modName){
-//        view.getLblModName().setText(modName);
-//
-//    }
-
     private void setcomBoModule(){
 
-
-//        JComboBox comboBoxModule=view.getComboBoxModule();
-//        comboBoxModule= new JComboBox(modNameArray);
-//        comboBoxModule.setMaximumRowCount(x);
-//        view.getPanelnavbar().add(comboBoxModule);
-//
-
-//        for (int i = 0; i<x;i++){
-//
-//            btnMod[i]= new JButton();
-//            final String  modName=modNameArray[i];
-//            btnMod[i].setText(modNameArray[i]);
-//            btnMod[i].setOpaque(false);
-//            btnMod[i].setContentAreaFilled(false);
-//            btnMod[i].setBorderPainted(false);
-//            view.getPanelnavbar().add(btnMod[i]);
-//            view.getPanelnavbar().add(Box.createVerticalGlue());
-//
         view.getComboBoxModule().addActionListener(e->comBoModAction());
-//        }
-
-
     }
+
     void comBoModAction(){
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
 
