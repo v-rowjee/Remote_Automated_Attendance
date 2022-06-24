@@ -33,15 +33,6 @@ public class LecturerController {
         setComboBoxModule();
     }
 
-    private String[] getModulesName() {
-        List<String> list = new ArrayList<>();
-        for (ModuleModel module : model.getModuleList()){
-            list.add(module.getName());
-            System.out.println(module.getName());
-        }
-        return list.toArray(new String[0]);
-    }
-
     public void initController() {
         view.getRdBtnAttendance().addActionListener(e -> showAttendance());
         view.getRdBtnStatistics().addActionListener(e -> showStatistic());
@@ -50,40 +41,10 @@ public class LecturerController {
         view.getBtnSubmitAttendance().addActionListener(e -> findPresent());
     }
 
-    private void setComboBoxModule(){
-        view.getModuleName().removeAllElements();
-
-            final String query = "SELECT Mname FROM module WHERE UserId = ?";
-
-            try{
-                final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-                final String username = "root";
-                final String password = "";
-                Connection conn = DriverManager.getConnection(dbURL,username,password);
-
-                PreparedStatement stmt = conn.prepareStatement(query);
-                stmt.setInt(1,model.getId());
-                ResultSet rs = stmt.executeQuery();
-
-                rs.next();
-
-                if(rs != null){
-                   do {
-                       String Mname = rs.getString("Mname");
-                       view.getModuleName().addElement(Mname);
-                   }while(rs.next());
-                }
-
-
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
-            }
-
-
-
-
-       // view.getModuleName().addElement("hoho");
-       // view.getModuleName().addElement("hoho2");
+    public void setComboBoxModule(){
+        for(ModuleModel m : model.getModuleList()){
+            view.getModuleName().addElement(m.getName());
+        }
         view.getComboBoxModule().setSelectedIndex(0);
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
     }
@@ -143,35 +104,6 @@ public class LecturerController {
         };
         clock.start();
     }
-
-//    private void setBtnModule(){
-//        int x = 5;
-//         String[] modNameArray = {"module1","module2","module3","module4","module5"};
-//
-//       JButton[] btnMod= view.getBtnMod();
-//       btnMod = new JButton[x];
-//
-//
-//        for (int i = 0; i<x;i++){
-//
-//            btnMod[i]= new JButton();
-//          final String  modName=modNameArray[i];
-//            btnMod[i].setText(modNameArray[i]);
-//            btnMod[i].setOpaque(false);
-//            btnMod[i].setContentAreaFilled(false);
-//            btnMod[i].setBorderPainted(false);
-//            view.getPanelnavbar().add(btnMod[i]);
-//            view.getPanelnavbar().add(Box.createVerticalGlue());
-//
-//            btnMod[i].addActionListener(e->btnModAction(modName));
-//        }
-//
-//
-//    }
-//    void btnModAction(String modName){
-//        view.getLblModName().setText(modName);
-//
-//    }
 
     void comBoModAction() {
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
