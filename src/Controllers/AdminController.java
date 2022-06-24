@@ -6,6 +6,7 @@ import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
+import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -36,6 +37,7 @@ public class AdminController {
         view.getRdBtnStatistics().addActionListener(e->showStatistic());
         view.getrdBtnDefaulter().addActionListener(e->showDefaulter());
         view.getRdBtnAdd().addActionListener(e->showAdd());
+        view.getBtnaddLecturer().addActionListener(e->addLecturer());
         view.getBtnLogout().addActionListener(e-> logout());
     }
 
@@ -108,6 +110,40 @@ public class AdminController {
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
 
     }
+
+    void addLecturer(){
+
+        final String query = "INSERT INTO user (name,username,password,type)VALUES (?,?,?,'lecturer')";
+        try{
+            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+            final String username = "root";
+            final String password = "";
+            Connection conn = DriverManager.getConnection(dbURL,username,password);
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, view.getTxtName().getText());
+            stmt.setString(2, view.getTxtUserName().getText());
+            stmt.setString(3, view.getTxtPassword().getText());
+             int rs = stmt.executeUpdate();
+
+            if(rs == 0){
+                JOptionPane.showMessageDialog(null, "No lecturer added!", "Error!", JOptionPane.ERROR_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "lecturer added!", "SUCCESS!", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+
+
+
+
+
+
+    }
+
+
 
 
 
