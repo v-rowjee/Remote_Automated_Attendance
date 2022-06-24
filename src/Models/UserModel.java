@@ -37,7 +37,7 @@ public class UserModel {
                 this.type = rs.getString("type");
             }
 
-            String query2 = "SELECT * FROM module WHERE uid = ?";
+            String query2 = "SELECT * FROM module WHERE userid = ?";
             PreparedStatement stmt2 = conn.prepareStatement(query2);
             stmt2.setInt(1,id);
             ResultSet rs2 = stmt2.executeQuery();
