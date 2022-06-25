@@ -8,6 +8,7 @@ import Views.LoginView;
 
 import javax.swing.*;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -37,6 +38,7 @@ public class LecturerController {
         view.getLblUser().setText("Welcome " + model.getName());
         setComboBoxModule();
         comBoModAction();
+        setTableStats();
     }
 
     public void initController() {
@@ -44,6 +46,7 @@ public class LecturerController {
         view.getRdBtnStatistics().addActionListener(e -> showStatistic());
         view.getBtnLogout().addActionListener(e -> logout());
         view.getComboBoxModule().addActionListener(e -> comBoModAction());
+        view.getComboBoxModule().addActionListener(e -> setTableStats());
         view.getBtnSubmitAttendance().addActionListener(e -> findPresent());
     }
 
@@ -111,6 +114,7 @@ public class LecturerController {
         clock.start();
     }
 
+    //listener to combo box module + setting up table attendance
     void comBoModAction() {
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
         for(ModuleModel m : model.getModuleList()){
@@ -200,21 +204,77 @@ public class LecturerController {
                stmt.executeUpdate();
             }
 
-//            if(rs == 0){
-//                JOptionPane.showMessageDialog(null, "No lecturer added!", "Error!", JOptionPane.ERROR_MESSAGE);
-//            }else{
-//                JOptionPane.showMessageDialog(null, "lecturer added!", "SUCCESS!", JOptionPane.INFORMATION_MESSAGE);
-//            }
-
         } catch (SQLException e) {
             System.err.println(e);
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController","Alert",JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+
+    void setTableStats(){
+
+        int mid=0;
+        for(ModuleModel m : model.getModuleList()){
+            if (m.getName()==view.getComboBoxModule().getSelectedItem()){
+                mid = m.getId();
+            }
+        }
+
+        String queryPresent ="SELECT COUNT(sid), date FROM attendance  WHERE mid =? AND presence='1' GROUP BY date ORDER BY date DESC";
+        String queryAbsent ="SELECT COUNT(sid), date FROM attendance  WHERE mid =? AND presence='0' GROUP BY date ORDER BY date DESC";
+
+        try{
+            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+            final String username = "root";
+            final String password = "";
+            Connection conn = DriverManager.getConnection(dbURL,username,password);
+            Connection conn2 = DriverManager.getConnection(dbURL,username,password);
+            PreparedStatement stmt1 = conn.prepareStatement(queryPresent);
+            PreparedStatement stmt2 = conn2.prepareStatement(queryAbsent);
+            stmt1.setInt(1, mid);
+            stmt2.setInt(1, mid);
+            ResultSet rs1 = stmt1.executeQuery();
+            ResultSet rs2 = stmt2.executeQuery();
+            ResultSetMetaData metaData1 = rs1.getMetaData();
+            int row = metaData1.getColumnCount();
+            Object[][] data2 = new Object[row][4];
+            int i=0;
+               while(rs1.next()){
+                    data2[i][0] = rs1.getDate("date");
+                    data2[i][1] = rs1.getInt("COUNT(sid)");
+                   // data2[i][2] = false;
+                   // data2[i][3] = false;
+                    i++;
+                }
+                i =0;
+            while(rs2.next()){
+                data2[i][2] = rs2.getInt("COUNT(sid)");
+                double intpresent=Integer.parseInt(String.valueOf(data2[i][1]));
+                double intabsent=Integer.parseInt(String.valueOf(data2[i][2]));
+                double percentage= (intpresent/(intpresent + intabsent))*100;
+                System.out.println(percentage);
+                DecimalFormat df = new DecimalFormat("0.0");
+                data2[i][3] = df.format(percentage);
+
+                i++;
+            }
+
+
+            String columns2[] = { "Date", "Present","Absent","% Present" };
+            view.getModel2().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+
+
+
+        }
+
 
 
     }
-}
 
 
 
