@@ -39,7 +39,7 @@ public class ModuleModel {
 
             studentList = new ArrayList<>();
             while(rs2.next()){
-                studentList.add(new StudentModel(rs2.getInt("id")));
+                studentList.add(new StudentModel(rs2.getInt("sid")));
             }
 
             stmt.close();

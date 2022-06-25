@@ -14,18 +14,19 @@ import java.util.List;
 
 public class LecturerView {
     private JFrame frame;
-    private DefaultTableModel model;
     private JTable table;
     private AASButton btnLogout, btnSubmitAttendance;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
-    private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
+    private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
+    private Object[][] dataa;
 
 
     final DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
+    DefaultTableModel model = new DefaultTableModel();
 
     CardLayout cl = new CardLayout();
 
@@ -56,15 +57,11 @@ public class LecturerView {
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblUser.setVerticalAlignment(SwingConstants.TOP);
         lblDate= new JLabel();
-        lblDate.setHorizontalAlignment(SwingConstants.CENTER);
         lblTime= new JLabel();
-        lblTime.setHorizontalAlignment(SwingConstants.CENTER);
         lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
-        lblModuleSelected.setHorizontalAlignment(SwingConstants.LEFT);
         lblOptionSelected=new JLabel("Attendance");
-        lblOptionSelected.setHorizontalAlignment(SwingConstants.RIGHT);
         lblFor=new JLabel("for");
-        lblFor.setHorizontalAlignment(SwingConstants.CENTER);
+        lbldummy=new JLabel("                            ");
 
 
         //Creating panels
@@ -82,8 +79,9 @@ public class LecturerView {
         BoxLayout boxlayout2 = new BoxLayout(cardstats,BoxLayout.Y_AXIS);
         cardstats.setLayout(boxlayout2);
 
-        //paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
-        paneldate.setLayout(new GridLayout(1,6));
+        paneldate.setLayout(new FlowLayout());
+      //  paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
+      //  paneldate.setLayout(new GridLayout(1,6));
         paneldate.setBorder(new EmptyBorder(20,20,20,20));
 
 
@@ -99,6 +97,7 @@ public class LecturerView {
         paneldate.add(lblOptionSelected);
         paneldate.add(lblFor);
         paneldate.add(lblModuleSelected);
+        paneldate.add(lbldummy);
         paneldate.add(lblDate);
         paneldate.add(lblTime);
 
@@ -126,16 +125,6 @@ public class LecturerView {
 
 
         //creating JTable for attendance
-        String columns[] = { "Student ID", "Name","Present", "Absent" };
-
-        Object[][] data = {
-                {"1", "IBM", false, true},
-                {"2", "MicroSoft",true, false},
-                {"3", "Apple",  true, false},
-                {"4", "Nortel", false, false}
-        };
-
-        DefaultTableModel model = new DefaultTableModel(data, columns);
         table = new JTable(model){
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -264,6 +253,8 @@ public class LecturerView {
         return comboBoxModule;
     }
 
+
+
     public void setComboBoxModule(JComboBox comboBoxModule) {
         this.comboBoxModule = comboBoxModule;
     }
@@ -278,5 +269,9 @@ public class LecturerView {
 
     public DefaultComboBoxModel getModuleName() {
         return moduleName;
+    }
+
+    public DefaultTableModel getModel() {
+        return model;
     }
 }
