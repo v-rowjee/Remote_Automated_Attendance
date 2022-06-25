@@ -1,43 +1,39 @@
 package Views;
 
 import Components.AASButton;
-import Models.ModuleModel;
-
 
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
 
 public class LecturerView {
     private JFrame frame;
-    private JTable table;
+    private JTable tableAttendance, tableStats;
     private AASButton btnLogout, btnSubmitAttendance;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
     private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
-    private JPanel cardattendance, cardstats,cardsearch;
-    private Object[][] dataa;
+    private JPanel cardAttendance, cardStats, cardSearch;
+    private CardLayout cardLayout;
 
+    private DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
+    private DefaultTableModel tblModelAttendance;
+    private DefaultTableModel tblModelStats;
 
-    final DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
-    DefaultTableModel model = new DefaultTableModel();
-
-    CardLayout cl = new CardLayout();
 
     public LecturerView(String title){
         frame = new JFrame(title);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  //      frame.setLocationRelativeTo(null);
+        frame.setMinimumSize(new Dimension(800, 500));
         frame.setVisible(true);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        URL iconURL = getClass().getResource("../images/favicon.png");
+        frame.setIconImage(new ImageIcon(iconURL).getImage());
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
@@ -61,7 +57,7 @@ public class LecturerView {
         lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
         lblOptionSelected=new JLabel("Attendance");
         lblFor=new JLabel("for");
-        lbldummy=new JLabel("                            ");
+        lbldummy=new JLabel("                          ");
 
 
         //Creating panels
@@ -69,15 +65,16 @@ public class LecturerView {
         panelcenter = new JPanel();
         paneldate=new JPanel();
         panelMain=new JPanel();
-        cardattendance = new JPanel();
-        cardstats = new JPanel();
-        cardsearch=new JPanel();
+        cardAttendance = new JPanel();
+        cardStats = new JPanel();
+        cardSearch =new JPanel();
 
-        panelcenter.setLayout(cl);
-        BoxLayout boxlayout1 = new BoxLayout(cardattendance,BoxLayout.Y_AXIS);
-        cardattendance.setLayout(boxlayout1);
-        BoxLayout boxlayout2 = new BoxLayout(cardstats,BoxLayout.Y_AXIS);
-        cardstats.setLayout(boxlayout2);
+        cardLayout = new CardLayout();
+        panelcenter.setLayout(cardLayout);
+        BoxLayout boxlayout1 = new BoxLayout(cardAttendance,BoxLayout.Y_AXIS);
+        cardAttendance.setLayout(boxlayout1);
+        BoxLayout boxlayout2 = new BoxLayout(cardStats,BoxLayout.Y_AXIS);
+        cardStats.setLayout(boxlayout2);
 
         paneldate.setLayout(new FlowLayout());
       //  paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
@@ -93,15 +90,13 @@ public class LecturerView {
         panelMain.add(panelcenter,BorderLayout.CENTER);
 
 
-         //Add UI element to panels
+        //Add UI element to panels
         paneldate.add(lblOptionSelected);
         paneldate.add(lblFor);
         paneldate.add(lblModuleSelected);
         paneldate.add(lbldummy);
         paneldate.add(lblDate);
         paneldate.add(lblTime);
-
-
 
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
@@ -113,78 +108,57 @@ public class LecturerView {
         //add colour to panels
         panelnavbar.setBackground(Color.green);
         paneldate.setBackground(Color.red);
-        cardattendance.setBackground(Color.blue);
-        cardstats.setBackground(Color.yellow);
-        cardsearch.setBackground(Color.black);
+        cardAttendance.setBackground(Color.blue);
+        cardStats.setBackground(Color.yellow);
+        cardSearch.setBackground(Color.black);
 
 
         //adding card to panel
-        panelcenter.add(cardattendance, "attendance");
-        panelcenter.add(cardstats,"stats");
-        panelcenter.add(cardsearch,"search");
+        panelcenter.add(cardAttendance, "attendance");
+        panelcenter.add(cardStats,"stats");
+        panelcenter.add(cardSearch,"search");
 
 
         //creating JTable for attendance
-        table = new JTable(model){
+        tblModelAttendance = new DefaultTableModel();
+        tableAttendance = new JTable(tblModelAttendance){
             public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                    case 1:
-                        return String.class;
-                    case 3:
-                        return Boolean.class;
-                    default:
-                        return Boolean.class;
-                }
+                return switch (column) {
+                    case 0 -> Integer.class;
+                    case 1 -> String.class;
+                    default -> Boolean.class;
+                };
             }
         };
+        tableAttendance.setShowGrid(true);
+        tableAttendance.setShowVerticalLines(true);
+        tableAttendance.setAutoCreateRowSorter(true);
+        JScrollPane paneAttendance = new JScrollPane(tableAttendance);
+        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        table.setShowGrid(true);
-        table.setShowVerticalLines(true);
-        JScrollPane pane = new JScrollPane(table);
-        pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        cardattendance.add(pane);
         btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cardattendance.add(btnSubmitAttendance);
 
-
+        cardAttendance.add(paneAttendance);
+        cardAttendance.add(btnSubmitAttendance);
 
 
         //creating JTable for statistics
-        String columns2[] = { "Date", "Present","Absent","% Present" };
+        tblModelStats = new DefaultTableModel();
+        tableStats = new JTable(tblModelStats);
+        tableStats.setShowGrid(true);
+        tableStats.setShowVerticalLines(true);
+        JScrollPane paneStats = new JScrollPane(tableStats);
+        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        Object[][] data2 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
-        };
-
-        DefaultTableModel model2 = new DefaultTableModel(data2, columns2);
-        JTable table2 = new JTable(model2);
-
-        table2.setShowGrid(true);
-        table2.setShowVerticalLines(true);
-        JScrollPane pane2 = new JScrollPane(table2);
-        pane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        pane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        cardstats.add(pane2);
-
+        cardStats.add(paneStats);
 
 
 
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
         frame.add(panelMain,BorderLayout.CENTER);
-
-
-
-
-
-
-
-
     }
 
     public JFrame getFrame() {
@@ -199,13 +173,16 @@ public class LecturerView {
         return lblModuleSelected;
     }
 
+    public JPanel getCardStats() {
+        return cardStats;
+    }
 
     public JPanel getPanelcenter() {
         return panelcenter;
     }
 
-    public CardLayout getCl() {
-        return cl;
+    public CardLayout getCardLayout() {
+        return cardLayout;
     }
 
     public AASButton getBtnLogout() {
@@ -263,15 +240,20 @@ public class LecturerView {
         return btnSubmitAttendance;
     }
 
-    public JTable getTable(){
-        return table;
+    public JTable getTableAttendance(){
+        return tableAttendance;
     }
 
     public DefaultComboBoxModel getModuleName() {
         return moduleName;
     }
 
-    public DefaultTableModel getModel() {
-        return model;
+    public DefaultTableModel getTblModelAttendance() {
+        return tblModelAttendance;
     }
+
+    public DefaultTableModel getTblModelStats() {
+        return tblModelStats;
+    }
+
 }
