@@ -163,18 +163,16 @@ public class LecturerController {
         ////////////////adding attendance to db//////////////////
 
         //getting selected mid
+        int mid=0;
         for(ModuleModel m : model.getModuleList()){
             if (m.getName()==view.getComboBoxModule().getSelectedItem()){
-                int mid = m.getId();
+                mid = m.getId();
             }
         }
 
-        //getting date
-        LocalDate localDate = LocalDate.now();
-        String date = String.valueOf(localDate);
-        System.out.println(date);
 
-        final String query2 = "INSERT INTO attendance (mid,sid,presence)VALUES (mid,?,?)";
+
+        final String query2 = "INSERT INTO attendance (mid,sid,presence)VALUES (?,?,?)";
         try{
             final String dbURL = "jdbc:mysql://localhost:3306/attendance";
             final String username = "root";
@@ -184,18 +182,20 @@ public class LecturerController {
 
             for (int i = 0; i < view.getTable().getRowCount(); i++) {  // Loop through the rows
                 int id = parseInt(String.valueOf(view.getTable().getValueAt(i, 0)));
-                System.out.println(id);
+                System.out.println(mid);
                 String presence = String.valueOf(view.getTable().getValueAt(i, 2));
 
-                stmt.setInt(1, id);
+
+                stmt.setInt(1, mid);
+                stmt.setInt(2, id);
 
                 System.out.println(presence);
 
                 if (presence.equals("true")){
-                    stmt.setInt(2,1);
+                    stmt.setInt(3,1);
                 }
                 else{
-                    stmt.setInt(2,0);
+                    stmt.setInt(3,0);
                 }
                stmt.executeUpdate();
             }
