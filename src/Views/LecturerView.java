@@ -28,6 +28,8 @@ public class LecturerView {
     final DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
     DefaultTableModel model = new DefaultTableModel();
 
+    DefaultTableModel model2 = new DefaultTableModel();
+
     CardLayout cl = new CardLayout();
 
     public LecturerView(String title){
@@ -152,16 +154,8 @@ public class LecturerView {
 
 
         //creating JTable for statistics
-        String columns2[] = { "Date", "Present","Absent","% Present" };
 
-        Object[][] data2 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
-        };
 
-        DefaultTableModel model2 = new DefaultTableModel(data2, columns2);
         JTable table2 = new JTable(model2);
 
         table2.setShowGrid(true);
@@ -273,5 +267,9 @@ public class LecturerView {
 
     public DefaultTableModel getModel() {
         return model;
+    }
+
+    public DefaultTableModel getModel2() {
+        return model2;
     }
 }
