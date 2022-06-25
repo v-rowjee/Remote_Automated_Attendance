@@ -62,7 +62,7 @@ public class LecturerView {
         lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
         lblOptionSelected=new AASLabel("Attendance");
         lblFor=new AASLabel("for");
-        lbldummy=new AASLabel("                                                           ");
+        lbldummy=new AASLabel("                ");
 
 
         //Creating panels
@@ -81,11 +81,11 @@ public class LecturerView {
         cardstats.setLayout(boxlayout2);
 
         paneldate.setLayout(new FlowLayout());
-        paneldate.setBorder(new EmptyBorder(10,10,10,10));
+        paneldate.setBorder(new EmptyBorder(15,10,15,10));
 
 
         panelnavbar.setLayout(new GridLayout(5,1,10,10));
-        panelnavbar.setBorder(new EmptyBorder(20,20,20,20) );
+        panelnavbar.setBorder(new EmptyBorder(20,10,20,10) );
 
         panelMain.setLayout(new BorderLayout());
         panelMain.add(paneldate,BorderLayout.NORTH);
@@ -112,7 +112,7 @@ public class LecturerView {
         //add colour to panels
         panelnavbar.setBackground(Color.decode("#00adb5"));
         paneldate.setBackground(Color.darkGray);
-        cardattendance.setBackground(Color.blue);
+        cardattendance.setBackground(Color.darkGray);
         cardstats.setBackground(Color.yellow);
         cardsearch.setBackground(Color.black);
 
