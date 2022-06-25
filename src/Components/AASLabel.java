@@ -8,6 +8,10 @@ public class AASLabel extends JLabel {
 		super(text);
 		setForeground(Color.decode("#eeeeee"));
 	};
+
+	public AASLabel(){
+		setForeground(Color.decode("#eeeeee"));
+	};
 	AASLabel(String text, String color){
 		super(text);
 		setForeground(Color.decode(color));

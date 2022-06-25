@@ -168,8 +168,6 @@ public class LecturerController {
             while(rs1.next()){
                 data2[i][0] = rs1.getDate("date");
                 data2[i][1] = rs1.getInt("COUNT(sid)");
-                // data2[i][2] = false;
-                // data2[i][3] = false;
                 i++;
             }
             i =0;
@@ -178,7 +176,6 @@ public class LecturerController {
                 double intpresent=Integer.parseInt(String.valueOf(data2[i][1]));
                 double intabsent=Integer.parseInt(String.valueOf(data2[i][2]));
                 double percentage= (intpresent/(intpresent + intabsent))*100;
-                System.out.println(percentage);
                 DecimalFormat df = new DecimalFormat("0.0");
                 data2[i][3] = df.format(percentage);
 

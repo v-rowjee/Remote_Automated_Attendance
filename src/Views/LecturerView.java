@@ -1,6 +1,8 @@
 package Views;
 
 import Components.AASButton;
+import Components.AASLabel;
+import Components.AASRadioButton;
 
 
 import javax.swing.*;
@@ -14,10 +16,10 @@ public class LecturerView {
     private JFrame frame;
     private JTable tableAtt, tableStats;
     private AASButton btnLogout, btnSubmitAttendance;
-    private JRadioButton rdBtnAttendance, rdBtnStatistics;
+    private AASRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
-    private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
+    private AASLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
     private CardLayout cardLayout = new CardLayout();
@@ -41,8 +43,8 @@ public class LecturerView {
         btnLogout = new AASButton("Logout");
         btnSubmitAttendance=new AASButton("Submit");
 
-        rdBtnAttendance= new JRadioButton("Attendance",true);
-        rdBtnStatistics= new JRadioButton("Statistics", false);
+        rdBtnAttendance= new AASRadioButton("Attendance",true);
+        rdBtnStatistics= new AASRadioButton("Statistics", false);
 
         radioGroup= new ButtonGroup();
         radioGroup.add(rdBtnAttendance);
@@ -52,15 +54,15 @@ public class LecturerView {
         comboBoxModule= new JComboBox(moduleName);
         comboBoxModule.setMaximumRowCount(5);
 
-        lblUser= new JLabel("Welcome User");
+        lblUser= new AASLabel("Welcome User");
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblUser.setVerticalAlignment(SwingConstants.TOP);
-        lblDate= new JLabel();
-        lblTime= new JLabel();
-        lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
-        lblOptionSelected=new JLabel("Attendance");
-        lblFor=new JLabel("for");
-        lbldummy=new JLabel("                          ");
+        lblDate= new AASLabel();
+        lblTime= new AASLabel();
+        lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
+        lblOptionSelected=new AASLabel("Attendance");
+        lblFor=new AASLabel("for");
+        lbldummy=new AASLabel("                                                           ");
 
 
         //Creating panels
@@ -79,9 +81,7 @@ public class LecturerView {
         cardstats.setLayout(boxlayout2);
 
         paneldate.setLayout(new FlowLayout());
-      //  paneldate.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
-      //  paneldate.setLayout(new GridLayout(1,6));
-        paneldate.setBorder(new EmptyBorder(20,20,20,20));
+        paneldate.setBorder(new EmptyBorder(10,10,10,10));
 
 
         panelnavbar.setLayout(new GridLayout(5,1,10,10));
@@ -110,8 +110,8 @@ public class LecturerView {
 
 
         //add colour to panels
-        panelnavbar.setBackground(Color.green);
-        paneldate.setBackground(Color.red);
+        panelnavbar.setBackground(Color.decode("#00adb5"));
+        paneldate.setBackground(Color.darkGray);
         cardattendance.setBackground(Color.blue);
         cardstats.setBackground(Color.yellow);
         cardsearch.setBackground(Color.black);
@@ -164,11 +164,11 @@ public class LecturerView {
         return frame;
     }
 
-    public JLabel getLblOptionSelected() {
+    public AASLabel getLblOptionSelected() {
         return lblOptionSelected;
     }
 
-    public JLabel getLblModuleSelected() {
+    public AASLabel getLblModuleSelected() {
         return lblModuleSelected;
     }
 
@@ -185,11 +185,11 @@ public class LecturerView {
         return btnLogout;
     }
 
-    public JLabel getLblDate() {
+    public AASLabel getLblDate() {
         return lblDate;
     }
 
-    public JLabel getLblTime() {
+    public AASLabel getLblTime() {
         return lblTime;
     }
 
@@ -197,19 +197,19 @@ public class LecturerView {
         this.frame = frame;
     }
 
-    public void setLblDate(JLabel lblDate) {
+    public void setLblDate(AASLabel lblDate) {
         this.lblDate = lblDate;
     }
 
-    public void setLblTime(JLabel lblTime) {
+    public void setLblTime(AASLabel lblTime) {
         this.lblTime = lblTime;
     }
 
-    public JRadioButton getRdBtnAttendance() {
+    public AASRadioButton getRdBtnAttendance() {
         return rdBtnAttendance;
     }
 
-    public JRadioButton getRdBtnStatistics() {
+    public AASRadioButton getRdBtnStatistics() {
         return rdBtnStatistics;
     }
 
@@ -218,7 +218,7 @@ public class LecturerView {
     }
 
 
-    public JLabel getLblUser() {
+    public AASLabel getLblUser() {
         return lblUser;
     }
 
