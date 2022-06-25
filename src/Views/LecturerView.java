@@ -1,7 +1,6 @@
 package Views;
 
 import Components.AASButton;
-import Models.ModuleModel;
 
 
 import javax.swing.*;
@@ -9,12 +8,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
 
 public class LecturerView {
     private JFrame frame;
-    private JTable table;
+    private JTable tableAtt, tableStats;
     private AASButton btnLogout, btnSubmitAttendance;
     private JRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
@@ -22,24 +20,22 @@ public class LecturerView {
     private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
-    private Object[][] dataa;
+    private CardLayout cardLayout = new CardLayout();
 
 
-    final DefaultComboBoxModel moduleName = new DefaultComboBoxModel(new String[] {});
-    DefaultTableModel model = new DefaultTableModel();
+    private DefaultComboBoxModel moduleName;
+    private DefaultTableModel tblModelAtt;
+    private DefaultTableModel tblModelStats;
 
-    DefaultTableModel model2 = new DefaultTableModel();
-
-    CardLayout cl = new CardLayout();
 
     public LecturerView(String title){
         frame = new JFrame(title);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  //      frame.setLocationRelativeTo(null);
+        frame.setMinimumSize(new Dimension(800,500));
         frame.setVisible(true);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        URL iconURL = getClass().getResource("../images/favicon.png");
+        frame.setIconImage(new ImageIcon(iconURL).getImage());
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
@@ -52,6 +48,7 @@ public class LecturerView {
         radioGroup.add(rdBtnAttendance);
         radioGroup.add(rdBtnStatistics);
 
+        moduleName = new DefaultComboBoxModel(new String[] {});
         comboBoxModule= new JComboBox(moduleName);
         comboBoxModule.setMaximumRowCount(5);
 
@@ -63,7 +60,7 @@ public class LecturerView {
         lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
         lblOptionSelected=new JLabel("Attendance");
         lblFor=new JLabel("for");
-        lbldummy=new JLabel("                            ");
+        lbldummy=new JLabel("                          ");
 
 
         //Creating panels
@@ -75,7 +72,7 @@ public class LecturerView {
         cardstats = new JPanel();
         cardsearch=new JPanel();
 
-        panelcenter.setLayout(cl);
+        panelcenter.setLayout(cardLayout);
         BoxLayout boxlayout1 = new BoxLayout(cardattendance,BoxLayout.Y_AXIS);
         cardattendance.setLayout(boxlayout1);
         BoxLayout boxlayout2 = new BoxLayout(cardstats,BoxLayout.Y_AXIS);
@@ -127,58 +124,40 @@ public class LecturerView {
 
 
         //creating JTable for attendance
-        table = new JTable(model){
+        tblModelAtt = new DefaultTableModel();
+        tableAtt = new JTable(tblModelAtt){
             public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                    case 1:
-                        return String.class;
-                    case 3:
-                        return Boolean.class;
-                    default:
-                        return Boolean.class;
-                }
+                return switch (column) {
+                    case 0 -> String.class;
+                    case 1 -> String.class;
+                    default -> Boolean.class;
+                };
             }
         };
-
-        table.setShowGrid(true);
-        table.setShowVerticalLines(true);
-        JScrollPane pane = new JScrollPane(table);
-        pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        cardattendance.add(pane);
+        tableAtt.setShowGrid(true);
+        tableAtt.setShowVerticalLines(true);
+        JScrollPane paneAtt = new JScrollPane(tableAtt);
+        paneAtt.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneAtt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        cardattendance.add(paneAtt);
         btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardattendance.add(btnSubmitAttendance);
 
 
-
-
         //creating JTable for statistics
-
-
-        JTable table2 = new JTable(model2);
-
-        table2.setShowGrid(true);
-        table2.setShowVerticalLines(true);
-        JScrollPane pane2 = new JScrollPane(table2);
-        pane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        pane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        cardstats.add(pane2);
-
-
+        tblModelStats = new DefaultTableModel();
+        tableStats = new JTable(tblModelStats);
+        tableStats.setShowGrid(true);
+        tableStats.setShowVerticalLines(true);
+        JScrollPane paneStats = new JScrollPane(tableStats);
+        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        cardstats.add(paneStats);
 
 
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
         frame.add(panelMain,BorderLayout.CENTER);
-
-
-
-
-
-
-
-
     }
 
     public JFrame getFrame() {
@@ -198,8 +177,8 @@ public class LecturerView {
         return panelcenter;
     }
 
-    public CardLayout getCl() {
-        return cl;
+    public CardLayout getCardLayout() {
+        return cardLayout;
     }
 
     public AASButton getBtnLogout() {
@@ -257,19 +236,19 @@ public class LecturerView {
         return btnSubmitAttendance;
     }
 
-    public JTable getTable(){
-        return table;
+    public JTable getTableAtt(){
+        return tableAtt;
     }
 
     public DefaultComboBoxModel getModuleName() {
         return moduleName;
     }
 
-    public DefaultTableModel getModel() {
-        return model;
+    public DefaultTableModel getTblModelAtt() {
+        return tblModelAtt;
     }
 
-    public DefaultTableModel getModel2() {
-        return model2;
+    public DefaultTableModel getTblModelStats() {
+        return tblModelStats;
     }
 }
