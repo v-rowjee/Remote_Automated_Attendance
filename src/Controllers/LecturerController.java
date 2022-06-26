@@ -125,8 +125,8 @@ public class LecturerController {
 
                     data[i][0] = String.valueOf(s.getId());
                     data[i][1] = s.getName();
-                    data[i][2] = false;
-                    data[i][3] = false;
+                    data[i][2] = m.getAttendanceFor(s);
+                    data[i][3] = !m.getAttendanceFor(s);
                     i++;
 
 
@@ -146,33 +146,27 @@ public class LecturerController {
             }
         }
 
-        String queryPresent ="SELECT COUNT(sid), date FROM attendance  WHERE mid =? AND presence='1' GROUP BY date ORDER BY date DESC";
-        String queryAbsent ="SELECT COUNT(sid), date FROM attendance  WHERE mid =? AND presence='0' GROUP BY date ORDER BY date DESC";
+        String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
+
 
         try{
             final String dbURL = "jdbc:mysql://localhost:3306/attendance";
             final String username = "root";
             final String password = "";
             Connection conn = DriverManager.getConnection(dbURL,username,password);
-            Connection conn2 = DriverManager.getConnection(dbURL,username,password);
-            PreparedStatement stmt1 = conn.prepareStatement(queryPresent);
-            PreparedStatement stmt2 = conn2.prepareStatement(queryAbsent);
-            stmt1.setInt(1, mid);
-            stmt2.setInt(1, mid);
-            ResultSet rs1 = stmt1.executeQuery();
-            ResultSet rs2 = stmt2.executeQuery();
-            ResultSetMetaData metaData1 = rs1.getMetaData();
+            PreparedStatement stmt = conn.prepareStatement(queryAttendance);
+            stmt.setInt(1, mid);
+            ResultSet rs = stmt.executeQuery();
+            ResultSetMetaData metaData1 = rs.getMetaData();
             int row = metaData1.getColumnCount();
             Object[][] data2 = new Object[row][4];
             int i=0;
-            while(rs1.next()){
-                data2[i][0] = rs1.getDate("date");
-                data2[i][1] = rs1.getInt("COUNT(sid)");
-                i++;
-            }
-            i =0;
-            while(rs2.next()){
-                data2[i][2] = rs2.getInt("COUNT(sid)");
+            while(rs.next()){
+
+                data2[i][0] = rs.getDate("date");
+                data2[i][1] = rs.getInt("present");
+                data2[i][2] = rs.getInt("absent");
+
                 double intpresent=Integer.parseInt(String.valueOf(data2[i][1]));
                 double intabsent=Integer.parseInt(String.valueOf(data2[i][2]));
                 double percentage= (intpresent/(intpresent + intabsent))*100;
@@ -212,56 +206,50 @@ public class LecturerController {
                 columnData[i][3]="0";
             }
         }
-        for (int x = 0; x < columnData.length; x++) {
-            System.out.println(columnData[x][3]);
-        }
         JOptionPane.showMessageDialog(view.getFrame(), "ALL GOOD", "Information", JOptionPane.INFORMATION_MESSAGE);
 
         ////////////////adding attendance to db//////////////////
-
-        //getting selected mid
-        int mid=0;
-        for(ModuleModel m : model.getModuleList()){
-            if (m.getName()==view.getComboBoxModule().getSelectedItem()){
-                mid = m.getId();
-            }
-        }
-
-
-
-        final String query2 = "INSERT INTO attendance (mid,sid,presence)VALUES (?,?,?)";
-        try{
-            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-            final String username = "root";
-            final String password = "";
-            Connection conn = DriverManager.getConnection(dbURL,username,password);
-            PreparedStatement stmt = conn.prepareStatement(query2);
-
-            for (int i = 0; i < view.getTableAtt().getRowCount(); i++) {  // Loop through the rows
-                int id = parseInt(String.valueOf(view.getTableAtt().getValueAt(i, 0)));
-                System.out.println(mid);
-                String presence = String.valueOf(view.getTableAtt().getValueAt(i, 2));
-
-
-                stmt.setInt(1, mid);
-                stmt.setInt(2, id);
-
-                System.out.println(presence);
-
-                if (presence.equals("true")){
-                    stmt.setInt(3,1);
+        int ans = JOptionPane.showConfirmDialog(null, "Attendance can only be taken once per day. Do you want to proceed?");
+        if(ans==JOptionPane.YES_OPTION) {
+            //getting selected mid
+            int mid = 0;
+            for (ModuleModel m : model.getModuleList()) {
+                if (m.getName() == view.getComboBoxModule().getSelectedItem()) {
+                    mid = m.getId();
                 }
-                else{
-                    stmt.setInt(3,0);
-                }
-               stmt.executeUpdate();
             }
 
-        } catch (SQLException e) {
-            System.err.println(e);
-            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController","Alert",JOptionPane.ERROR_MESSAGE);
-        }
 
+            final String query2 = "INSERT INTO attendance (mid,sid,presence)VALUES (?,?,?)";
+            try {
+                final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+                final String username = "root";
+                final String password = "";
+                Connection conn = DriverManager.getConnection(dbURL, username, password);
+                PreparedStatement stmt = conn.prepareStatement(query2);
+
+                for (int i = 0; i < view.getTableAtt().getRowCount(); i++) {  // Loop through the rows
+                    int id = parseInt(String.valueOf(view.getTableAtt().getValueAt(i, 0)));
+                    String presence = String.valueOf(view.getTableAtt().getValueAt(i, 2));
+
+
+                    stmt.setInt(1, mid);
+                    stmt.setInt(2, id);
+
+
+                    if (presence.equals("true")) {
+                        stmt.setInt(3, 1);
+                    } else {
+                        stmt.setInt(3, 0);
+                    }
+                    stmt.executeUpdate();
+                }
+
+            } catch (SQLException e) {
+                System.err.println(e);
+                JOptionPane.showMessageDialog(view.getFrame(), "Duplicate Attendance Data", "Alert", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     }

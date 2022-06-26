@@ -1,8 +1,7 @@
 package Models;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import Database.Database;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,36 @@ public class ModuleModel {
             System.err.println(e);
         }
     }
+    public Boolean getAttendanceFor(StudentModel s){
+        Connection conn = Database.getConnection();
 
+        String query = "SELECT presence FROM attendance WHERE date = CURRENT_DATE() AND mid = ? AND sid = ?";
+
+        try{
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1,this.id);
+            stmt.setInt(2,s.getId());
+
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs != null){
+                while(rs.next()){
+                    // getting presence of student
+                    return rs.getBoolean("presence");
+                }
+            }
+            else{
+                // not set in db yet
+                return true;
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public int getId() {
         return id;
