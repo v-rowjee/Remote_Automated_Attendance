@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.*;
 
 public class AdminView {
     private JFrame frame;
@@ -51,8 +52,9 @@ public class AdminView {
         radioGroup.add(rdBtnDefaulter);
         radioGroup.add(rdBtnAdd);
 
-        comboBoxModule= new JComboBox(modName);
+        comboBoxModule= new JComboBox(getModule());
         comboBoxModule.setMaximumRowCount(5);
+
 
         lblUser= new JLabel("Welcome User");
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
@@ -226,9 +228,7 @@ public class AdminView {
         return btnLogout;
     }
 
-    public static String[] getModName() {
-        return modName;
-    }
+
 
     public JLabel getLblDate() {
         return lblDate;
@@ -288,9 +288,9 @@ public class AdminView {
         this.comboBoxModule = comboBoxModule;
     }
 
-    public static void setModName(String[] modName) {
-        AdminView.modName = modName;
-    }
+    //public  void setModName(String[] modName) {
+      //  moduleName = modName;
+    //}
 
     public JButton getBtnaddLecturer(){return BtnaddLecturer;}
 
@@ -299,4 +299,50 @@ public class AdminView {
     public JTextField getTxtUserName(){return txtUserName;}
 
     public JTextField getTxtPassword(){return txtPassword;}
+
+    public String[] getModule(){
+        String [] array=null;
+        final String query = "SELECT name AS row_count FROM  module";
+
+        try{
+            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
+            final String username = "root";
+            final String password = "";
+            Connection conn = DriverManager.getConnection(dbURL,username,password);
+            PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            ResultSet rs = stmt.executeQuery();
+            int rowCount=0;
+            while(rs.next()){
+               rowCount++;
+               System.out.println(rowCount);
+            }
+
+
+            array=new String[rowCount];
+            int i=0;
+
+            rs.beforeFirst();
+
+            while(rs.next()){
+
+                array[i]=rs.getString(1);
+                i++;
+
+            }
+
+
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(frame.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
+            System.out.println(e);
+        }
+
+        return array;
+    }
+
+
+
+
+
 }
