@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.ModuleModel;
 import Models.UserModel;
 import Views.AdminView;
 import Views.LecturerView;
@@ -139,6 +140,14 @@ public class AdminController {
 
 
     }
+
+    /*public void setComboBoxModule(){
+        for(ModuleModel m : model.getModuleList()){
+            view.getModuleName().addElement(m.getName());
+        }
+        view.getComboBoxModule().setSelectedIndex(0);
+        view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
+    }*/
 
 
 
