@@ -126,7 +126,7 @@ public class LecturerController {
                     data[i][0] = String.valueOf(s.getId());
                     data[i][1] = s.getName();
                     data[i][2] = m.getAttendanceFor(s);
-                    data[i][3] = !m.getAttendanceFor(s);
+                    data[i][3] = m.getAbsenceFor(s);
                     i++;
 
 

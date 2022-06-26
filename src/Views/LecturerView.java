@@ -3,6 +3,7 @@ package Views;
 import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
+import Components.AASTable;
 
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ import java.net.URL;
 
 public class LecturerView {
     private JFrame frame;
-    private JTable tableAtt, tableStats;
+    private AASTable tableAtt, tableStats;
     private AASButton btnLogout, btnSubmitAttendance;
     private AASRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
@@ -123,9 +124,9 @@ public class LecturerView {
         panelcenter.add(cardsearch,"search");
 
 
-        //creating JTable for attendance
+        //creating AASTable for attendance
         tblModelAtt = new DefaultTableModel();
-        tableAtt = new JTable(tblModelAtt){
+        tableAtt = new AASTable(tblModelAtt){
             public Class getColumnClass(int column) {
                 return switch (column) {
                     case 0 -> String.class;
@@ -134,8 +135,8 @@ public class LecturerView {
                 };
             }
         };
-        tableAtt.setShowGrid(true);
-        tableAtt.setShowVerticalLines(true);
+       // tableAtt.setShowGrid(true);
+       // tableAtt.setShowVerticalLines(true);
         JScrollPane paneAtt = new JScrollPane(tableAtt);
         paneAtt.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         paneAtt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -144,9 +145,9 @@ public class LecturerView {
         cardattendance.add(btnSubmitAttendance);
 
 
-        //creating JTable for statistics
+        //creating AASTable for statistics
         tblModelStats = new DefaultTableModel();
-        tableStats = new JTable(tblModelStats);
+        tableStats = new AASTable(tblModelStats);
         tableStats.setShowGrid(true);
         tableStats.setShowVerticalLines(true);
         JScrollPane paneStats = new JScrollPane(tableStats);
@@ -236,7 +237,7 @@ public class LecturerView {
         return btnSubmitAttendance;
     }
 
-    public JTable getTableAtt(){
+    public AASTable getTableAtt(){
         return tableAtt;
     }
 
