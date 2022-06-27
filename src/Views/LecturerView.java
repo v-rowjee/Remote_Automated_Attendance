@@ -63,7 +63,6 @@ public class LecturerView {
         lblUser= new AASLabel();
         lblUser.setTitle(true);
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
-        lblUser.setVerticalAlignment(SwingConstants.TOP);
         lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
         lblOptionSelected=new AASLabel("Attendance");
         lblFor = new AASLabel(" for ");
@@ -102,15 +101,22 @@ public class LecturerView {
 
 
         panelnavbar.setPreferredSize(new Dimension(frame.getWidth()/4,frame.getHeight()));
-        panelnavbar.setLayout(new GridLayout(6,1,0,40));
-        panelnavbar.setBorder(new EmptyBorder(13,20,10,20) );
+        panelnavbar.setLayout(new BorderLayout());
+        panelnavbar.setBorder(new EmptyBorder(0,20,5,20) );
 
-        panelnavbar.add(lblUser);
-        panelnavbar.add(comboBoxModule);
-        panelnavbar.add(rdBtnAttendance);
-        panelnavbar.add(rdBtnStatistics);
-        panelnavbar.add(Box.createGlue());
-        panelnavbar.add(btnLogout);
+        JPanel panelNavbarCenter = new JPanel();
+        panelNavbarCenter.setLayout(new GridLayout(3,1,0,50));
+        panelNavbarCenter.setBorder(new EmptyBorder(50,0,50,0));
+        panelNavbarCenter.setBackground(Color.decode("#00adb5"));
+        panelNavbarCenter.add(comboBoxModule);
+        panelNavbarCenter.add(rdBtnAttendance);
+        panelNavbarCenter.add(rdBtnStatistics);
+
+        lblUser.setPreferredSize(new Dimension(frame.getWidth()/4,frame.getHeight()/10));
+        btnLogout.setPreferredSize(new Dimension(frame.getWidth()/4,frame.getHeight()/10-10));
+        panelnavbar.add(lblUser,BorderLayout.NORTH);
+        panelnavbar.add(panelNavbarCenter,BorderLayout.CENTER);
+        panelnavbar.add(btnLogout,BorderLayout.SOUTH);
 
 
         //add colour to panels
