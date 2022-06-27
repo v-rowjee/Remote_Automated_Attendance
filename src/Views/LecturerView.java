@@ -9,20 +9,24 @@ import Components.AASTable;
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class LecturerView {
     private JFrame frame;
     private AASTable tableAtt, tableStats;
-    private AASButton btnLogout, btnSubmitAttendance;
+    private AASButton btnLogout, btnSubmitAttendance, btnClearAttendance;
     private AASRadioButton rdBtnAttendance, rdBtnStatistics;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
-    private AASLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor, lbldummy;
+    private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor, clock;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
+    private JPanel panelAttBottom;
     private CardLayout cardLayout = new CardLayout();
 
 
@@ -42,7 +46,9 @@ public class LecturerView {
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
+        btnLogout.setDark(true);
         btnSubmitAttendance=new AASButton("Submit");
+        btnClearAttendance = new AASButton("Clear");
 
         rdBtnAttendance= new AASRadioButton("Attendance",true);
         rdBtnStatistics= new AASRadioButton("Statistics", false);
@@ -54,16 +60,14 @@ public class LecturerView {
         moduleName = new DefaultComboBoxModel(new String[] {});
         comboBoxModule= new JComboBox(moduleName);
         comboBoxModule.setMaximumRowCount(5);
-
-        lblUser= new AASLabel("Welcome User");
+        lblUser= new AASLabel();
+        lblUser.setTitle(true);
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblUser.setVerticalAlignment(SwingConstants.TOP);
-        lblDate= new AASLabel();
-        lblTime= new AASLabel();
         lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
         lblOptionSelected=new AASLabel("Attendance");
-        lblFor=new AASLabel("for");
-        lbldummy=new AASLabel("                ");
+        lblFor = new AASLabel(" for ");
+        clock = new AASLabel();
 
 
         //Creating panels
@@ -74,19 +78,14 @@ public class LecturerView {
         cardattendance = new JPanel();
         cardstats = new JPanel();
         cardsearch=new JPanel();
+        panelAttBottom = new JPanel();
 
         panelcenter.setLayout(cardLayout);
-        BoxLayout boxlayout1 = new BoxLayout(cardattendance,BoxLayout.Y_AXIS);
-        cardattendance.setLayout(boxlayout1);
-        BoxLayout boxlayout2 = new BoxLayout(cardstats,BoxLayout.Y_AXIS);
-        cardstats.setLayout(boxlayout2);
+        cardattendance.setLayout(new BorderLayout());
+        cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
 
-        paneldate.setLayout(new FlowLayout());
-        paneldate.setBorder(new EmptyBorder(15,10,15,10));
+        paneldate.setBorder(new EmptyBorder(15,25,15,25));
 
-
-        panelnavbar.setLayout(new GridLayout(5,1,10,10));
-        panelnavbar.setBorder(new EmptyBorder(20,10,20,10) );
 
         panelMain.setLayout(new BorderLayout());
         panelMain.add(paneldate,BorderLayout.NORTH);
@@ -94,19 +93,23 @@ public class LecturerView {
 
 
          //Add UI element to panels
+        paneldate.setLayout(new BoxLayout(paneldate,BoxLayout.X_AXIS));
         paneldate.add(lblOptionSelected);
         paneldate.add(lblFor);
         paneldate.add(lblModuleSelected);
-        paneldate.add(lbldummy);
-        paneldate.add(lblDate);
-        paneldate.add(lblTime);
+        paneldate.add(Box.createGlue());
+        paneldate.add(clock);
 
 
+        panelnavbar.setPreferredSize(new Dimension(frame.getWidth()/4,frame.getHeight()));
+        panelnavbar.setLayout(new GridLayout(6,1,0,40));
+        panelnavbar.setBorder(new EmptyBorder(13,20,10,20) );
 
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
         panelnavbar.add(rdBtnAttendance);
         panelnavbar.add(rdBtnStatistics);
+        panelnavbar.add(Box.createGlue());
         panelnavbar.add(btnLogout);
 
 
@@ -135,14 +138,18 @@ public class LecturerView {
                 };
             }
         };
-       // tableAtt.setShowGrid(true);
-       // tableAtt.setShowVerticalLines(true);
         JScrollPane paneAtt = new JScrollPane(tableAtt);
         paneAtt.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         paneAtt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        cardattendance.add(paneAtt);
+
         btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cardattendance.add(btnSubmitAttendance);
+        panelAttBottom.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        panelAttBottom.setBackground(Color.darkGray);
+        panelAttBottom.add(btnClearAttendance);
+        panelAttBottom.add(btnSubmitAttendance);
+
+        cardattendance.add(paneAtt,BorderLayout.CENTER);
+        cardattendance.add(panelAttBottom,BorderLayout.SOUTH);
 
 
         //creating AASTable for statistics
@@ -173,6 +180,9 @@ public class LecturerView {
         return lblModuleSelected;
     }
 
+    public AASLabel getClock() {
+        return clock;
+    }
 
     public JPanel getPanelcenter() {
         return panelcenter;
@@ -186,26 +196,6 @@ public class LecturerView {
         return btnLogout;
     }
 
-    public AASLabel getLblDate() {
-        return lblDate;
-    }
-
-    public AASLabel getLblTime() {
-        return lblTime;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
-    public void setLblDate(AASLabel lblDate) {
-        this.lblDate = lblDate;
-    }
-
-    public void setLblTime(AASLabel lblTime) {
-        this.lblTime = lblTime;
-    }
-
     public AASRadioButton getRdBtnAttendance() {
         return rdBtnAttendance;
     }
@@ -214,23 +204,12 @@ public class LecturerView {
         return rdBtnStatistics;
     }
 
-    public JPanel getPanelnavbar() {
-        return panelnavbar;
-    }
-
-
     public AASLabel getLblUser() {
         return lblUser;
     }
 
     public JComboBox getComboBoxModule() {
         return comboBoxModule;
-    }
-
-
-
-    public void setComboBoxModule(JComboBox comboBoxModule) {
-        this.comboBoxModule = comboBoxModule;
     }
 
     public AASButton getBtnSubmitAttendance() {
