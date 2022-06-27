@@ -7,11 +7,13 @@ import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.*;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 
 import static Controllers.LoginController.centreWindow;
 import static java.lang.Integer.parseInt;
@@ -30,10 +32,10 @@ public class LecturerController {
     public void initView() {
         view.getFrame().setSize(700, 500);
         centreWindow(view.getFrame());
-        setDateTime();
+        setCurrentDateTime();
 
         view.getCardLayout().show(view.getPanelcenter(), "attendance");
-        view.getLblUser().setText("Welcome " + model.getName());
+        view.getLblUser().setText("Welcome, " + model.getName());
         setComboBoxModule();
         setTableAttendance();
         setTableStats();
@@ -56,6 +58,19 @@ public class LecturerController {
         c.initController();
     }
 
+    public  void setCurrentDateTime(){
+        tickTock();
+        Timer timer = new Timer(500, e -> tickTock());
+        timer.setRepeats(true);
+        timer.setCoalesce(true);
+        timer.setInitialDelay(0);
+        timer.start();
+    }
+    public void tickTock() {
+        view.getClock().setText(DateFormat.getDateTimeInstance().format(new Date()));
+        view.getClock().setFont(new Font("Roboto",Font.PLAIN,13));
+    }
+
     public void setComboBoxModule(){
         for(ModuleModel m : model.getModuleList()){
             view.getModuleName().addElement(m.getName());
@@ -72,43 +87,6 @@ public class LecturerController {
     private void showAttendance() {
         view.getCardLayout().show(view.getPanelcenter(), "attendance");
         view.getLblOptionSelected().setText("Attendance");
-    }
-
-    public void setDateTime() {
-        Thread clock = new Thread() {
-            public void run() {
-                for (; ; ) {
-
-                    Calendar cal = new GregorianCalendar();
-                    int month = cal.get(Calendar.MONTH);
-                    int year = cal.get(Calendar.YEAR);
-                    int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                    view.getLblDate().setText("Date: " + day + "/" + (month + 1) + "/" + (year));
-
-                    String am_pm = new String();
-                    int second = cal.get(Calendar.SECOND);
-                    int mint = cal.get(Calendar.MINUTE);
-                    int hour = cal.get(Calendar.HOUR);
-                    int timezone = cal.get(Calendar.AM_PM);
-                    if (timezone == 0) {
-                        am_pm = "AM";
-                    } else {
-                        am_pm = "PM";
-                    }
-                    view.getLblTime().setText("Time: " + hour + ":" + (mint) + ":" + (second) + " " + am_pm);
-
-
-                    try {
-                        sleep(1000);
-
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(LecturerController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        };
-        clock.start();
     }
 
     //listener to combo box module + setting up table attendance
