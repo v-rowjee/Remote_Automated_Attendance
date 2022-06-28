@@ -46,6 +46,10 @@ public class LoginView {
         panel.setBackground(Color.darkGray);
         lblUsername.setForeground(Color.white);
         lblPassword.setForeground(Color.white);
+        txtPassword.setBorder(null);
+        txtPassword.setBorder(BorderFactory.createCompoundBorder(
+                txtPassword.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
         panel.add(Box.createVerticalGlue());
         panel.add(lblUsername);
