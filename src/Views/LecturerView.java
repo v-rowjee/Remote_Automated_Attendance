@@ -106,8 +106,8 @@ public class LecturerView {
         panelnavbar.setBorder(new EmptyBorder(0,20,5,20) );
 
         JPanel panelNavbarCenter = new JPanel();
-        panelNavbarCenter.setLayout(new GridLayout(3,1,0,50));
-        panelNavbarCenter.setBorder(new EmptyBorder(50,0,50,0));
+        panelNavbarCenter.setLayout(new GridLayout(3,1,0,40));
+        panelNavbarCenter.setBorder(new EmptyBorder(60,0,100,0));
         panelNavbarCenter.setBackground(Color.decode("#00adb5"));
         panelNavbarCenter.add(comboBoxModule);
         panelNavbarCenter.add(rdBtnAttendance);
