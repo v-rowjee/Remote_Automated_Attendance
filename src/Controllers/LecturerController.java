@@ -45,6 +45,7 @@ public class LecturerController {
         view.getBtnLogout().addActionListener(e -> logout());
         view.getRdBtnAttendance().addActionListener(e -> showAttendance());
         view.getRdBtnStatistics().addActionListener(e -> showStatistic());
+        view.getRdBtnStatistics().addActionListener(e -> setTableStats());
         view.getComboBoxModule().addActionListener(e -> setTableAttendance());
         view.getComboBoxModule().addActionListener(e -> setTableStats());
         view.getBtnSubmitAttendance().addActionListener(e -> addAttendance());
@@ -125,15 +126,22 @@ public class LecturerController {
         }
 
         String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
-
+        System.out.println("haha1");
         try{
             Connection conn = Database.getConnection();
+
             PreparedStatement stmt = conn.prepareStatement(queryAttendance);
             stmt.setInt(1, mid);
             ResultSet rs = stmt.executeQuery();
-            ResultSetMetaData metaData1 = rs.getMetaData();
-            int row = metaData1.getColumnCount();
-            Object[][] data2 = new Object[row][4];
+
+            System.out.println("Your query have rows.");
+//            int rowCount =0;
+//            rs.last();
+//            rowCount = rs.getRow();
+//            rs.first();
+//            System.out.println("Your query have " + rowCount + " rows.");
+
+            Object[][] data2 = new Object[4][4];
             int i=0;
             while(rs.next()){
 
@@ -149,7 +157,6 @@ public class LecturerController {
 
                 i++;
             }
-
 
             String columns2[] = { "Date", "Present","Absent","% Present" };
             view.getTblModelStats().setDataVector(data2,columns2);

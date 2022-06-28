@@ -1,5 +1,9 @@
 package Views;
 
+import Components.AASButton;
+import Components.AASLabel;
+import Components.AASRadioButton;
+
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -7,24 +11,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
 
+
 public class AdminView {
     private JFrame frame;
-    private JButton  btnLogout, btnMod[],BtnaddLecturer;
-    private JRadioButton rdBtnAttendance, rdBtnStatistics;
+    private AASButton  btnLogout, btnMod[],BtnaddLecturer;
     private ButtonGroup radioGroup;
     private JComboBox comboBoxModule;
-    private JLabel lblUser, lblDate, lblTime, lblOptionSelected, lblModuleSelected, lblFor;
+    private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
     private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd;
-    private JRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd;
+    private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnAttendance,rdBtnStatistics ;
     private JTextField SearchBar;
 
-
-    private JLabel lblName,lblUsrName,lblPass;
+    private AASLabel lblName,lblUsrName,lblPass, clock;
 
     private JTextField txtName, txtUserName, txtPassword;
-
-    private static String[] modName={"hjhj","sdfsd","sfs"};
 
     CardLayout cl = new CardLayout();
 
@@ -38,36 +39,36 @@ public class AdminView {
 
 
         // Create UI elements
-        btnLogout = new JButton("Logout");
-        rdBtnSearch=new JRadioButton("Search",true);
-        rdBtnStatistics= new JRadioButton("Statistics", false);
-        rdBtnDefaulter=new JRadioButton("Defaulter list",false);
-        rdBtnAdd=new JRadioButton("Add lecturer",false);
+        btnLogout = new AASButton("Logout");
+        rdBtnSearch=new AASRadioButton("Search",true);
+        rdBtnStatistics= new AASRadioButton("View Statistics", false);
+        rdBtnDefaulter=new AASRadioButton("Defaulter List",false);
+        rdBtnAdd=new AASRadioButton("Add Lecturer",false);
+        rdBtnViewLecturer=new AASRadioButton("View Lecturers", false);
+        rdBtnViewStudent =new AASRadioButton("View Students",false);
+        rdBtnAttendance=new AASRadioButton("View Attendance", false);
 
-        BtnaddLecturer=new JButton("Add");
+        BtnaddLecturer=new AASButton("Add");
 
         radioGroup= new ButtonGroup();
         radioGroup.add(rdBtnSearch);
         radioGroup.add(rdBtnStatistics);
         radioGroup.add(rdBtnDefaulter);
         radioGroup.add(rdBtnAdd);
+        radioGroup.add(rdBtnViewLecturer);
+        radioGroup.add(rdBtnViewStudent);
+        radioGroup.add(rdBtnAttendance);
 
         comboBoxModule= new JComboBox(getModule());
         comboBoxModule.setMaximumRowCount(5);
 
 
-        lblUser= new JLabel("Welcome User");
+        lblUser= new AASLabel();
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDate= new JLabel();
-        lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTime= new JLabel();
-        lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-        lblModuleSelected=new JLabel((String)comboBoxModule.getSelectedItem());
-        lblModuleSelected.setHorizontalAlignment(SwingConstants.LEFT);
-        lblOptionSelected=new JLabel("Search");
-        lblOptionSelected.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblFor=new JLabel("for");
-        lblFor.setHorizontalAlignment(SwingConstants.CENTER);
+        lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
+        lblOptionSelected=new AASLabel("Search");
+        lblFor=new AASLabel(" for ");
+        clock=new AASLabel();
 
         SearchBar=new JTextField(20);
 
@@ -85,10 +86,10 @@ public class AdminView {
         panelcenter.setLayout(cl);
 
         paneldate.setLayout(new GridLayout(1,6));
-        paneldate.setBorder(new EmptyBorder(20,20,20,20));
+        paneldate.setBorder(new EmptyBorder(15,25,15,25));
 
 
-        panelnavbar.setLayout(new GridLayout(7,1,10,10));
+        panelnavbar.setLayout(new GridLayout(10,1,10,10));
         panelnavbar.setBorder(new EmptyBorder(0,20,20,20) );
 
         panelMain.setLayout(new BorderLayout());
@@ -97,17 +98,22 @@ public class AdminView {
 
 
         // Add UI element to panels
+        paneldate.setLayout(new BoxLayout(paneldate,BoxLayout.X_AXIS));
         paneldate.add(lblOptionSelected);
         paneldate.add(lblFor);
         paneldate.add(lblModuleSelected);
-        paneldate.add(lblDate);
-        paneldate.add(lblTime);
+        paneldate.add(Box.createGlue());
+        paneldate.add(clock);
 
-        panelnavbar.add(rdBtnSearch);
+
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
+        panelnavbar.add(rdBtnSearch);
         panelnavbar.add(rdBtnStatistics);
         panelnavbar.add(rdBtnDefaulter);
+        panelnavbar.add(rdBtnAttendance);
+        panelnavbar.add(rdBtnViewLecturer);
+        panelnavbar.add(rdBtnViewStudent);
         panelnavbar.add(rdBtnAdd);
         panelnavbar.add(btnLogout);
 
@@ -118,7 +124,8 @@ public class AdminView {
         paneldate.setBackground(Color.red);
         cardstats.setBackground(Color.yellow);
         cardsearch.setBackground(Color.black);
-        cardDefaulter.setBackground(Color.white);
+        cardDefaulter.setBackground(Color.black);
+        cardAdd.setBackground(Color.black);
 
 
         //adding card to panel
@@ -172,9 +179,9 @@ public class AdminView {
         //add lecturer card
 
 
-        lblName =new JLabel("name");
-        lblUsrName=new JLabel("user name");
-        lblPass=new JLabel("password");
+        lblName =new AASLabel("name");
+        lblUsrName=new AASLabel("user name");
+        lblPass=new AASLabel("password");
 
         txtName =new JTextField(10);
 
@@ -207,11 +214,11 @@ public class AdminView {
         return frame;
     }
 
-    public JLabel getLblOptionSelected() {
+    public AASLabel getLblOptionSelected() {
         return lblOptionSelected;
     }
 
-    public JLabel getLblModuleSelected() {
+    public AASLabel getLblModuleSelected() {
         return lblModuleSelected;
     }
 
@@ -224,59 +231,41 @@ public class AdminView {
         return cl;
     }
 
-    public JButton getBtnLogout() {
+    public AASButton getBtnLogout() {
         return btnLogout;
-    }
-
-
-
-    public JLabel getLblDate() {
-        return lblDate;
-    }
-
-    public JLabel getLblTime() {
-        return lblTime;
     }
 
     public void setFrame(JFrame frame) {
         this.frame = frame;
     }
 
-    public void setLblDate(JLabel lblDate) {
-        this.lblDate = lblDate;
-    }
-
-    public void setLblTime(JLabel lblTime) {
-        this.lblTime = lblTime;
-    }
-
-    public JRadioButton getRdBtnAttendance() {
+    public AASRadioButton getRdBtnAttendance() {
         return rdBtnAttendance;
     }
 
-    public JRadioButton getRdBtnSearch() {
+    public AASRadioButton getRdBtnSearch() {
         return rdBtnSearch;
     }
 
-    public JRadioButton getrdBtnDefaulter() {
+    public AASRadioButton getrdBtnDefaulter() {
         return rdBtnDefaulter;
     }
 
-    public JRadioButton getRdBtnStatistics() {
+    public AASRadioButton getRdBtnStatistics() {
         return rdBtnStatistics;
     }
 
-    public JRadioButton getRdBtnAdd(){return rdBtnAdd;}
+    public AASRadioButton getRdBtnAdd(){return rdBtnAdd;}
 
     public JPanel getPanelnavbar() {
         return panelnavbar;
     }
 
-    public JButton[] getBtnMod() {
+    public AASButton[] getBtnMod() {
         return btnMod;
     }
 
-    public JLabel getLblUser() {
+    public AASLabel getLblUser() {
         return lblUser;
     }
 
@@ -288,11 +277,7 @@ public class AdminView {
         this.comboBoxModule = comboBoxModule;
     }
 
-    //public  void setModName(String[] modName) {
-      //  moduleName = modName;
-    //}
-
-    public JButton getBtnaddLecturer(){return BtnaddLecturer;}
+    public AASButton getBtnaddLecturer(){return BtnaddLecturer;}
 
     public JTextField getTxtName(){return txtName;}
 
@@ -341,7 +326,9 @@ public class AdminView {
         return array;
     }
 
-
+    public AASLabel getClock() {
+        return clock;
+    }
 
 
 

@@ -7,7 +7,9 @@ import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.sql.*;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -23,14 +25,14 @@ public class AdminController {
         model = m;
         view = v;
         initView();
-        CurrentDate();
         setcomBoModule();
     }
     public void initView() {
         view.getFrame().setSize(700,500);
         view.getCl().show(view.getPanelcenter(),"search");
         centreWindow(view.getFrame());
-        view.getLblUser().setText("Welcome hardcoded");
+        view.getLblUser().setText("Welcome, " + model.getName());
+        setCurrentDateTime();
     }
 
     public void initController() {
@@ -71,35 +73,18 @@ public class AdminController {
         c.initController();
     }
 
-    public void CurrentDate(){
-        Thread clock=new Thread() {
-            public void run() {
-                for(;;)   {
 
-                    Calendar cal=new GregorianCalendar();
-                    int month=cal.get(Calendar.MONTH);
-                    int year=cal.get(Calendar.YEAR);
-                    int day=cal.get(Calendar.DAY_OF_MONTH);
-
-                    view.getLblDate().setText("Date: "+day+"/"+(month+1)+"/"+(year));
-
-
-                    int second=cal.get(Calendar.SECOND);
-                    int mint=cal.get(Calendar.MINUTE);
-                    int hour=cal.get(Calendar.HOUR);
-                    view.getLblTime().setText("Time: "+hour+":"+(mint)+":"+(second));
-
-
-                    try {
-                        sleep(1000);
-
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(LecturerController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        };
-        clock.start();
+    public  void setCurrentDateTime(){
+        tickTock();
+        Timer timer = new Timer(500, e -> tickTock());
+        timer.setRepeats(true);
+        timer.setCoalesce(true);
+        timer.setInitialDelay(0);
+        timer.start();
+    }
+    public void tickTock() {
+        view.getClock().setText(DateFormat.getDateTimeInstance().format(new java.util.Date()));
+        view.getClock().setFont(new Font("Roboto",Font.PLAIN,13));
     }
 
     private void setcomBoModule(){
