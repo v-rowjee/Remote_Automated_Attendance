@@ -10,8 +10,7 @@ import java.net.URL;
 public class LoginView {
     JFrame frame;
     JPanel panel;
-    AASLabel lblUsername;
-    JLabel lblPassword, image;
+    JLabel lblUsername, lblPassword, image;
     AASTextField txtUsername;
     JPasswordField txtPassword;
     AASCheckBox chxShowPassword;
@@ -31,7 +30,7 @@ public class LoginView {
         image = new JLabel(img);
 
         panel = new JPanel();
-        lblUsername = new AASLabel("Username");
+        lblUsername = new JLabel("Username");
         lblPassword = new JLabel("Password");
 
         txtUsername = new AASTextField();
@@ -45,9 +44,8 @@ public class LoginView {
 
         // adding colors
         panel.setBackground(Color.darkGray);
-        lblPassword.setForeground(Color.decode("#eeeeee"));
-        txtPassword.setBackground(Color.decode("#eeeeee"));
-        txtPassword.setBorder(null);
+        lblUsername.setForeground(Color.white);
+        lblPassword.setForeground(Color.white);
 
         panel.add(Box.createVerticalGlue());
         panel.add(lblUsername);
