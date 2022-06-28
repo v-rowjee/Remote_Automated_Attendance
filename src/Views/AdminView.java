@@ -3,6 +3,7 @@ package Views;
 import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
+import Components.AASTable;
 
 import javax.swing.*;
 import javax.swing.JPanel;
@@ -13,19 +14,24 @@ import java.sql.*;
 
 
 public class AdminView {
+    DefaultTableModel TblModelStats;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer;
     private ButtonGroup radioGroup;
+    private AASTable tableStats;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd;
+    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd,ResultPanel,AttendancePanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnAttendance,rdBtnStatistics ;
     private JTextField SearchBar;
 
     private AASLabel lblName,lblUsrName,lblPass, clock;
 
     private JTextField txtName, txtUserName, txtPassword;
+    private JButton btnGo;
+    private AASTable tableStudentINFO,TableStudenAttendance;
+    private DefaultTableModel TableInfo,TableAttendance;
 
     CardLayout cl = new CardLayout();
 
@@ -71,6 +77,7 @@ public class AdminView {
         clock=new AASLabel();
 
         SearchBar=new JTextField(20);
+        btnGo=new JButton("GO");
 
         //Creating panels
         panelnavbar = new JPanel();
@@ -82,6 +89,8 @@ public class AdminView {
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
         cardAdd=new JPanel();
+        ResultPanel=new JPanel();
+        AttendancePanel=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -95,6 +104,9 @@ public class AdminView {
         panelMain.setLayout(new BorderLayout());
         panelMain.add(paneldate,BorderLayout.NORTH);
         panelMain.add(panelcenter,BorderLayout.CENTER);
+
+        cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
+        cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
@@ -137,25 +149,74 @@ public class AdminView {
 
 
         //creating JTable for statistics
-        String columns2[] = { "Date", "Present","Absent","% Present" };
+        TblModelStats = new DefaultTableModel();
+        tableStats = new AASTable(TblModelStats){public Class getColumnClass(int column) {
+            return switch (column) {
+                default -> String.class;
+            };
+        }};
 
-        Object[][] data2 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
-        };
+        JScrollPane paneStats = new JScrollPane(tableStats);
 
-        DefaultTableModel model2 = new DefaultTableModel(data2, columns2);
-        JTable table2 = new JTable(model2);
+        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        table2.setShowGrid(true);
-        table2.setShowVerticalLines(true);
-        JScrollPane pane2 = new JScrollPane(table2);
-        cardstats.add(pane2);
+        cardstats.add(paneStats);
+
+
 
         //search card
+        cardsearch.setLayout(new FlowLayout());
         cardsearch.add(SearchBar);
+        cardsearch.add(btnGo);
+        cardsearch.add(ResultPanel);
+        cardsearch.add(AttendancePanel);
+
+        TableInfo=new DefaultTableModel();
+        tableStudentINFO=new AASTable(TableInfo){
+        public Class getColumnClass(int column) {
+            return switch (column) {
+
+                default -> String.class;
+            };
+        }
+    };
+
+        JScrollPane paneSearch = new JScrollPane(tableStudentINFO);
+        paneSearch.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+
+        ResultPanel.add(paneSearch);
+
+
+        TableAttendance=new DefaultTableModel();
+        TableStudenAttendance=new AASTable(TableAttendance){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    case 0 -> Integer.class;
+                    case 1 -> Integer.class;
+                    case 2 -> Date.class;
+                    //case 3 -> String.class;
+                    default->boolean.class;
+
+                };
+            }
+        };
+
+        JScrollPane paneAttendance = new JScrollPane(TableStudenAttendance);
+        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        AttendancePanel.add(paneAttendance);
+
+
+       // cardsearch.setLayout(new FlowLayout());
+        cardsearch.add(SearchBar);
+        cardsearch.add(btnGo);
+        cardsearch.add(ResultPanel);
+        cardsearch.add(AttendancePanel);
+
 
         //defaulter card
 
@@ -222,7 +283,9 @@ public class AdminView {
         return lblModuleSelected;
     }
 
-
+    public DefaultTableModel getTblModelStats() {
+        return TblModelStats;
+    }
     public JPanel getPanelcenter() {
         return panelcenter;
     }
@@ -317,7 +380,6 @@ public class AdminView {
 
             }
 
-
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(frame.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
             System.out.println(e);
@@ -330,6 +392,16 @@ public class AdminView {
         return clock;
     }
 
+    public JTextField getSearchBar() {
+        return SearchBar;
+    }
 
+    public DefaultTableModel getTableInfo() {
+        return TableInfo;
+    }
+
+    public JButton getBtnGo(){return btnGo;}
+
+    public DefaultTableModel getTableAttendance(){return TableAttendance;}
 
 }
