@@ -161,11 +161,9 @@ public class LecturerView {
         //creating AASTable for statistics
         tblModelStats = new DefaultTableModel();
         tableStats = new AASTable(tblModelStats);
-        tableStats.setShowGrid(true);
-        tableStats.setShowVerticalLines(true);
         JScrollPane paneStats = new JScrollPane(tableStats);
-        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         cardstats.add(paneStats);
 
 
@@ -200,6 +198,10 @@ public class LecturerView {
 
     public AASButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public AASButton getBtnClearAttendance() {
+        return btnClearAttendance;
     }
 
     public AASRadioButton getRdBtnAttendance() {

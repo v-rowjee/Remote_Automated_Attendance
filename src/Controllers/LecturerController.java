@@ -1,5 +1,6 @@
 package Controllers;
 
+import Database.Database;
 import Models.ModuleModel;
 import Models.StudentModel;
 import Models.UserModel;
@@ -12,7 +13,6 @@ import java.awt.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.*;
 import java.util.Date;
 
 import static Controllers.LoginController.centreWindow;
@@ -34,8 +34,8 @@ public class LecturerController {
         centreWindow(view.getFrame());
         setCurrentDateTime();
 
-        view.getCardLayout().show(view.getPanelcenter(), "attendance");
         view.getLblUser().setText("Welcome, " + model.getName());
+        showAttendance();
         setComboBoxModule();
         setTableAttendance();
         setTableStats();
@@ -47,7 +47,8 @@ public class LecturerController {
         view.getRdBtnStatistics().addActionListener(e -> showStatistic());
         view.getComboBoxModule().addActionListener(e -> setTableAttendance());
         view.getComboBoxModule().addActionListener(e -> setTableStats());
-        view.getBtnSubmitAttendance().addActionListener(e -> findPresent());
+        view.getBtnSubmitAttendance().addActionListener(e -> addAttendance());
+        view.getBtnClearAttendance().addActionListener(e -> clearTableAttendance());
     }
 
     private void logout() {
@@ -89,7 +90,6 @@ public class LecturerController {
         view.getLblOptionSelected().setText("Attendance");
     }
 
-    //listener to combo box module + setting up table attendance
     void setTableAttendance() {
         view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
         for(ModuleModel m : model.getModuleList()){
@@ -126,12 +126,8 @@ public class LecturerController {
 
         String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
 
-
         try{
-            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-            final String username = "root";
-            final String password = "";
-            Connection conn = DriverManager.getConnection(dbURL,username,password);
+            Connection conn = Database.getConnection();
             PreparedStatement stmt = conn.prepareStatement(queryAttendance);
             stmt.setInt(1, mid);
             ResultSet rs = stmt.executeQuery();
@@ -159,7 +155,7 @@ public class LecturerController {
             view.getTblModelStats().setDataVector(data2,columns2);
 
         } catch (SQLException e) {
-            System.err.println(e);
+            e.getStackTrace();
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
         }
 
@@ -167,7 +163,37 @@ public class LecturerController {
 
     }
 
-    void findPresent() {
+    void clearTableAttendance(){
+        for(ModuleModel m : model.getModuleList()){
+
+            if(m.getName()==view.getComboBoxModule().getSelectedItem()) {
+                int size = m.getStudentList().size();
+                int i = 0;
+                Object[][] data = new Object[size][4];
+                for (StudentModel s : m.getStudentList()) {
+
+                    data[i][0] = String.valueOf(s.getId());
+                    data[i][1] = s.getName();
+                    data[i][2] = null;
+                    data[i][3] = null;
+                    i++;
+
+                }
+                String columns[] = {"Student ID", "Name", "Present", "Absent"};
+                view.getTblModelAtt().setDataVector(data, columns);
+
+                int rowAffected = m.removeAttendance();
+                if(rowAffected > 0){
+                    JOptionPane.showMessageDialog(view.getFrame(), "Attendance reset for this module");
+                }
+                else{
+                    JOptionPane.showMessageDialog(view.getFrame(), "Attendance not taken yet for this module");
+                }
+            }
+        }
+    }
+
+    void addAttendance() {
         //view.getTable();
         Object[][] columnData = new Object[view.getTableAtt().getRowCount()][4];
         for (int i = 0; i < view.getTableAtt().getRowCount(); i++) {  // Loop through the rows
@@ -178,16 +204,16 @@ public class LecturerController {
                 JOptionPane.showMessageDialog(view.getFrame(), "Student with Id" + columnData[i][0] + " should be either present or absent", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (columnData[i][1].equals(true)) {
+            if (columnData[i][1].equals("true")) {
                 columnData[i][3]="1";
             }else{
                 columnData[i][3]="0";
             }
         }
-        JOptionPane.showMessageDialog(view.getFrame(), "ALL GOOD", "Information", JOptionPane.INFORMATION_MESSAGE);
 
         ////////////////adding attendance to db//////////////////
-        int ans = JOptionPane.showConfirmDialog(null, "Attendance can only be taken once per day. Do you want to proceed?");
+        int rowAffected = 0;
+        int ans = JOptionPane.showConfirmDialog(view.getFrame(), "Attendance can only be taken once per day. Do you want to proceed?");
         if(ans==JOptionPane.YES_OPTION) {
             //getting selected mid
             int mid = 0;
@@ -197,19 +223,14 @@ public class LecturerController {
                 }
             }
 
-
             final String query2 = "INSERT INTO attendance (mid,sid,presence)VALUES (?,?,?)";
             try {
-                final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-                final String username = "root";
-                final String password = "";
-                Connection conn = DriverManager.getConnection(dbURL, username, password);
+                Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query2);
 
                 for (int i = 0; i < view.getTableAtt().getRowCount(); i++) {  // Loop through the rows
                     int id = parseInt(String.valueOf(view.getTableAtt().getValueAt(i, 0)));
                     String presence = String.valueOf(view.getTableAtt().getValueAt(i, 2));
-
 
                     stmt.setInt(1, mid);
                     stmt.setInt(2, id);
@@ -220,17 +241,23 @@ public class LecturerController {
                     } else {
                         stmt.setInt(3, 0);
                     }
-                    stmt.executeUpdate();
+                    rowAffected = stmt.executeUpdate();
                 }
 
             } catch (SQLException e) {
                 System.err.println(e);
                 JOptionPane.showMessageDialog(view.getFrame(), "Duplicate Attendance Data", "Alert", JOptionPane.ERROR_MESSAGE);
             }
+            if(rowAffected > 0){
+                JOptionPane.showMessageDialog(view.getFrame(), "Attendance taken successfully for this module");
+            }
+            else{
+                JOptionPane.showMessageDialog(view.getFrame(), "Attendance not taken yet for this module");
+            }
         }
     }
 
-    }
+}
 
 
 

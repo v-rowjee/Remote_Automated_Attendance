@@ -1,6 +1,7 @@
 package Models;
 import Database.Database;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,22 @@ public class ModuleModel {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public int removeAttendance(){
+        Connection conn = Database.getConnection();
+
+        String query = "DELETE FROM attendance WHERE date = CURRENT_DATE() AND mid = ?";
+
+        try{
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1,this.id);
+            return stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public int getId() {
