@@ -125,23 +125,22 @@ public class LecturerController {
             }
         }
 
-        String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
-        System.out.println("haha1");
+        String queryAttendance ="SELECT COUNT(*) AS row_count, sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
+
         try{
             Connection conn = Database.getConnection();
 
-            PreparedStatement stmt = conn.prepareStatement(queryAttendance);
+            PreparedStatement stmt = conn.prepareStatement(queryAttendance,ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             stmt.setInt(1, mid);
             ResultSet rs = stmt.executeQuery();
 
-            System.out.println("Your query have rows.");
-//            int rowCount =0;
-//            rs.last();
-//            rowCount = rs.getRow();
-//            rs.first();
-//            System.out.println("Your query have " + rowCount + " rows.");
+           int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
 
-            Object[][] data2 = new Object[4][4];
+            Object[][] data2 = new Object[rowCount][4];
             int i=0;
             while(rs.next()){
 

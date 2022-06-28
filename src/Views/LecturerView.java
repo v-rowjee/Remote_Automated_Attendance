@@ -26,7 +26,7 @@ public class LecturerView {
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor, clock;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain;
     private JPanel cardattendance, cardstats,cardsearch;
-    private JPanel panelAttBottom;
+    private JPanel panelAttBottom,panelStatsBottom;
     private CardLayout cardLayout = new CardLayout();
 
 
@@ -78,6 +78,7 @@ public class LecturerView {
         cardstats = new JPanel();
         cardsearch=new JPanel();
         panelAttBottom = new JPanel();
+        panelStatsBottom=new JPanel();
 
         panelcenter.setLayout(cardLayout);
         cardattendance.setLayout(new BorderLayout());
@@ -123,7 +124,7 @@ public class LecturerView {
         panelnavbar.setBackground(Color.decode("#00adb5"));
         paneldate.setBackground(Color.darkGray);
         cardattendance.setBackground(Color.darkGray);
-        cardstats.setBackground(Color.yellow);
+        cardstats.setBackground(Color.darkGray);
         cardsearch.setBackground(Color.black);
 
 
@@ -160,11 +161,22 @@ public class LecturerView {
 
         //creating AASTable for statistics
         tblModelStats = new DefaultTableModel();
-        tableStats = new AASTable(tblModelStats);
+        tableStats = new AASTable(tblModelStats){public Class getColumnClass(int column) {
+            return switch (column) {
+                default -> String.class;
+            };
+        }};
+
         JScrollPane paneStats = new JScrollPane(tableStats);
+
         paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+
         cardstats.add(paneStats);
+        panelStatsBottom.setBackground(Color.darkGray);
+        panelStatsBottom.setPreferredSize(new Dimension((int) ( frame.getWidth()*0.75), (int )(frame.getHeight()*0.12)));
+        cardstats.add(panelStatsBottom);
 
 
         //Adding panels to frame
