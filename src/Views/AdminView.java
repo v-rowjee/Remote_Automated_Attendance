@@ -3,7 +3,6 @@ package Views;
 import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
-import Components.AASTable;
 
 import javax.swing.*;
 import javax.swing.JPanel;
@@ -20,16 +19,13 @@ public class AdminView {
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd,ResultPanel,AttendancePanel;
+    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnAttendance,rdBtnStatistics ;
     private JTextField SearchBar;
 
     private AASLabel lblName,lblUsrName,lblPass, clock;
 
     private JTextField txtName, txtUserName, txtPassword;
-    private JButton btnGo;
-    private AASTable tableStudentINFO,TableStudenAttendance;
-    private DefaultTableModel TableInfo,TableAttendance;
 
     CardLayout cl = new CardLayout();
 
@@ -75,7 +71,6 @@ public class AdminView {
         clock=new AASLabel();
 
         SearchBar=new JTextField(20);
-        btnGo=new JButton("GO");
 
         //Creating panels
         panelnavbar = new JPanel();
@@ -87,8 +82,6 @@ public class AdminView {
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
         cardAdd=new JPanel();
-        ResultPanel=new JPanel();
-        AttendancePanel=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -162,57 +155,7 @@ public class AdminView {
         cardstats.add(pane2);
 
         //search card
-        cardsearch.setLayout(new FlowLayout());
         cardsearch.add(SearchBar);
-        cardsearch.add(btnGo);
-        cardsearch.add(ResultPanel);
-        cardsearch.add(AttendancePanel);
-
-        TableInfo=new DefaultTableModel();
-        tableStudentINFO=new AASTable(TableInfo){
-        public Class getColumnClass(int column) {
-            return switch (column) {
-
-                default -> String.class;
-            };
-        }
-    };
-
-        JScrollPane paneSearch = new JScrollPane(tableStudentINFO);
-        paneSearch.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
-
-        ResultPanel.add(paneSearch);
-
-
-        TableAttendance=new DefaultTableModel();
-        TableStudenAttendance=new AASTable(TableAttendance){
-            public Class getColumnClass(int column) {
-                return switch (column) {
-                    case 0 -> Integer.class;
-                    case 1 -> Integer.class;
-                    case 2 -> Date.class;
-                    //case 3 -> String.class;
-                    default->boolean.class;
-
-                };
-            }
-        };
-
-        JScrollPane paneAttendance = new JScrollPane(TableStudenAttendance);
-        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
-        AttendancePanel.add(paneAttendance);
-
-
-       // cardsearch.setLayout(new FlowLayout());
-        cardsearch.add(SearchBar);
-        cardsearch.add(btnGo);
-        cardsearch.add(ResultPanel);
-        cardsearch.add(AttendancePanel);
-
 
         //defaulter card
 
@@ -387,16 +330,6 @@ public class AdminView {
         return clock;
     }
 
-    public JTextField getSearchBar() {
-        return SearchBar;
-    }
 
-    public DefaultTableModel getTableInfo() {
-        return TableInfo;
-    }
-
-    public JButton getBtnGo(){return btnGo;}
-
-    public DefaultTableModel getTableAttendance(){return TableAttendance;}
 
 }

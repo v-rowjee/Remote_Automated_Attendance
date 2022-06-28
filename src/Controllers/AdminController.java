@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -42,7 +41,6 @@ public class AdminController {
         view.getrdBtnDefaulter().addActionListener(e->showDefaulter());
         view.getRdBtnAdd().addActionListener(e->showAdd());
         view.getBtnaddLecturer().addActionListener(e->addLecturer());
-        view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
     }
 
@@ -125,76 +123,6 @@ public class AdminController {
         }
 
 
-    }
-
-
-    void Search() {
-
-        final String query = "SELECT id,name,course FROM student WHERE name=?";
-        //final String query1 = "SELECT a.mid,a.sid,a.date,a.presence FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE name=? GROUP BY a.mid DESC";
-        final String query1 = "SELECT mid,sid,date,presence FROM attendance WHERE sid= 1";
-        try {
-            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-            final String username = "root";
-            final String password = "";
-            Connection conn = DriverManager.getConnection(dbURL, username, password);
-            String name=view.getSearchBar().getText();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, name);
-
-
-
-            ResultSet rs = stmt.executeQuery();
-
-            Object[][] data = new Object[1][3];
-            int i=0;
-            while(rs.next()){
-                data[i][0] = rs.getString("id");
-                data[i][1] = rs.getString("name");
-                data[i][2] = rs.getString("course");
-
-                i++;
-            }
-            String columns[] = { "id", "name","course" };
-            view.getTableInfo().setDataVector(data,columns);
-
-
-            PreparedStatement stmt1 = conn.prepareStatement(query1,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            //stmt1.setString(1, name);
-
-            ResultSet rs1 = stmt1.executeQuery();
-
-
-            int j=0;
-            rs1.last();
-            int RowCount=rs1.getRow();
-
-            Object[][] data1 = new Object[RowCount][4];
-
-            rs1.beforeFirst();
-
-
-            while(rs1.next()){
-                data1[j][0] = rs1.getInt("mid");
-                data1[j][1] = rs1.getInt("sid");
-                data1[j][2] = rs1.getDate("date");
-                data1[j][3] = rs1.getInt("presence");
-
-                j++;
-            }
-
-
-            String columns1[] = { "mid", "sid","date","presence" };
-            view.getTableAttendance().setDataVector(data1,columns1);
-
-
-
-
-
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database", "Alert", JOptionPane.ERROR_MESSAGE);
-        }
 
     }
 
