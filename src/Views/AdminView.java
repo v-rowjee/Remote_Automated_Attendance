@@ -14,15 +14,15 @@ import java.sql.*;
 
 
 public class AdminView {
-    DefaultTableModel TblModelStats;
+    DefaultTableModel TblModelStats, TblModelDefaulter;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer;
     private ButtonGroup radioGroup;
-    private AASTable tableStats;
+    private AASTable tableStats, tableDefaulter;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd,ResultPanel,AttendancePanel;
+    private JPanel cardViewAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnAttendance,rdBtnStatistics ;
     private JTextField SearchBar;
 
@@ -46,8 +46,8 @@ public class AdminView {
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
-        rdBtnSearch=new AASRadioButton("Search",true);
-        rdBtnStatistics= new AASRadioButton("View Statistics", false);
+        rdBtnSearch=new AASRadioButton("Search Student",false);
+        rdBtnStatistics= new AASRadioButton("View Statistics", true);
         rdBtnDefaulter=new AASRadioButton("Defaulter List",false);
         rdBtnAdd=new AASRadioButton("Add Lecturer",false);
         rdBtnViewLecturer=new AASRadioButton("View Lecturers", false);
@@ -72,7 +72,7 @@ public class AdminView {
         lblUser= new AASLabel();
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
-        lblOptionSelected=new AASLabel("Search");
+        lblOptionSelected=new AASLabel("View Statistic");
         lblFor=new AASLabel(" for ");
         clock=new AASLabel();
 
@@ -84,7 +84,9 @@ public class AdminView {
         panelcenter = new JPanel();
         paneldate=new JPanel();
         panelMain=new JPanel();
-        cardattendance = new JPanel();
+        cardViewAttendance = new JPanel();
+        cardViewLecturer=new JPanel();
+        cardViewStudent=new JPanel();
         cardstats = new JPanel();
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
@@ -120,12 +122,13 @@ public class AdminView {
 
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
-        panelnavbar.add(rdBtnSearch);
+
         panelnavbar.add(rdBtnStatistics);
         panelnavbar.add(rdBtnDefaulter);
         panelnavbar.add(rdBtnAttendance);
-        panelnavbar.add(rdBtnViewLecturer);
+        panelnavbar.add(rdBtnSearch);
         panelnavbar.add(rdBtnViewStudent);
+        panelnavbar.add(rdBtnViewLecturer);
         panelnavbar.add(rdBtnAdd);
         panelnavbar.add(btnLogout);
 
@@ -138,6 +141,9 @@ public class AdminView {
         cardsearch.setBackground(Color.black);
         cardDefaulter.setBackground(Color.black);
         cardAdd.setBackground(Color.black);
+        cardViewLecturer.setBackground(Color.PINK);
+        cardViewAttendance.setBackground(Color.CYAN);
+        cardViewStudent.setBackground(Color.MAGENTA);
 
 
         //adding card to panel
@@ -145,6 +151,9 @@ public class AdminView {
         panelcenter.add(cardsearch,"search");
         panelcenter.add(cardDefaulter,"Defaulter list");
         panelcenter.add(cardAdd,"Add lecturer");
+        panelcenter.add(cardViewAttendance,"View Attendance");
+        panelcenter.add(cardViewLecturer,"View Lecturer");
+        panelcenter.add(cardViewStudent,"View Student");
 
 
 
@@ -219,23 +228,21 @@ public class AdminView {
 
 
         //defaulter card
+        TblModelDefaulter = new DefaultTableModel();
+        tableDefaulter = new AASTable(TblModelDefaulter){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    default -> String.class;
 
-        String columns3[] = { "Date", "Present","Absent","% Present" };
-
-        Object[][] data3 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
+                };
+            }
         };
+        JScrollPane paneDefaulter = new JScrollPane(tableDefaulter);
+        paneDefaulter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneDefaulter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        cardDefaulter.add(paneDefaulter);
 
-        DefaultTableModel model3 = new DefaultTableModel(data3, columns3);
-        JTable table3 = new JTable(model3);
 
-        table3.setShowGrid(true);
-        table3.setShowVerticalLines(true);
-        JScrollPane pane3 = new JScrollPane(table3);
-        cardDefaulter.add(pane3);
 
         //add lecturer card
 
@@ -310,7 +317,7 @@ public class AdminView {
         return rdBtnSearch;
     }
 
-    public AASRadioButton getrdBtnDefaulter() {
+    public AASRadioButton getRdBtnDefaulter() {
         return rdBtnDefaulter;
     }
 
@@ -404,4 +411,19 @@ public class AdminView {
 
     public DefaultTableModel getTableAttendance(){return TableAttendance;}
 
+    public DefaultTableModel getTblModelDefaulter() {
+        return TblModelDefaulter;
+    }
+
+    public AASRadioButton getRdBtnViewLecturer() {
+        return rdBtnViewLecturer;
+    }
+
+    public AASRadioButton getRdBtnViewStudent() {
+        return rdBtnViewStudent;
+    }
+
+    public AASLabel getLblFor() {
+        return lblFor;
+    }
 }

@@ -8,9 +8,11 @@ import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -125,7 +127,7 @@ public class LecturerController {
             }
         }
 
-        String queryAttendance ="SELECT COUNT(*) AS row_count, sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
+        String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
 
         try{
             Connection conn = Database.getConnection();

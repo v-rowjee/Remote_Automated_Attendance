@@ -1,10 +1,8 @@
 package Controllers;
 
 import Database.Database;
-import Models.ModuleModel;
 import Models.UserModel;
 import Views.AdminView;
-import Views.LecturerView;
 import Views.LoginView;
 
 import javax.swing.*;
@@ -12,10 +10,6 @@ import java.awt.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static Controllers.LoginController.centreWindow;
 
@@ -31,7 +25,7 @@ public class AdminController {
     }
     public void initView() {
         view.getFrame().setSize(700,500);
-        view.getCl().show(view.getPanelcenter(),"search");
+        view.getCl().show(view.getPanelcenter(),"Statistic");
         centreWindow(view.getFrame());
         view.getLblUser().setText("Welcome, " + model.getName());
         setCurrentDateTime();
@@ -43,33 +37,68 @@ public class AdminController {
     public void initController() {
         view.getRdBtnSearch().addActionListener(e-> showSearch());
         view.getRdBtnStatistics().addActionListener(e->showStatistic());
-        view.getrdBtnDefaulter().addActionListener(e->showDefaulter());
-        view.getRdBtnStatistics().addActionListener(e->setTableStats());
+        view.getRdBtnDefaulter().addActionListener(e->showDefaulter());
+        view.getRdBtnViewLecturer().addActionListener(e->showLecturer());
+        view.getRdBtnAttendance().addActionListener(e->showAttendance());
+        view.getRdBtnViewStudent().addActionListener(e->showStudent());
         view.getRdBtnAdd().addActionListener(e->showAdd());
         view.getBtnaddLecturer().addActionListener(e->addLecturer());
         view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
         view.getComboBoxModule().addActionListener(e -> setTableStats());
+        view.getComboBoxModule().addActionListener(e -> setTableDefaulter());
+
     }
 
     private void showStatistic() {
         view.getCl().show(view.getPanelcenter(),"stats");
         view.getLblOptionSelected().setText("Statistic");
+        view.getLblFor().setVisible(true);
+        view.getLblModuleSelected().setVisible(true);
+        setTableStats();
+    }
+
+    private void showLecturer(){
+        view.getCl().show(view.getPanelcenter(),"View Lecturer");
+        view.getLblOptionSelected().setText("View Lecturers");
+        view.getLblModuleSelected().setVisible(false);
+        view.getLblFor().setVisible(false);
+    }
+
+    private void showStudent(){
+        view.getCl().show(view.getPanelcenter(),"View Student");
+        view.getLblOptionSelected().setText("View Students");
+        view.getLblModuleSelected().setVisible(false);
+        view.getLblFor().setVisible(false);
+    }
+
+    private void showAttendance(){
+        view.getCl().show(view.getPanelcenter(),"View Attendance");
+        view.getLblOptionSelected().setText("View Attendance");
+        view.getLblFor().setVisible(true);
+        view.getLblModuleSelected().setVisible(true);
     }
 
     private void showSearch() {
         view.getCl().show(view.getPanelcenter(),"search");
-        view.getLblOptionSelected().setText("Search");
+        view.getLblOptionSelected().setText("Search Student");
+        view.getLblModuleSelected().setVisible(false);
+        view.getLblFor().setVisible(false);
     }
 
     private void showDefaulter() {
         view.getCl().show(view.getPanelcenter(),"Defaulter list");
         view.getLblOptionSelected().setText("Defaulter List");
+        view.getLblFor().setVisible(true);
+        view.getLblModuleSelected().setVisible(true);
+        setTableDefaulter();
     }
 
     private void showAdd() {
         view.getCl().show(view.getPanelcenter(),"Add lecturer");
         view.getLblOptionSelected().setText("Add Lecturer");
+        view.getLblModuleSelected().setVisible(false);
+        view.getLblFor().setVisible(false);
     }
 
 
@@ -134,7 +163,7 @@ public class AdminController {
         void setTableStats(){
             int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
 
-            String queryAttendance ="SELECT COUNT(*) AS row_count, sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
+            String queryAttendance ="SELECT sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
 
             try{
                 Connection conn = Database.getConnection();
@@ -171,81 +200,58 @@ public class AdminController {
 
             } catch (SQLException e) {
                 e.getStackTrace();
-                JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
             }
         }
 
-//    void setTableDefaulter(){
-//        int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
-//
-//        String queryAttendance ="SELECT COUNT(*) AS row_count, sum(presence=1) AS present, sum(presence=0) AS absent, date FROM attendance  WHERE mid =? GROUP BY date ORDER BY date DESC";
-//
-//        try{
-//            Connection conn = Database.getConnection();
-//
-//            PreparedStatement stmt = conn.prepareStatement(queryAttendance,ResultSet.TYPE_SCROLL_SENSITIVE,
-//                    ResultSet.CONCUR_UPDATABLE);
-//            stmt.setInt(1, mid);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            int rowCount =0;
-//            rs.last();
-//            rowCount=rs.getRow();
-//            rs.beforeFirst();
-//
-//    }
-//
-//            Object[][] data2 = new Object[rowCount][4];
-//            int i=0;
-//            while(rs.next()){
-//
+
     void Search() {
 
         final String query = "SELECT id,name,course FROM student WHERE name=?";
         //final String query1 = "SELECT a.mid,a.sid,a.date,a.presence FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE name=? GROUP BY a.mid DESC";
         final String query1 = "SELECT mid,sid,date,presence FROM attendance WHERE sid= 1";
+        String name;
         try {
             final String dbURL = "jdbc:mysql://localhost:3306/attendance";
             final String username = "root";
             final String password = "";
             Connection conn = DriverManager.getConnection(dbURL, username, password);
-            String name=view.getSearchBar().getText();
+            name = view.getSearchBar().getText();
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, name);
-
 
 
             ResultSet rs = stmt.executeQuery();
 
             Object[][] data = new Object[1][3];
-            int i=0;
-            while(rs.next()){
+            int i = 0;
+            while (rs.next()) {
                 data[i][0] = rs.getString("id");
                 data[i][1] = rs.getString("name");
                 data[i][2] = rs.getString("course");
 
                 i++;
             }
-            String columns[] = { "id", "name","course" };
-            view.getTableInfo().setDataVector(data,columns);
+            String columns[] = {"id", "name", "course"};
+            view.getTableInfo().setDataVector(data, columns);
 
 
-            PreparedStatement stmt1 = conn.prepareStatement(query1,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement stmt1 = conn.prepareStatement(query1, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             //stmt1.setString(1, name);
 
             ResultSet rs1 = stmt1.executeQuery();
 
 
-            int j=0;
+            int j = 0;
             rs1.last();
-            int RowCount=rs1.getRow();
+            int RowCount = rs1.getRow();
 
             Object[][] data1 = new Object[RowCount][4];
 
             rs1.beforeFirst();
 
 
-            while(rs1.next()){
+            while (rs1.next()) {
                 data1[j][0] = rs1.getInt("mid");
                 data1[j][1] = rs1.getInt("sid");
                 data1[j][2] = rs1.getDate("date");
@@ -255,63 +261,76 @@ public class AdminController {
             }
 
 
-            String columns1[] = { "mid", "sid","date","presence" };
-            view.getTableAttendance().setDataVector(data1,columns1);
-
-
-
+            String columns1[] = {"mid", "sid", "date", "presence"};
+            view.getTableAttendance().setDataVector(data1, columns1);
 
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database", "Alert", JOptionPane.ERROR_MESSAGE);
         }
-
-//                data2[i][0] = rs.getDate("date");
-//                data2[i][1] = rs.getInt("present");
-//                data2[i][2] = rs.getInt("absent");
-//
-//                double intpresent=Integer.parseInt(String.valueOf(data2[i][1]));
-//                double intabsent=Integer.parseInt(String.valueOf(data2[i][2]));
-//                double percentage= (intpresent/(intpresent + intabsent))*100;
-//                DecimalFormat df = new DecimalFormat("0.0");
-//                data2[i][3] = df.format(percentage);
-//
-//                i++;
-//            }
-//
-//            String columns2[] = { "Date", "Present","Absent","% Present" };
-//            view.getTblModelStats().setDataVector(data2,columns2);
-//
-//        } catch (SQLException e) {
-//            e.getStackTrace();
-//            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database LecturerController Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
-//        }
     }
 
-
-
-
-        int getMid(String name){
-            String modname= name;
-            String queryMname ="Select id FROM module WHERE name=? ";
-            try{
+        public int getMid (String name){
+            String modname = name;
+            String queryMname = "Select id FROM module WHERE name=? ";
+            try {
                 Connection conn = Database.getConnection();
 
-                PreparedStatement stmt = conn.prepareStatement(queryMname,ResultSet.TYPE_SCROLL_SENSITIVE,
+                PreparedStatement stmt = conn.prepareStatement(queryMname, ResultSet.TYPE_SCROLL_SENSITIVE,
                         ResultSet.CONCUR_UPDATABLE);
                 stmt.setString(1, modname);
                 ResultSet rs = stmt.executeQuery();
 
-                while(rs.next()){
+                while (rs.next()) {
                     return rs.getInt("id");
                 }
 
             } catch (SQLException e) {
                 e.getStackTrace();
-                JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Finding mid","Alert",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database Admin Controller Finding mid", "Alert", JOptionPane.ERROR_MESSAGE);
             }
-        return 0;
+            return 0;
         }
+
+    void setTableDefaulter(){
+        int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
+        //String queryDefaulter ="SELECT  sum(presence=0) AS absent, sid FROM attendance ,date WHERE mid =? GROUP BY sid ORDER BY date DESC";
+        String queryDefaulter ="SELECT  sum(presence=0) AS absent, sid,date, name FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE mid =? GROUP BY sid ORDER BY date DESC";
+        //final String query1 = "SELECT a.mid,a.sid,a.date,a.presence FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE name=? GROUP BY a.mid DESC";
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(queryDefaulter,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt.setInt(1, mid);
+            ResultSet rs = stmt.executeQuery();
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data = new Object[rowCount][3];
+            int i=0;
+            while(rs.next()){
+                int absenceCount = rs.getInt("absent");
+                if (absenceCount >=3){
+
+                    data[i][0] = rs.getInt("sid");
+                    data[i][1]=rs.getString("name");
+                    data[i][2] = rs.getInt("absent");
+
+                    i++;
+                }
+            }
+
+            String columns[] = { "Student Id","Student Name","Num of Absence" };
+            view.getTblModelDefaulter().setDataVector(data,columns);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Defaulter Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     }
 
