@@ -85,6 +85,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
+        setTableReport();
     }
 
     private void showSearch() {
@@ -211,6 +212,51 @@ public class AdminController {
                 JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Stats Table","Alert",JOptionPane.ERROR_MESSAGE);
             }
         }
+
+    void setTableReport(){
+        int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
+
+        String queryReport ="SELECT  date, sid, presence, name FROM attendance a INNER JOIN student s ON a.sid=s.id  WHERE mid =?  ORDER BY date DESC";
+
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(queryReport,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
+            stmt.setInt(1, mid);
+            ResultSet rs = stmt.executeQuery();
+
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data2 = new Object[rowCount][4];
+            int i=0;
+            while(rs.next()){
+
+                data2[i][0] = rs.getDate("date");
+                data2[i][1] = rs.getInt("sid");
+                data2[i][2] = rs.getString("name");
+                System.out.println("haha");
+                int x  = rs.getInt("presence");
+                    if (x ==0){
+                        data2[i][3] = "Absent";
+                    }else {
+                        data2[i][3]="Present";
+                    }
+
+                i++;
+            }
+
+            String columns2[] = { "Date", "Student Id","Student Name","Attendance" };
+            view.getTblModelReport().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Report Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 
     void Search() {

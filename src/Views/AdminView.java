@@ -4,25 +4,29 @@ import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
 import Components.AASTable;
+import com.toedter.calendar.JCalendar;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import java.util.Properties;
 
 
 public class AdminView {
-    DefaultTableModel TblModelStats, TblModelDefaulter;
+    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer, btnGenerateReport;
     private ButtonGroup radioGroup;
-    private AASTable tableStats, tableDefaulter;
+    private AASTable tableStats, tableDefaulter, tableReport;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardReport, cardViewAllAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportCenterPanel,reportBottomPanel;
+    private JPanel cardReport, cardViewAllAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportBottomPanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
@@ -33,8 +37,9 @@ public class AdminView {
     private AASTable tableStudentINFO,TableStudenAttendance;
     private DefaultTableModel TableInfo,TableAttendance;
 
-
-
+    UtilDateModel modeldate ;
+    JDatePanelImpl datePanel;
+    JDatePickerImpl datePicker ;
     CardLayout cl = new CardLayout();
 
 
@@ -101,7 +106,6 @@ public class AdminView {
         AttendancePanel=new JPanel();
         cardReport=new JPanel();
         reportBottomPanel=new JPanel();
-        reportCenterPanel=new JPanel();
         reportTopPanel=new JPanel();
 
         panelcenter.setLayout(cl);
@@ -145,15 +149,20 @@ public class AdminView {
 
 
                     ///Card Report
-        cardReport.setLayout(new BorderLayout());
-
+        cardReport.setLayout(new BoxLayout(cardReport,BoxLayout.Y_AXIS));
         reportTopPanel.add(btnGenerateReport);
-        reportBottomPanel.setBackground(Color.darkGray);
-        reportBottomPanel.setPreferredSize(new Dimension((int) ( frame.getWidth()*0.75), (int )(frame.getHeight()*0.20)));
 
-        cardReport.add(reportTopPanel,BorderLayout.NORTH);
-        cardReport.add(reportCenterPanel,BorderLayout.CENTER);
-        cardReport.add(reportBottomPanel,BorderLayout.SOUTH);
+        modeldate = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        datePanel = new JDatePanelImpl(modeldate,p);
+        datePicker = new JDatePickerImpl(datePanel,null);
+
+
+      //  reportTopPanel.add(datePicker);
+        reportTopPanel.add(new JCalendar());
 
 
 
@@ -196,6 +205,31 @@ public class AdminView {
         paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         cardstats.add(paneStats);
+
+
+
+        //creating JTable for report generation
+        TblModelReport = new DefaultTableModel();
+        tableReport = new AASTable(TblModelReport){public Class getColumnClass(int column) {
+            return switch (column) {
+                default -> String.class;
+            };
+        }};
+
+        JScrollPane paneReport = new JScrollPane(tableReport);
+
+        paneReport.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneReport.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+
+
+        cardReport.add(reportTopPanel);
+        cardReport.add(paneReport);
+        reportBottomPanel.setBackground(Color.darkGray);
+        reportBottomPanel.setPreferredSize(new Dimension((int) ( frame.getWidth()*0.75), (int )(frame.getHeight()*0.20)));
+        cardReport.add(reportBottomPanel);
+
+
 
 
 
@@ -313,6 +347,10 @@ public class AdminView {
 
     public AASLabel getLblModuleSelected() {
         return lblModuleSelected;
+    }
+
+    public DefaultTableModel getTblModelReport() {
+        return TblModelReport;
     }
 
     public DefaultTableModel getTblModelStats() {
