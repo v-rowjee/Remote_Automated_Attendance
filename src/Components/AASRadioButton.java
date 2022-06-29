@@ -15,7 +15,7 @@ public class AASRadioButton extends JRadioButton {
         setBorder(null);
         setBorderPainted(false);
         setFocusPainted( false );
-        setHorizontalAlignment(SwingConstants.CENTER);
+        setHorizontalAlignment(SwingConstants.LEFT);
 
         addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {

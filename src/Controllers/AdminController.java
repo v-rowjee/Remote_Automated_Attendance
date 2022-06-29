@@ -46,9 +46,14 @@ public class AdminController {
         view.getBtnaddLecturer().addActionListener(e->addLecturer());
         view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
-        view.getComboBoxModule().addActionListener(e -> setTableStats());
-        view.getComboBoxModule().addActionListener(e -> setTableDefaulter());
+        view.getComboBoxModule().addActionListener(e -> comboBoxAction());
 
+    }
+
+    private void comboBoxAction(){
+        setTableDefaulter();
+        setTableStats();
+        setTableReport();
     }
 
     private void showStatistic() {
