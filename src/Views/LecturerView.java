@@ -49,6 +49,10 @@ public class LecturerView {
         rdBtnStatistics= new AASRadioButton("Statistics", false);
 
         radioGroup= new ButtonGroup();
+        rdBtnAttendance.setHorizontalAlignment(SwingConstants.LEFT);
+        rdBtnAttendance.setBorder(new EmptyBorder(0,30,0,0));
+        rdBtnStatistics.setHorizontalAlignment(SwingConstants.LEFT);
+        rdBtnStatistics.setBorder(new EmptyBorder(0,30,0,0));
         radioGroup.add(rdBtnAttendance);
         radioGroup.add(rdBtnStatistics);
 
@@ -98,7 +102,7 @@ public class LecturerView {
 
         panelnavbar.setPreferredSize(new Dimension(frame.getWidth()/4,frame.getHeight()));
         panelnavbar.setLayout(new BorderLayout());
-        panelnavbar.setBorder(new EmptyBorder(0,20,5,20) );
+        panelnavbar.setBorder(new EmptyBorder(0,20,10,20) );
 
         JPanel panelNavbarCenter = new JPanel();
         panelNavbarCenter.setLayout(new GridLayout(3,1,0,40));
@@ -148,6 +152,8 @@ public class LecturerView {
         btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelAttBottom.setLayout(new FlowLayout(FlowLayout.TRAILING));
         panelAttBottom.setBackground(Color.darkGray);
+        panelAttBottom.setPreferredSize(new Dimension(frame.getWidth(),frame.getHeight()/10+10));
+        panelAttBottom.setBorder(new EmptyBorder(5,0,0,5));
         panelAttBottom.add(btnClearAttendance);
         panelAttBottom.add(btnSubmitAttendance);
 
