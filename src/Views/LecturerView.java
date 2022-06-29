@@ -146,8 +146,8 @@ public class LecturerView {
             }
         };
         JScrollPane paneAtt = new JScrollPane(tableAtt);
-        paneAtt.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneAtt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        paneAtt.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneAtt.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         btnSubmitAttendance.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelAttBottom.setLayout(new FlowLayout(FlowLayout.TRAILING));

@@ -39,7 +39,8 @@ public class AdminController {
         view.getRdBtnStatistics().addActionListener(e->showStatistic());
         view.getRdBtnDefaulter().addActionListener(e->showDefaulter());
         view.getRdBtnViewLecturer().addActionListener(e->showLecturer());
-        view.getRdBtnAttendance().addActionListener(e->showAttendance());
+        view.getRdBtnReportGeneration().addActionListener(e->generateReport());
+        view.getRdBtnAllAttendance().addActionListener(e->viewAllAttendance());
         view.getRdBtnViewStudent().addActionListener(e->showStudent());
         view.getRdBtnAdd().addActionListener(e->showAdd());
         view.getBtnaddLecturer().addActionListener(e->addLecturer());
@@ -57,6 +58,13 @@ public class AdminController {
         view.getLblModuleSelected().setVisible(true);
         setTableStats();
     }
+    private void viewAllAttendance(){
+        view.getCl().show(view.getPanelcenter(),"View All Attendance");
+        view.getLblOptionSelected().setText("View All Attendance");
+        view.getLblModuleSelected().setVisible(false);
+        view.getLblFor().setVisible(false);
+    }
+
 
     private void showLecturer(){
         view.getCl().show(view.getPanelcenter(),"View Lecturer");
@@ -72,9 +80,9 @@ public class AdminController {
         view.getLblFor().setVisible(false);
     }
 
-    private void showAttendance(){
-        view.getCl().show(view.getPanelcenter(),"View Attendance");
-        view.getLblOptionSelected().setText("View Attendance");
+    private void generateReport(){
+        view.getCl().show(view.getPanelcenter(),"View Report");
+        view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
     }
