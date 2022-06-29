@@ -91,7 +91,7 @@ public class LoginController {
 
         } catch (SQLException e) {
             e.getStackTrace();
-            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Login","Alert",JOptionPane.ERROR_MESSAGE);
         }
     }
 

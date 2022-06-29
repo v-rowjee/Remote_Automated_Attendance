@@ -3,6 +3,7 @@ package Views;
 import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
+import Components.AASTable;
 
 import javax.swing.*;
 import javax.swing.JPanel;
@@ -13,19 +14,24 @@ import java.sql.*;
 
 
 public class AdminView {
+    DefaultTableModel TblModelStats, TblModelDefaulter;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer;
     private ButtonGroup radioGroup;
+    private AASTable tableStats, tableDefaulter;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardattendance, cardstats,cardsearch,cardDefaulter,cardAdd;
+    private JPanel cardViewAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnAttendance,rdBtnStatistics ;
     private JTextField SearchBar;
 
     private AASLabel lblName,lblUsrName,lblPass, clock;
 
     private JTextField txtName, txtUserName, txtPassword;
+    private JButton btnGo;
+    private AASTable tableStudentINFO,TableStudenAttendance;
+    private DefaultTableModel TableInfo,TableAttendance;
 
     CardLayout cl = new CardLayout();
 
@@ -40,8 +46,8 @@ public class AdminView {
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
-        rdBtnSearch=new AASRadioButton("Search",true);
-        rdBtnStatistics= new AASRadioButton("View Statistics", false);
+        rdBtnSearch=new AASRadioButton("Search Student",false);
+        rdBtnStatistics= new AASRadioButton("View Statistics", true);
         rdBtnDefaulter=new AASRadioButton("Defaulter List",false);
         rdBtnAdd=new AASRadioButton("Add Lecturer",false);
         rdBtnViewLecturer=new AASRadioButton("View Lecturers", false);
@@ -66,22 +72,27 @@ public class AdminView {
         lblUser= new AASLabel();
         lblUser.setHorizontalAlignment(SwingConstants.CENTER);
         lblModuleSelected=new AASLabel((String)comboBoxModule.getSelectedItem());
-        lblOptionSelected=new AASLabel("Search");
+        lblOptionSelected=new AASLabel("View Statistic");
         lblFor=new AASLabel(" for ");
         clock=new AASLabel();
 
         SearchBar=new JTextField(20);
+        btnGo=new JButton("GO");
 
         //Creating panels
         panelnavbar = new JPanel();
         panelcenter = new JPanel();
         paneldate=new JPanel();
         panelMain=new JPanel();
-        cardattendance = new JPanel();
+        cardViewAttendance = new JPanel();
+        cardViewLecturer=new JPanel();
+        cardViewStudent=new JPanel();
         cardstats = new JPanel();
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
         cardAdd=new JPanel();
+        ResultPanel=new JPanel();
+        AttendancePanel=new JPanel();
 
         panelcenter.setLayout(cl);
 
@@ -96,6 +107,9 @@ public class AdminView {
         panelMain.add(paneldate,BorderLayout.NORTH);
         panelMain.add(panelcenter,BorderLayout.CENTER);
 
+        cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
+        cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
+
 
         // Add UI element to panels
         paneldate.setLayout(new BoxLayout(paneldate,BoxLayout.X_AXIS));
@@ -108,12 +122,13 @@ public class AdminView {
 
         panelnavbar.add(lblUser);
         panelnavbar.add(comboBoxModule);
-        panelnavbar.add(rdBtnSearch);
+
         panelnavbar.add(rdBtnStatistics);
         panelnavbar.add(rdBtnDefaulter);
         panelnavbar.add(rdBtnAttendance);
-        panelnavbar.add(rdBtnViewLecturer);
+        panelnavbar.add(rdBtnSearch);
         panelnavbar.add(rdBtnViewStudent);
+        panelnavbar.add(rdBtnViewLecturer);
         panelnavbar.add(rdBtnAdd);
         panelnavbar.add(btnLogout);
 
@@ -126,6 +141,9 @@ public class AdminView {
         cardsearch.setBackground(Color.black);
         cardDefaulter.setBackground(Color.black);
         cardAdd.setBackground(Color.black);
+        cardViewLecturer.setBackground(Color.PINK);
+        cardViewAttendance.setBackground(Color.CYAN);
+        cardViewStudent.setBackground(Color.MAGENTA);
 
 
         //adding card to panel
@@ -133,48 +151,98 @@ public class AdminView {
         panelcenter.add(cardsearch,"search");
         panelcenter.add(cardDefaulter,"Defaulter list");
         panelcenter.add(cardAdd,"Add lecturer");
+        panelcenter.add(cardViewAttendance,"View Attendance");
+        panelcenter.add(cardViewLecturer,"View Lecturer");
+        panelcenter.add(cardViewStudent,"View Student");
 
 
 
         //creating JTable for statistics
-        String columns2[] = { "Date", "Present","Absent","% Present" };
+        TblModelStats = new DefaultTableModel();
+        tableStats = new AASTable(TblModelStats){public Class getColumnClass(int column) {
+            return switch (column) {
+                default -> String.class;
+            };
+        }};
 
-        Object[][] data2 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
-        };
+        JScrollPane paneStats = new JScrollPane(tableStats);
 
-        DefaultTableModel model2 = new DefaultTableModel(data2, columns2);
-        JTable table2 = new JTable(model2);
+        paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        table2.setShowGrid(true);
-        table2.setShowVerticalLines(true);
-        JScrollPane pane2 = new JScrollPane(table2);
-        cardstats.add(pane2);
+        cardstats.add(paneStats);
+
+
 
         //search card
+        cardsearch.setLayout(new FlowLayout());
         cardsearch.add(SearchBar);
+        cardsearch.add(btnGo);
+        cardsearch.add(ResultPanel);
+        cardsearch.add(AttendancePanel);
 
-        //defaulter card
+        TableInfo=new DefaultTableModel();
+        tableStudentINFO=new AASTable(TableInfo){
+        public Class getColumnClass(int column) {
+            return switch (column) {
 
-        String columns3[] = { "Date", "Present","Absent","% Present" };
+                default -> String.class;
+            };
+        }
+    };
 
-        Object[][] data3 = {
-                {"11/02/2022", "15", "45","15"},
-                {"12/02/2022", "23","37","38"},
-                {"13/02/2022", "45",  "15","75"},
-                {"14/02/2022", "33", "27","55"}
+        JScrollPane paneSearch = new JScrollPane(tableStudentINFO);
+        paneSearch.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+
+        ResultPanel.add(paneSearch);
+
+
+        TableAttendance=new DefaultTableModel();
+        TableStudenAttendance=new AASTable(TableAttendance){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    case 0 -> Integer.class;
+                    case 1 -> Integer.class;
+                    case 2 -> Date.class;
+                    //case 3 -> String.class;
+                    default->boolean.class;
+
+                };
+            }
         };
 
-        DefaultTableModel model3 = new DefaultTableModel(data3, columns3);
-        JTable table3 = new JTable(model3);
+        JScrollPane paneAttendance = new JScrollPane(TableStudenAttendance);
+        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        table3.setShowGrid(true);
-        table3.setShowVerticalLines(true);
-        JScrollPane pane3 = new JScrollPane(table3);
-        cardDefaulter.add(pane3);
+        AttendancePanel.add(paneAttendance);
+
+
+       // cardsearch.setLayout(new FlowLayout());
+        cardsearch.add(SearchBar);
+        cardsearch.add(btnGo);
+        cardsearch.add(ResultPanel);
+        cardsearch.add(AttendancePanel);
+
+
+        //defaulter card
+        TblModelDefaulter = new DefaultTableModel();
+        tableDefaulter = new AASTable(TblModelDefaulter){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    default -> String.class;
+
+                };
+            }
+        };
+        JScrollPane paneDefaulter = new JScrollPane(tableDefaulter);
+        paneDefaulter.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneDefaulter.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        cardDefaulter.add(paneDefaulter);
+
+
 
         //add lecturer card
 
@@ -222,7 +290,9 @@ public class AdminView {
         return lblModuleSelected;
     }
 
-
+    public DefaultTableModel getTblModelStats() {
+        return TblModelStats;
+    }
     public JPanel getPanelcenter() {
         return panelcenter;
     }
@@ -247,7 +317,7 @@ public class AdminView {
         return rdBtnSearch;
     }
 
-    public AASRadioButton getrdBtnDefaulter() {
+    public AASRadioButton getRdBtnDefaulter() {
         return rdBtnDefaulter;
     }
 
@@ -317,7 +387,6 @@ public class AdminView {
 
             }
 
-
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(frame.getFrame(),"Error Connecting To Database","Alert",JOptionPane.ERROR_MESSAGE);
             System.out.println(e);
@@ -330,6 +399,31 @@ public class AdminView {
         return clock;
     }
 
+    public JTextField getSearchBar() {
+        return SearchBar;
+    }
 
+    public DefaultTableModel getTableInfo() {
+        return TableInfo;
+    }
 
+    public JButton getBtnGo(){return btnGo;}
+
+    public DefaultTableModel getTableAttendance(){return TableAttendance;}
+
+    public DefaultTableModel getTblModelDefaulter() {
+        return TblModelDefaulter;
+    }
+
+    public AASRadioButton getRdBtnViewLecturer() {
+        return rdBtnViewLecturer;
+    }
+
+    public AASRadioButton getRdBtnViewStudent() {
+        return rdBtnViewStudent;
+    }
+
+    public AASLabel getLblFor() {
+        return lblFor;
+    }
 }

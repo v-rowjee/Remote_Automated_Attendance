@@ -5,16 +5,11 @@ import Components.AASLabel;
 import Components.AASRadioButton;
 import Components.AASTable;
 
-
 import javax.swing.*;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.net.URL;
-import java.text.DateFormat;
-import java.util.Date;
 
 public class LecturerView {
     private JFrame frame;
@@ -122,6 +117,7 @@ public class LecturerView {
         panelnavbar.add(lblUser,BorderLayout.NORTH);
         panelnavbar.add(panelNavbarCenter,BorderLayout.CENTER);
         panelnavbar.add(btnLogout,BorderLayout.SOUTH);
+
 
 
         //add colour to panels
@@ -257,4 +253,6 @@ public class LecturerView {
     public DefaultTableModel getTblModelStats() {
         return tblModelStats;
     }
+
+
 }
