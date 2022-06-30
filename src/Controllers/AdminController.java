@@ -61,6 +61,11 @@ public class AdminController {
     }
 
     public void reportDateFromTo(){
+        if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){
+            JOptionPane.showMessageDialog(view.getFrame(), "Please choose both DateFrom and DateTo", "Alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
         String dateFrom = sdf.format(view.getDateChooserFrom().getDate());
         String dateTo = sdf.format(view.getDateChooserTo().getDate());
