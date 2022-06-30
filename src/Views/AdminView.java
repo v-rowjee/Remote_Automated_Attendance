@@ -9,6 +9,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +26,7 @@ public class AdminView {
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardReport, cardViewAllAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportBottomPanel;
+    private JPanel cardReport, cardViewAllAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, SearchPanel,reportTopPanel,reportBottomPanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
@@ -33,10 +34,12 @@ public class AdminView {
 
     private JTextField txtName, txtUserName, txtPassword;
     private JButton btnGo;
-    private AASTable tableStudentINFO,TableStudenAttendance;
-    private DefaultTableModel TableInfo,TableAttendance;
+    private AASTable tableStudentINFO,TableStudenAttendance,TableAllLecturers;
+    private DefaultTableModel TableInfo,TableAttendance,TableLecturers;
 
     private JDateChooser dateChooserFrom, dateChooserTo;
+
+    private JPanel PanelFied;
 
     UtilDateModel modeldate ;
     JDatePanelImpl datePanel;
@@ -50,7 +53,7 @@ public class AdminView {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-
+        PanelFied=new JPanel();
 
         // Create UI elements
         btnLogout = new AASButton("Logout");
@@ -109,8 +112,7 @@ public class AdminView {
         cardsearch=new JPanel();
         cardDefaulter=new JPanel();
         cardAdd=new JPanel();
-        ResultPanel=new JPanel();
-        AttendancePanel=new JPanel();
+        SearchPanel=new JPanel();
         cardReport=new JPanel();
         reportBottomPanel=new JPanel();
         reportTopPanel=new JPanel();
@@ -158,8 +160,8 @@ public class AdminView {
 
                     ///Card Report
         cardReport.setLayout(new BoxLayout(cardReport,BoxLayout.Y_AXIS));
-reportTopPanel.setBackground(Color.BLACK);
-reportTopPanel.add(lblFrom);
+        reportTopPanel.setBackground(Color.BLACK);
+        reportTopPanel.add(lblFrom);
         reportTopPanel.add(dateChooserFrom);
         reportTopPanel.add(lblTo);
         reportTopPanel.add(dateChooserTo);
@@ -249,11 +251,11 @@ reportTopPanel.add(lblFrom);
 
 
         //search card
-        cardsearch.setLayout(new FlowLayout());
+        cardsearch.setLayout(new GridLayout(4,1));
         cardsearch.add(SearchBar);
         cardsearch.add(btnGo);
-        cardsearch.add(ResultPanel);
-        cardsearch.add(AttendancePanel);
+        cardsearch.add(SearchPanel);
+
 
         TableInfo=new DefaultTableModel();
         tableStudentINFO=new AASTable(TableInfo){
@@ -270,7 +272,7 @@ reportTopPanel.add(lblFrom);
         paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
 
-        ResultPanel.add(paneSearch);
+        SearchPanel.add(paneSearch);
 
 
         TableAttendance=new DefaultTableModel();
@@ -291,14 +293,14 @@ reportTopPanel.add(lblFrom);
         paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        AttendancePanel.add(paneAttendance);
+        SearchPanel.add(paneAttendance);
 
 
        // cardsearch.setLayout(new FlowLayout());
         cardsearch.add(SearchBar);
         cardsearch.add(btnGo);
-        cardsearch.add(ResultPanel);
-        cardsearch.add(AttendancePanel);
+        cardsearch.add(SearchPanel);
+        //cardsearch.add(SearchPanel);
 
 
         //defaulter card
@@ -306,7 +308,11 @@ reportTopPanel.add(lblFrom);
         tableDefaulter = new AASTable(TblModelDefaulter){
             public Class getColumnClass(int column) {
                 return switch (column) {
-                    default -> String.class;
+                    case 0 -> Integer.class;
+                    case 1 -> String.class;
+                    case 2 -> Date.class;
+                    //case 3 -> String.class;
+                    default->boolean.class;
 
                 };
             }
@@ -341,6 +347,23 @@ reportTopPanel.add(lblFrom);
         cardAdd.add(txtPassword);
         cardAdd.add(BtnaddLecturer);
 
+        //view all lecturers
+
+        TableLecturers = new DefaultTableModel();
+        TableAllLecturers = new AASTable(TableLecturers){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    case 0 -> String.class;
+                    case 1 -> String.class;
+                    case 2 -> String.class;
+                    default->String.class;
+                };
+            }
+        };
+        JScrollPane PaneLecturer = new JScrollPane(TableAllLecturers);
+        PaneLecturer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        PaneLecturer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        cardViewLecturer.add(PaneLecturer);
 
 
 
@@ -350,6 +373,10 @@ reportTopPanel.add(lblFrom);
 
 
 
+    }
+
+    public DefaultTableModel getTableLecturers() {
+        return TableLecturers;
     }
 
     public JFrame getFrame() {
