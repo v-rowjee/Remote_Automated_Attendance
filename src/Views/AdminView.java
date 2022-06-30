@@ -4,7 +4,7 @@ import Components.AASButton;
 import Components.AASLabel;
 import Components.AASRadioButton;
 import Components.AASTable;
-import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -14,15 +14,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
-import java.util.Properties;
 
 
 public class AdminView {
-    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport;
+    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer, btnGenerateReport;
     private ButtonGroup radioGroup;
-    private AASTable tableStats, tableDefaulter, tableReport;
+    private AASTable tableStats, tableDefaulter, tableReport,tableStudent;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
@@ -30,12 +29,14 @@ public class AdminView {
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
-    private AASLabel lblName,lblUsrName,lblPass, clock;
+    private AASLabel lblName,lblUsrName,lblPass, clock, lblFrom, lblTo;
 
     private JTextField txtName, txtUserName, txtPassword;
     private JButton btnGo;
     private AASTable tableStudentINFO,TableStudenAttendance;
     private DefaultTableModel TableInfo,TableAttendance;
+
+    private JDateChooser dateChooserFrom, dateChooserTo;
 
     UtilDateModel modeldate ;
     JDatePanelImpl datePanel;
@@ -84,11 +85,17 @@ public class AdminView {
         lblOptionSelected=new AASLabel("View Statistic");
         lblFor=new AASLabel(" for ");
         clock=new AASLabel();
+        lblFrom=new AASLabel("From: ");
+        lblTo=new AASLabel("To");
+
 
         SearchBar=new JTextField(20);
 
         btnGo=new JButton("GO");
         btnGenerateReport=new AASButton("Generate Report");
+
+        dateChooserFrom= new JDateChooser();
+        dateChooserTo=new JDateChooser();
 
         //Creating panels
         panelnavbar = new JPanel();
@@ -123,6 +130,7 @@ public class AdminView {
 
         cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
         cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
+        cardViewStudent.setLayout(new BoxLayout(cardViewStudent,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
@@ -150,20 +158,12 @@ public class AdminView {
 
                     ///Card Report
         cardReport.setLayout(new BoxLayout(cardReport,BoxLayout.Y_AXIS));
+reportTopPanel.setBackground(Color.BLACK);
+reportTopPanel.add(lblFrom);
+        reportTopPanel.add(dateChooserFrom);
+        reportTopPanel.add(lblTo);
+        reportTopPanel.add(dateChooserTo);
         reportTopPanel.add(btnGenerateReport);
-
-        modeldate = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        datePanel = new JDatePanelImpl(modeldate,p);
-        datePicker = new JDatePickerImpl(datePanel,null);
-
-
-      //  reportTopPanel.add(datePicker);
-        reportTopPanel.add(new JCalendar());
-
 
 
         //add colour to panels
@@ -229,6 +229,21 @@ public class AdminView {
         reportBottomPanel.setPreferredSize(new Dimension((int) ( frame.getWidth()*0.75), (int )(frame.getHeight()*0.20)));
         cardReport.add(reportBottomPanel);
 
+
+//view student card
+        TblModelStudent = new DefaultTableModel();
+        tableStudent = new AASTable(TblModelStudent){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    default -> String.class;
+
+                };
+            }
+        };
+        JScrollPane paneStudent = new JScrollPane(tableStudent);
+        paneStudent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneStudent.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        cardViewStudent.add(paneStudent);
 
 
 
@@ -349,6 +364,14 @@ public class AdminView {
         return lblModuleSelected;
     }
 
+    public JDatePickerImpl getDatePicker() {
+        return datePicker;
+    }
+
+    public UtilDateModel getModeldate() {
+        return modeldate;
+    }
+
     public DefaultTableModel getTblModelReport() {
         return TblModelReport;
     }
@@ -434,7 +457,6 @@ public class AdminView {
             int rowCount=0;
             while(rs.next()){
                rowCount++;
-               System.out.println(rowCount);
             }
 
 
@@ -466,6 +488,10 @@ public class AdminView {
         return SearchBar;
     }
 
+    public JDateChooser getDateChooserTo() {
+        return dateChooserTo;
+    }
+
     public DefaultTableModel getTableInfo() {
         return TableInfo;
     }
@@ -490,7 +516,20 @@ public class AdminView {
         return rdBtnViewStudent;
     }
 
+    public DefaultTableModel getTblModelStudent() {
+        return TblModelStudent;
+    }
+
     public AASLabel getLblFor() {
         return lblFor;
     }
+
+    public JDateChooser getDateChooserFrom() {
+        return dateChooserFrom;
+    }
+
+    public AASButton getBtnGenerateReport() {
+        return btnGenerateReport;
+    }
+
 }

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import static Controllers.LoginController.centreWindow;
 
@@ -47,13 +48,23 @@ public class AdminController {
         view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
         view.getComboBoxModule().addActionListener(e -> comboBoxAction());
+        view.getBtnGenerateReport().addActionListener(e->reportDateFromTo());
 
     }
 
     private void comboBoxAction(){
         setTableDefaulter();
         setTableStats();
-        setTableReport();
+
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+        setTableReport(sdf.format(view.getDateChooserFrom().getDate()),sdf.format(view.getDateChooserTo().getDate()));
+    }
+
+    public void reportDateFromTo(){
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+        String dateFrom = sdf.format(view.getDateChooserFrom().getDate());
+        String dateTo = sdf.format(view.getDateChooserTo().getDate());
+        setTableReport(dateFrom,dateTo);
     }
 
     private void showStatistic() {
@@ -83,6 +94,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("View Students");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
+        setTableStudents();
     }
 
     private void generateReport(){
@@ -90,7 +102,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
-        setTableReport();
+
     }
 
     private void showSearch() {
@@ -218,16 +230,18 @@ public class AdminController {
             }
         }
 
-    void setTableReport(){
+    void setTableReport(String dateFrom, String dateTo){
         int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
 
-        String queryReport ="SELECT  date, sid, presence, name FROM attendance a INNER JOIN student s ON a.sid=s.id  WHERE mid =?  ORDER BY date DESC";
+        String queryReport ="SELECT  date, sid, presence, name FROM attendance a INNER JOIN student s ON a.sid=s.id  WHERE mid =? AND date >=? AND DATE <=?  ORDER BY date DESC";
 
         try{
             Connection conn = Database.getConnection();
 
             PreparedStatement stmt = conn.prepareStatement(queryReport,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
             stmt.setInt(1, mid);
+            stmt.setString(2, dateFrom);
+            stmt.setString(3, dateTo);
             ResultSet rs = stmt.executeQuery();
 
 
@@ -243,7 +257,6 @@ public class AdminController {
                 data2[i][0] = rs.getDate("date");
                 data2[i][1] = rs.getInt("sid");
                 data2[i][2] = rs.getString("name");
-                System.out.println("haha");
                 int x  = rs.getInt("presence");
                     if (x ==0){
                         data2[i][3] = "Absent";
@@ -260,6 +273,41 @@ public class AdminController {
         } catch (SQLException e) {
             e.getStackTrace();
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Report Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    void setTableStudents(){
+
+        String queryReport ="SELECT  id,  name, course FROM student ORDER BY id ASC";
+
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(queryReport,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
+
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data2 = new Object[rowCount][3];
+            int i=0;
+            while(rs.next()){
+
+                data2[i][0] = rs.getInt("id");
+                data2[i][1] = rs.getString("name");
+                data2[i][2] = rs.getString("course");
+                i++;
+            }
+
+            String columns2[] = { "Student Id", "Student Name","Course" };
+            view.getTblModelStudent().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Student Table","Alert",JOptionPane.ERROR_MESSAGE);
         }
     }
 
