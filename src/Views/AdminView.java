@@ -86,7 +86,7 @@ public class AdminView {
         lblFor=new AASLabel(" for ");
         clock=new AASLabel();
         lblFrom=new AASLabel("From: ");
-        lblTo=new AASLabel("To");
+        lblTo=new AASLabel("To :");
 
 
         SearchBar=new JTextField(20);

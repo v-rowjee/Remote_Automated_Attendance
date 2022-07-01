@@ -56,13 +56,20 @@ public class AdminController {
         setTableDefaulter();
         setTableStats();
 
+
+        if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){}else{
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
-        setTableReport(sdf.format(view.getDateChooserFrom().getDate()),sdf.format(view.getDateChooserTo().getDate()));
+        setTableReport(sdf.format(view.getDateChooserFrom().getDate()),sdf.format(view.getDateChooserTo().getDate()));}
     }
 
     public void reportDateFromTo(){
         if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){
             JOptionPane.showMessageDialog(view.getFrame(), "Please choose both DateFrom and DateTo", "Alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (view.getDateChooserFrom().getDate().after(view.getDateChooserTo().getDate() )){
+            JOptionPane.showMessageDialog(view.getFrame(), "DateTo should be after DateFrom", "Alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
