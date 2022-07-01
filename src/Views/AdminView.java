@@ -17,11 +17,11 @@ import java.sql.*;
 
 
 public class AdminView {
-    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent;
+    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent,TblModelLecturers;
     private JFrame frame;
     private AASButton  btnLogout, btnMod[],BtnaddLecturer, btnGenerateReport;
     private ButtonGroup radioGroup;
-    private AASTable tableStats, tableDefaulter, tableReport,tableStudent;
+    private AASTable tableStats, tableDefaulter, tableReport,tableStudent, tableLecturers;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
@@ -131,6 +131,7 @@ public class AdminView {
         cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
         cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
         cardViewStudent.setLayout(new BoxLayout(cardViewStudent,BoxLayout.Y_AXIS));
+        cardViewLecturer.setLayout(new BoxLayout(cardViewLecturer,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
@@ -300,6 +301,25 @@ reportTopPanel.add(lblFrom);
         cardsearch.add(ResultPanel);
         cardsearch.add(AttendancePanel);
 
+//
+        TblModelLecturers = new DefaultTableModel();
+        tableLecturers = new AASTable(TblModelLecturers){
+            public Class getColumnClass(int column) {
+                return switch (column) {
+                    case 0 -> String.class;
+                    case 1 -> String.class;
+                    case 2 -> String.class;
+                    default->String.class;
+                };
+            }
+        };
+        JScrollPane PaneLecturer = new JScrollPane(tableLecturers);
+        PaneLecturer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        PaneLecturer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        cardViewLecturer.add(PaneLecturer);
+
+
+
 
         //defaulter card
         TblModelDefaulter = new DefaultTableModel();
@@ -347,8 +367,6 @@ reportTopPanel.add(lblFrom);
         //Adding panels to frame
         frame.add(panelnavbar,BorderLayout.WEST);
         frame.add(panelMain,BorderLayout.CENTER);
-
-
 
     }
 
@@ -401,6 +419,10 @@ reportTopPanel.add(lblFrom);
 
     public AASRadioButton getRdBtnSearch() {
         return rdBtnSearch;
+    }
+
+    public DefaultTableModel getTblModelLecturers() {
+        return TblModelLecturers;
     }
 
     public AASRadioButton getRdBtnDefaulter() {

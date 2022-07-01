@@ -92,6 +92,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("View Lecturers");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
+        setTableLecturers();
     }
 
     private void showStudent(){
@@ -443,6 +444,42 @@ public class AdminController {
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Defaulter Table","Alert",JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    void setTableLecturers(){
+
+        String queryReport ="SELECT  id,name, username FROM user WHERE type='Lecturer'";
+
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(queryReport,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
+
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data2 = new Object[rowCount][3];
+            int i=0;
+            while(rs.next()){
+
+                data2[i][0] = rs.getInt("id");
+                data2[i][1] = rs.getString("name");
+                data2[i][2] = rs.getString("username");
+                i++;
+            }
+
+            String columns2[] = { "Lecturer Id", "Lecturer Name","Username" };
+            view.getTblModelLecturers().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Student Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     }
 
