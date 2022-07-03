@@ -89,6 +89,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("View All Attendance");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
+        setTableAllAttendance();
     }
 
     private void showLecturer(){
@@ -308,6 +309,49 @@ public class AdminController {
         } catch (SQLException e) {
             e.getStackTrace();
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Student Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    void setTableAllAttendance(){
+
+        String query ="SELECT  attendance.date, attendance.mid, attendance.presence, student.name, module.name  FROM ((attendance INNER JOIN student  ON attendance.sid=student.id) INNER JOIN module ON attendance.mid=module.id)    ORDER BY date DESC";
+
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
+
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data2 = new Object[rowCount][4];
+            int i=0;
+            while(rs.next()){
+
+                data2[i][0] = rs.getDate("date");
+                data2[i][1] = rs.getString("module.name");
+                data2[i][2] = rs.getString("name");
+                int x  = rs.getInt("presence");
+                if (x ==0){
+                    data2[i][3] = "Absent";
+                }else {
+                    data2[i][3]="Present";
+                }
+
+                i++;
+            }
+
+            String columns2[] = { "Date", "Module Name","Student Name","Attendance" };
+            view.getTblModelAllAttendance().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller All Atendance Table","Alert",JOptionPane.ERROR_MESSAGE);
+       System.out.println(e);
         }
     }
 

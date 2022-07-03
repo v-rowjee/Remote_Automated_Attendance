@@ -13,19 +13,20 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.net.URL;
 import java.sql.*;
 
 
 public class AdminView {
-    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent,TblModelLecturers;
+    DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent,TblModelLecturers, TblModelAllAttendance;
     private JFrame frame;
     private AASButton  btnLogout, btnAddLecturer, btnGenerateReport;
     private ButtonGroup radioGroup;
-    private AASTable tableStats, tableDefaulter, tableReport,tableStudent, tableLecturers;
+    private AASTable tableStats, tableDefaulter, tableReport,tableStudent, tableLecturers,tableAllAttendance;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelCenter, panelNavbar, panelDate, panelMain;
-    private JPanel cardReport, cardViewAllAttendance, cardStats, cardSearch,cardDefaulter, cardAddLecturer,cardViewLecturer,cardViewStudent,reportTopPanel,reportBottomPanel;
+    private JPanel cardReport, cardViewAllAttendance, cardStats, cardSearch,cardDefaulter, cardAddLecturer,cardViewLecturer,cardViewStudent,reportTopPanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
@@ -49,6 +50,8 @@ public class AdminView {
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        URL iconURL = getClass().getResource("../images/favicon.png");
+        frame.setIconImage(new ImageIcon(iconURL).getImage());
 
 
 
@@ -117,7 +120,6 @@ public class AdminView {
         cardDefaulter=new JPanel();
         cardAddLecturer =new JPanel();
         cardReport=new JPanel();
-        reportBottomPanel=new JPanel();
         reportTopPanel=new JPanel();
 
         panelCenter.setLayout(cardLayout);
@@ -138,6 +140,7 @@ public class AdminView {
         cardViewStudent.setLayout(new BoxLayout(cardViewStudent,BoxLayout.Y_AXIS));
         cardViewLecturer.setLayout(new BoxLayout(cardViewLecturer,BoxLayout.Y_AXIS));
         cardSearch.setLayout(new BoxLayout(cardSearch,BoxLayout.Y_AXIS));
+        cardViewAllAttendance.setLayout(new BoxLayout(cardViewAllAttendance,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
@@ -236,9 +239,24 @@ public class AdminView {
 
         cardReport.add(reportTopPanel);
         cardReport.add(paneReport);
-        reportBottomPanel.setBackground(Color.darkGray);
-        reportBottomPanel.setPreferredSize(new Dimension((int) ( frame.getWidth()*0.75), 50));
-//        cardReport.add(reportBottomPanel);
+
+
+        //card all attendance
+        TblModelAllAttendance = new DefaultTableModel();
+        tableAllAttendance = new AASTable(TblModelAllAttendance){public Class getColumnClass(int column) {
+            return switch (column) {
+                default -> String.class;
+            };
+        }};
+
+        JScrollPane paneAllAttendance = new JScrollPane(tableAllAttendance);
+
+        paneAllAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneAllAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+
+
+        cardViewAllAttendance.add(paneAllAttendance);
 
 
 //view student card
@@ -543,4 +561,7 @@ public class AdminView {
         return btnGenerateReport;
     }
 
+    public DefaultTableModel getTblModelAllAttendance() {
+        return TblModelAllAttendance;
+    }
 }
