@@ -25,7 +25,7 @@ public class AdminView {
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
     private JPanel panelCenter, panelNavbar, panelDate, panelMain;
-    private JPanel cardReport, cardViewAllAttendance, cardStats, cardSearch,cardDefaulter, cardAddLecturer,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportBottomPanel;
+    private JPanel cardReport, cardViewAllAttendance, cardStats, cardSearch,cardDefaulter, cardAddLecturer,cardViewLecturer,cardViewStudent,reportTopPanel,reportBottomPanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
@@ -116,8 +116,6 @@ public class AdminView {
         cardSearch =new JPanel();
         cardDefaulter=new JPanel();
         cardAddLecturer =new JPanel();
-        ResultPanel=new JPanel();
-        AttendancePanel=new JPanel();
         cardReport=new JPanel();
         reportBottomPanel=new JPanel();
         reportTopPanel=new JPanel();
@@ -139,6 +137,7 @@ public class AdminView {
         cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
         cardViewStudent.setLayout(new BoxLayout(cardViewStudent,BoxLayout.Y_AXIS));
         cardViewLecturer.setLayout(new BoxLayout(cardViewLecturer,BoxLayout.Y_AXIS));
+        cardSearch.setLayout(new BoxLayout(cardSearch,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
@@ -182,9 +181,9 @@ public class AdminView {
         panelNavbar.setBackground(Color.decode("#00adb5"));
         panelDate.setBackground(Color.darkGray);
         cardStats.setBackground(Color.yellow);
-        cardSearch.setBackground(Color.darkGray);
+        cardSearch.setBackground(Color.white);
         cardDefaulter.setBackground(Color.darkGray);
-        cardAddLecturer.setBackground(Color.darkGray);
+        cardAddLecturer.setBackground(Color.WHITE);
         cardViewLecturer.setBackground(Color.darkGray);
         cardViewAllAttendance.setBackground(Color.CYAN);
         cardViewStudent.setBackground(Color.MAGENTA);
@@ -253,12 +252,12 @@ public class AdminView {
             }
         };
         JScrollPane paneStudent = new JScrollPane(tableStudent);
-        paneStudent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        paneStudent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         paneStudent.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         cardViewStudent.add(paneStudent);
 
 
-
+//card search student
         TableInfo=new DefaultTableModel();
         tableStudentINFO=new AASTable(TableInfo){
             public Class getColumnClass(int column) {
@@ -269,20 +268,15 @@ public class AdminView {
         };
 
         JScrollPane paneSearch = new JScrollPane(tableStudentINFO);
-        paneSearch.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        paneSearch.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneSearch.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-
-        ResultPanel.add(paneSearch);
 
 
         TableAttendance=new DefaultTableModel();
         TableStudenAttendance=new AASTable(TableAttendance){
             public Class getColumnClass(int column) {
                 return switch (column) {
-                    case 0 -> String.class;
-                    case 1 -> String.class;
-                    case 2 -> Date.class;
                     default-> String.class;
 
                 };
@@ -290,24 +284,20 @@ public class AdminView {
         };
 
         JScrollPane paneAttendance = new JScrollPane(TableStudenAttendance);
-        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
-        AttendancePanel.add(paneAttendance);
+        paneAttendance.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        paneAttendance.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 
-        cardSearch.setLayout(new BorderLayout());
         JPanel panelSearch = new JPanel();
         panelSearch.add(SearchBar);
         panelSearch.add(btnGo);
-        JPanel panelSearchTables = new JPanel();
-        panelSearchTables.setLayout(new BoxLayout(panelSearchTables,BoxLayout.X_AXIS));
-        panelSearchTables.add(ResultPanel);
-        panelSearchTables.add(AttendancePanel);
-        JScrollPane searchTablesScroll = new JScrollPane(panelSearchTables,ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        cardSearch.add(panelSearch,BorderLayout.NORTH);
-        cardSearch.add(searchTablesScroll,BorderLayout.CENTER);
+        cardSearch.add(panelSearch);
+        cardSearch.add(paneSearch);
+        cardSearch.add(paneAttendance);
+
+
+        //view lecturers
 
         TblModelLecturers = new DefaultTableModel();
         tableLecturers = new AASTable(TblModelLecturers){
@@ -349,8 +339,11 @@ public class AdminView {
 
 
         lblName =new AASLabel("Name");
+        lblName.setForeground(Color.BLACK);
         lblUserName =new AASLabel("Username");
+        lblUserName.setForeground(Color.BLACK);
         lblPass=new AASLabel("Password");
+        lblPass.setForeground(Color.BLACK);
 
         txtName =new JTextField(10);
 

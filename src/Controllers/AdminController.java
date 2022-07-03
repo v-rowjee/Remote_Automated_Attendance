@@ -237,7 +237,7 @@ public class AdminController {
     void setTableReport(String dateFrom, String dateTo){
         int mid=getMid((String) view.getComboBoxModule().getSelectedItem());
 
-        String queryReport ="SELECT  date, sid, presence, name FROM attendance a INNER JOIN student s ON a.sid=s.id  WHERE mid =? AND date >=? AND DATE <=?  ORDER BY date DESC";
+        String queryReport ="SELECT  date, sid, presence, name FROM attendance a INNER JOIN student s ON a.sid=s.id  WHERE mid =? AND date >=? AND date <=?  ORDER BY date DESC";
 
         try{
             Connection conn = Database.getConnection();
@@ -320,9 +320,10 @@ public class AdminController {
 
         int sid = 0;
 
+
         final String query = "SELECT id,name,course FROM student WHERE name LIKE ?";
-        //final String query1 = "SELECT a.mid,a.sid,a.date,a.presence FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE name=? GROUP BY a.mid DESC";
-        final String query1 = "SELECT mid,sid,date,presence FROM attendance WHERE sid= ?";
+        final String query1 = "SELECT mid,sid,date,presence, name FROM attendance a INNER JOIN module m ON a.mid=m.id  WHERE sid= ?";
+
         String name;
         try {
             Connection conn = Database.getConnection();
@@ -335,15 +336,15 @@ public class AdminController {
             Object[][] data = new Object[1][3];
             if(rs!= null){
                 while (rs.next()) {
-                    sid = rs.getInt("id");
-                    data[0][0] = sid;
+                  sid = rs.getInt("id");
+                 data[0][0] = sid;
                     data[0][1] = rs.getString("name");
                     data[0][2] = rs.getString("course");
 
                     break;
                 }
             }
-            String columns[] = {"id", "name", "course"};
+            String columns[] = {"Id", "Name", "Course"};
             view.getTableInfo().setDataVector(data, columns);
 
 
@@ -363,21 +364,28 @@ public class AdminController {
 
 
             while (rs1.next()) {
-                data1[j][0] = rs1.getInt("mid");
-                data1[j][1] = rs1.getInt("sid");
+                data1[j][0]=j+1;
+                data1[j][1] = rs1.getString("name");
                 data1[j][2] = rs1.getDate("date");
-                data1[j][3] = rs1.getInt("presence");
+
+                int x  = rs1.getInt("presence");
+                if (x ==0){
+                    data1[j][3] = "Absent";
+                }else {
+                    data1[j][3]="Present";
+                }
 
                 j++;
             }
 
 
-            String columns1[] = {"mid", "sid", "date", "presence"};
+            String columns1[] = {"","Mid", "Date", "Presence"};
             view.getTableAttendance().setDataVector(data1, columns1);
 
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database", "Alert", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database Admin Controller search student", "Alert", JOptionPane.ERROR_MESSAGE);
+        System.out.println(e);
         }
     }
 
