@@ -112,7 +112,6 @@ public class AdminController {
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
-        reportDateFromTo();
     }
 
     private void showSearch() {
