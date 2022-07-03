@@ -25,7 +25,7 @@ public class AdminController {
     }
     public void initView() {
         view.getFrame().setSize(700,500);
-        view.getCl().show(view.getPanelcenter(),"Statistic");
+        view.getCardLayout().show(view.getPanelCenter(),"Statistic");
         centreWindow(view.getFrame());
         view.getLblUser().setText("Welcome, " + model.getName());
         setCurrentDateTime();
@@ -41,7 +41,7 @@ public class AdminController {
         view.getRdBtnAllAttendance().addActionListener(e->viewAllAttendance());
         view.getRdBtnViewStudent().addActionListener(e->showStudent());
         view.getRdBtnAdd().addActionListener(e->showAdd());
-        view.getBtnaddLecturer().addActionListener(e->addLecturer());
+        view.getBtnAddLecturer().addActionListener(e->addLecturer());
         view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
         view.getComboBoxModule().addActionListener(e -> comboBoxAction());
@@ -81,21 +81,21 @@ public class AdminController {
     }
 
     private void showStatistic() {
-        view.getCl().show(view.getPanelcenter(),"stats");
+        view.getCardLayout().show(view.getPanelCenter(),"stats");
         view.getLblOptionSelected().setText("Statistic");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
         setTableStats();
     }
     private void viewAllAttendance(){
-        view.getCl().show(view.getPanelcenter(),"View All Attendance");
+        view.getCardLayout().show(view.getPanelCenter(),"View All Attendance");
         view.getLblOptionSelected().setText("View All Attendance");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
     }
 
     private void showLecturer(){
-        view.getCl().show(view.getPanelcenter(),"View Lecturer");
+        view.getCardLayout().show(view.getPanelCenter(),"View Lecturer");
         view.getLblOptionSelected().setText("View Lecturers");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
@@ -103,7 +103,7 @@ public class AdminController {
     }
 
     private void showStudent(){
-        view.getCl().show(view.getPanelcenter(),"View Student");
+        view.getCardLayout().show(view.getPanelCenter(),"View Student");
         view.getLblOptionSelected().setText("View Students");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
@@ -111,7 +111,7 @@ public class AdminController {
     }
 
     private void generateReport(){
-        view.getCl().show(view.getPanelcenter(),"View Report");
+        view.getCardLayout().show(view.getPanelCenter(),"View Report");
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
@@ -119,14 +119,14 @@ public class AdminController {
     }
 
     private void showSearch() {
-        view.getCl().show(view.getPanelcenter(),"search");
+        view.getCardLayout().show(view.getPanelCenter(),"search");
         view.getLblOptionSelected().setText("Search Student");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
     }
 
     private void showDefaulter() {
-        view.getCl().show(view.getPanelcenter(),"Defaulter list");
+        view.getCardLayout().show(view.getPanelCenter(),"Defaulter list");
         view.getLblOptionSelected().setText("Defaulter List");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
@@ -134,7 +134,7 @@ public class AdminController {
     }
 
     private void showAdd() {
-        view.getCl().show(view.getPanelcenter(),"Add lecturer");
+        view.getCardLayout().show(view.getPanelCenter(),"Add lecturer");
         view.getLblOptionSelected().setText("Add Lecturer");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);

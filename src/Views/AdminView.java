@@ -19,17 +19,17 @@ import java.sql.*;
 public class AdminView {
     DefaultTableModel TblModelStats, TblModelDefaulter, TblModelReport,TblModelStudent,TblModelLecturers;
     private JFrame frame;
-    private AASButton  btnLogout, btnMod[],BtnaddLecturer, btnGenerateReport;
+    private AASButton  btnLogout, btnAddLecturer, btnGenerateReport;
     private ButtonGroup radioGroup;
     private AASTable tableStats, tableDefaulter, tableReport,tableStudent, tableLecturers;
     private JComboBox comboBoxModule;
     private AASLabel lblUser, lblOptionSelected, lblModuleSelected, lblFor;
-    private JPanel panelcenter ,panelnavbar, paneldate, panelMain,panelSearch;
-    private JPanel cardReport, cardViewAllAttendance, cardstats,cardsearch,cardDefaulter,cardAdd,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportBottomPanel;
+    private JPanel panelCenter, panelNavbar, panelDate, panelMain;
+    private JPanel cardReport, cardViewAllAttendance, cardStats, cardSearch,cardDefaulter, cardAddLecturer,cardViewLecturer,cardViewStudent, ResultPanel,AttendancePanel,reportTopPanel,reportBottomPanel;
     private AASRadioButton rdBtnSearch,rdBtnDefaulter,rdBtnAdd, rdBtnViewLecturer, rdBtnViewStudent, rdBtnReportGeneration,rdBtnStatistics, rdBtnAllAttendance ;
     private JTextField SearchBar;
 
-    private AASLabel lblName,lblUsrName,lblPass, clock, lblFrom, lblTo;
+    private AASLabel lblName, lblUserName,lblPass, clock, lblFrom, lblTo;
 
     private JTextField txtName, txtUserName, txtPassword;
     private AASButton btnGo;
@@ -38,10 +38,10 @@ public class AdminView {
 
     private JDateChooser dateChooserFrom, dateChooserTo;
 
-    UtilDateModel modeldate ;
+    UtilDateModel modelDate;
     JDatePanelImpl datePanel;
     JDatePickerImpl datePicker ;
-    CardLayout cl = new CardLayout();
+    CardLayout cardLayout = new CardLayout();
 
 
     public AdminView(String title){
@@ -64,7 +64,7 @@ public class AdminView {
         rdBtnViewStudent =new AASRadioButton("View Students",false);
         rdBtnReportGeneration=new AASRadioButton("View Report", false);
 
-        BtnaddLecturer=new AASButton("Add");
+        btnAddLecturer =new AASButton("Add");
 
         radioGroup= new ButtonGroup();
         radioGroup.add(rdBtnSearch);
@@ -105,65 +105,65 @@ public class AdminView {
         dateChooserTo.setPreferredSize(new Dimension(100,25));
 
         //Creating panels
-        panelnavbar = new JPanel();
-        panelcenter = new JPanel();
-        paneldate=new JPanel();
+        panelNavbar = new JPanel();
+        panelCenter = new JPanel();
+        panelDate =new JPanel();
         panelMain=new JPanel();
         cardViewAllAttendance = new JPanel();
         cardViewLecturer=new JPanel();
         cardViewStudent=new JPanel();
-        cardstats = new JPanel();
-        cardsearch=new JPanel();
+        cardStats = new JPanel();
+        cardSearch =new JPanel();
         cardDefaulter=new JPanel();
-        cardAdd=new JPanel();
+        cardAddLecturer =new JPanel();
         ResultPanel=new JPanel();
         AttendancePanel=new JPanel();
         cardReport=new JPanel();
         reportBottomPanel=new JPanel();
         reportTopPanel=new JPanel();
 
-        panelcenter.setLayout(cl);
+        panelCenter.setLayout(cardLayout);
 
-        paneldate.setLayout(new GridLayout(1,6));
-        paneldate.setBorder(new EmptyBorder(15,25,15,25));
+        panelDate.setLayout(new GridLayout(1,6));
+        panelDate.setBorder(new EmptyBorder(15,25,15,25));
 
 
-        panelnavbar.setLayout(new GridLayout(14,1,0,10));
-        panelnavbar.setBorder(new EmptyBorder(10,20,10,20) );
+        panelNavbar.setLayout(new GridLayout(14,1,0,10));
+        panelNavbar.setBorder(new EmptyBorder(10,20,10,20) );
 
         panelMain.setLayout(new BorderLayout());
-        panelMain.add(paneldate,BorderLayout.NORTH);
-        panelMain.add(panelcenter,BorderLayout.CENTER);
+        panelMain.add(panelDate,BorderLayout.NORTH);
+        panelMain.add(panelCenter,BorderLayout.CENTER);
 
-        cardstats.setLayout(new BoxLayout(cardstats,BoxLayout.Y_AXIS));
+        cardStats.setLayout(new BoxLayout(cardStats,BoxLayout.Y_AXIS));
         cardDefaulter.setLayout(new BoxLayout(cardDefaulter,BoxLayout.Y_AXIS));
         cardViewStudent.setLayout(new BoxLayout(cardViewStudent,BoxLayout.Y_AXIS));
         cardViewLecturer.setLayout(new BoxLayout(cardViewLecturer,BoxLayout.Y_AXIS));
 
 
         // Add UI element to panels
-        paneldate.setLayout(new BoxLayout(paneldate,BoxLayout.X_AXIS));
-        paneldate.add(lblOptionSelected);
-        paneldate.add(lblFor);
-        paneldate.add(lblModuleSelected);
-        paneldate.add(Box.createGlue());
-        paneldate.add(clock);
+        panelDate.setLayout(new BoxLayout(panelDate,BoxLayout.X_AXIS));
+        panelDate.add(lblOptionSelected);
+        panelDate.add(lblFor);
+        panelDate.add(lblModuleSelected);
+        panelDate.add(Box.createGlue());
+        panelDate.add(clock);
 
 
-        panelnavbar.add(lblUser);
-        panelnavbar.add(Box.createGlue());
-        panelnavbar.add(comboBoxModule);
-        panelnavbar.add(rdBtnStatistics);
-        panelnavbar.add(rdBtnDefaulter);
-        panelnavbar.add(rdBtnReportGeneration);
-        panelnavbar.add(Box.createGlue());
-        panelnavbar.add(rdBtnAllAttendance);
-        panelnavbar.add(rdBtnSearch);
-        panelnavbar.add(rdBtnViewStudent);
-        panelnavbar.add(rdBtnViewLecturer);
-        panelnavbar.add(rdBtnAdd);
-        panelnavbar.add(Box.createGlue());
-        panelnavbar.add(btnLogout);
+        panelNavbar.add(lblUser);
+        panelNavbar.add(Box.createGlue());
+        panelNavbar.add(comboBoxModule);
+        panelNavbar.add(rdBtnStatistics);
+        panelNavbar.add(rdBtnDefaulter);
+        panelNavbar.add(rdBtnReportGeneration);
+        panelNavbar.add(Box.createGlue());
+        panelNavbar.add(rdBtnAllAttendance);
+        panelNavbar.add(rdBtnSearch);
+        panelNavbar.add(rdBtnViewStudent);
+        panelNavbar.add(rdBtnViewLecturer);
+        panelNavbar.add(rdBtnAdd);
+        panelNavbar.add(Box.createGlue());
+        panelNavbar.add(btnLogout);
 
 
         //Card Report
@@ -179,12 +179,12 @@ public class AdminView {
 
 
         //add colour to panels
-        panelnavbar.setBackground(Color.decode("#00adb5"));
-        paneldate.setBackground(Color.darkGray);
-        cardstats.setBackground(Color.yellow);
-        cardsearch.setBackground(Color.darkGray);
+        panelNavbar.setBackground(Color.decode("#00adb5"));
+        panelDate.setBackground(Color.darkGray);
+        cardStats.setBackground(Color.yellow);
+        cardSearch.setBackground(Color.darkGray);
         cardDefaulter.setBackground(Color.darkGray);
-        cardAdd.setBackground(Color.darkGray);
+        cardAddLecturer.setBackground(Color.darkGray);
         cardViewLecturer.setBackground(Color.darkGray);
         cardViewAllAttendance.setBackground(Color.CYAN);
         cardViewStudent.setBackground(Color.MAGENTA);
@@ -192,14 +192,14 @@ public class AdminView {
 
 
         //adding card to panel
-        panelcenter.add(cardstats,"stats");
-        panelcenter.add(cardsearch,"search");
-        panelcenter.add(cardDefaulter,"Defaulter list");
-        panelcenter.add(cardAdd,"Add lecturer");
-        panelcenter.add(cardViewAllAttendance,"View All Attendance");
-        panelcenter.add(cardViewLecturer,"View Lecturer");
-        panelcenter.add(cardViewStudent,"View Student");
-        panelcenter.add(cardReport,"View Report");
+        panelCenter.add(cardStats,"stats");
+        panelCenter.add(cardSearch,"search");
+        panelCenter.add(cardDefaulter,"Defaulter list");
+        panelCenter.add(cardAddLecturer,"Add lecturer");
+        panelCenter.add(cardViewAllAttendance,"View All Attendance");
+        panelCenter.add(cardViewLecturer,"View Lecturer");
+        panelCenter.add(cardViewStudent,"View Student");
+        panelCenter.add(cardReport,"View Report");
 
 
 
@@ -216,7 +216,7 @@ public class AdminView {
         paneStats.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         paneStats.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        cardstats.add(paneStats);
+        cardStats.add(paneStats);
 
 
 
@@ -296,7 +296,7 @@ public class AdminView {
         AttendancePanel.add(paneAttendance);
 
 
-        cardsearch.setLayout(new BorderLayout());
+        cardSearch.setLayout(new BorderLayout());
         JPanel panelSearch = new JPanel();
         panelSearch.add(SearchBar);
         panelSearch.add(btnGo);
@@ -306,8 +306,8 @@ public class AdminView {
         panelSearchTables.add(AttendancePanel);
         JScrollPane searchTablesScroll = new JScrollPane(panelSearchTables,ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        cardsearch.add(panelSearch,BorderLayout.NORTH);
-        cardsearch.add(searchTablesScroll,BorderLayout.CENTER);
+        cardSearch.add(panelSearch,BorderLayout.NORTH);
+        cardSearch.add(searchTablesScroll,BorderLayout.CENTER);
 
         TblModelLecturers = new DefaultTableModel();
         tableLecturers = new AASTable(TblModelLecturers){
@@ -349,7 +349,7 @@ public class AdminView {
 
 
         lblName =new AASLabel("Name");
-        lblUsrName=new AASLabel("Username");
+        lblUserName =new AASLabel("Username");
         lblPass=new AASLabel("Password");
 
         txtName =new JTextField(10);
@@ -357,23 +357,23 @@ public class AdminView {
         txtUserName =new JTextField(10);
         txtPassword =new JTextField(10);
 
-        cardAdd.setLayout(new GridLayout(5,2,50,50));
-        cardAdd.setBorder(new EmptyBorder(50,20,20,20) );
+        cardAddLecturer.setLayout(new GridLayout(5,2,50,50));
+        cardAddLecturer.setBorder(new EmptyBorder(50,20,20,20) );
 
-        cardAdd.add(lblName);
-        cardAdd.add(txtName);
-        cardAdd.add(lblUsrName);
-        cardAdd.add(txtUserName);
-        cardAdd.add(lblPass);
-        cardAdd.add(txtPassword);
-        cardAdd.add(Box.createGlue());
-        cardAdd.add(BtnaddLecturer);
+        cardAddLecturer.add(lblName);
+        cardAddLecturer.add(txtName);
+        cardAddLecturer.add(lblUserName);
+        cardAddLecturer.add(txtUserName);
+        cardAddLecturer.add(lblPass);
+        cardAddLecturer.add(txtPassword);
+        cardAddLecturer.add(Box.createGlue());
+        cardAddLecturer.add(btnAddLecturer);
 
 
 
 
         //Adding panels to frame
-        frame.add(panelnavbar,BorderLayout.WEST);
+        frame.add(panelNavbar,BorderLayout.WEST);
         frame.add(panelMain,BorderLayout.CENTER);
 
     }
@@ -394,8 +394,8 @@ public class AdminView {
         return datePicker;
     }
 
-    public UtilDateModel getModeldate() {
-        return modeldate;
+    public UtilDateModel getModelDate() {
+        return modelDate;
     }
 
     public DefaultTableModel getTblModelReport() {
@@ -405,20 +405,16 @@ public class AdminView {
     public DefaultTableModel getTblModelStats() {
         return TblModelStats;
     }
-    public JPanel getPanelcenter() {
-        return panelcenter;
+    public JPanel getPanelCenter() {
+        return panelCenter;
     }
 
-    public CardLayout getCl() {
-        return cl;
+    public CardLayout getCardLayout() {
+        return cardLayout;
     }
 
     public AASButton getBtnLogout() {
         return btnLogout;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
     }
 
     public AASRadioButton getRdBtnReportGeneration() {
@@ -443,14 +439,6 @@ public class AdminView {
 
     public AASRadioButton getRdBtnAdd(){return rdBtnAdd;}
 
-    public JPanel getPanelnavbar() {
-        return panelnavbar;
-    }
-
-    public AASButton[] getBtnMod() {
-        return btnMod;
-    }
-
     public AASLabel getLblUser() {
         return lblUser;
     }
@@ -463,7 +451,7 @@ public class AdminView {
         this.comboBoxModule = comboBoxModule;
     }
 
-    public AASButton getBtnaddLecturer(){return BtnaddLecturer;}
+    public AASButton getBtnAddLecturer(){return btnAddLecturer;}
 
     public JTextField getTxtName(){return txtName;}
 
