@@ -61,9 +61,6 @@ public class AdminController {
 
     public void reportDateFromTo(){
 
-        view.getDateChooserFrom().setDate(new java.util.Date());
-        view.getDateChooserTo().setDate(new java.util.Date());
-
         if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){
             JOptionPane.showMessageDialog(view.getFrame(), "Please choose both DateFrom and DateTo", "Alert", JOptionPane.ERROR_MESSAGE);
             return;
@@ -115,7 +112,6 @@ public class AdminController {
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
-        reportDateFromTo();
     }
 
     private void showSearch() {
