@@ -22,7 +22,6 @@ public class AdminController {
         model = m;
         view = v;
         initView();
-        setcomBoModule();
     }
     public void initView() {
         view.getFrame().setSize(700,500);
@@ -164,15 +163,6 @@ public class AdminController {
         view.getClock().setFont(new Font("Roboto",Font.PLAIN,13));
     }
 
-    private void setcomBoModule(){
-
-        view.getComboBoxModule().addActionListener(e->comBoModAction());
-    }
-
-    void comBoModAction(){
-        view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
-
-    }
 
     void addLecturer() {
 
