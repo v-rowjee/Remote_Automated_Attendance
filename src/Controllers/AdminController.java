@@ -22,17 +22,14 @@ public class AdminController {
         model = m;
         view = v;
         initView();
-        setcomBoModule();
     }
     public void initView() {
         view.getFrame().setSize(700,500);
-        view.getCl().show(view.getPanelcenter(),"Statistic");
+        view.getCardLayout().show(view.getPanelCenter(),"Statistic");
         centreWindow(view.getFrame());
         view.getLblUser().setText("Welcome, " + model.getName());
         setCurrentDateTime();
         setTableStats();
-
-
     }
 
     public void initController() {
@@ -44,7 +41,7 @@ public class AdminController {
         view.getRdBtnAllAttendance().addActionListener(e->viewAllAttendance());
         view.getRdBtnViewStudent().addActionListener(e->showStudent());
         view.getRdBtnAdd().addActionListener(e->showAdd());
-        view.getBtnaddLecturer().addActionListener(e->addLecturer());
+        view.getBtnAddLecturer().addActionListener(e->addLecturer());
         view.getBtnGo().addActionListener(e->Search());
         view.getBtnLogout().addActionListener(e-> logout());
         view.getComboBoxModule().addActionListener(e -> comboBoxAction());
@@ -63,6 +60,10 @@ public class AdminController {
     }
 
     public void reportDateFromTo(){
+
+        view.getDateChooserFrom().setDate(new java.util.Date());
+        view.getDateChooserTo().setDate(new java.util.Date());
+
         if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){
             JOptionPane.showMessageDialog(view.getFrame(), "Please choose both DateFrom and DateTo", "Alert", JOptionPane.ERROR_MESSAGE);
             return;
@@ -80,22 +81,21 @@ public class AdminController {
     }
 
     private void showStatistic() {
-        view.getCl().show(view.getPanelcenter(),"stats");
+        view.getCardLayout().show(view.getPanelCenter(),"stats");
         view.getLblOptionSelected().setText("Statistic");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
         setTableStats();
     }
     private void viewAllAttendance(){
-        view.getCl().show(view.getPanelcenter(),"View All Attendance");
+        view.getCardLayout().show(view.getPanelCenter(),"View All Attendance");
         view.getLblOptionSelected().setText("View All Attendance");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
     }
 
-
     private void showLecturer(){
-        view.getCl().show(view.getPanelcenter(),"View Lecturer");
+        view.getCardLayout().show(view.getPanelCenter(),"View Lecturer");
         view.getLblOptionSelected().setText("View Lecturers");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
@@ -103,7 +103,7 @@ public class AdminController {
     }
 
     private void showStudent(){
-        view.getCl().show(view.getPanelcenter(),"View Student");
+        view.getCardLayout().show(view.getPanelCenter(),"View Student");
         view.getLblOptionSelected().setText("View Students");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
@@ -111,22 +111,22 @@ public class AdminController {
     }
 
     private void generateReport(){
-        view.getCl().show(view.getPanelcenter(),"View Report");
+        view.getCardLayout().show(view.getPanelCenter(),"View Report");
         view.getLblOptionSelected().setText("Report");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
-
+        reportDateFromTo();
     }
 
     private void showSearch() {
-        view.getCl().show(view.getPanelcenter(),"search");
+        view.getCardLayout().show(view.getPanelCenter(),"search");
         view.getLblOptionSelected().setText("Search Student");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
     }
 
     private void showDefaulter() {
-        view.getCl().show(view.getPanelcenter(),"Defaulter list");
+        view.getCardLayout().show(view.getPanelCenter(),"Defaulter list");
         view.getLblOptionSelected().setText("Defaulter List");
         view.getLblFor().setVisible(true);
         view.getLblModuleSelected().setVisible(true);
@@ -134,7 +134,7 @@ public class AdminController {
     }
 
     private void showAdd() {
-        view.getCl().show(view.getPanelcenter(),"Add lecturer");
+        view.getCardLayout().show(view.getPanelCenter(),"Add lecturer");
         view.getLblOptionSelected().setText("Add Lecturer");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
@@ -163,15 +163,6 @@ public class AdminController {
         view.getClock().setFont(new Font("Roboto",Font.PLAIN,13));
     }
 
-    private void setcomBoModule(){
-
-        view.getComboBoxModule().addActionListener(e->comBoModAction());
-    }
-
-    void comBoModAction(){
-        view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
-
-    }
 
     void addLecturer() {
 
@@ -327,37 +318,37 @@ public class AdminController {
 
     void Search() {
 
-        final String query = "SELECT id,name,course FROM student WHERE name=?";
+        int sid = 0;
+
+        final String query = "SELECT id,name,course FROM student WHERE name LIKE ?";
         //final String query1 = "SELECT a.mid,a.sid,a.date,a.presence FROM attendance a INNER JOIN student s ON a.sid=s.id WHERE name=? GROUP BY a.mid DESC";
-        final String query1 = "SELECT mid,sid,date,presence FROM attendance WHERE sid= 1";
+        final String query1 = "SELECT mid,sid,date,presence FROM attendance WHERE sid= ?";
         String name;
         try {
-            final String dbURL = "jdbc:mysql://localhost:3306/attendance";
-            final String username = "root";
-            final String password = "";
-            Connection conn = DriverManager.getConnection(dbURL, username, password);
+            Connection conn = Database.getConnection();
             name = view.getSearchBar().getText();
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, name);
-
+            stmt.setString(1, name+"%");
 
             ResultSet rs = stmt.executeQuery();
 
             Object[][] data = new Object[1][3];
-            int i = 0;
-            while (rs.next()) {
-                data[i][0] = rs.getString("id");
-                data[i][1] = rs.getString("name");
-                data[i][2] = rs.getString("course");
+            if(rs!= null){
+                while (rs.next()) {
+                    sid = rs.getInt("id");
+                    data[0][0] = sid;
+                    data[0][1] = rs.getString("name");
+                    data[0][2] = rs.getString("course");
 
-                i++;
+                    break;
+                }
             }
             String columns[] = {"id", "name", "course"};
             view.getTableInfo().setDataVector(data, columns);
 
 
             PreparedStatement stmt1 = conn.prepareStatement(query1, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            //stmt1.setString(1, name);
+            stmt1.setInt(1, sid);
 
             ResultSet rs1 = stmt1.executeQuery();
 
