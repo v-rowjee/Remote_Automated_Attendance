@@ -8,13 +8,13 @@ import java.awt.*;
 import java.net.URL;
 
 public class LoginView {
-    JFrame frame;
-    JPanel panel;
-    JLabel lblUsername, lblPassword, image;
-    AASTextField txtUsername;
-    JPasswordField txtPassword;
-    AASCheckBox chxShowPassword;
-    AASButton btnLogin;
+    private JFrame frame;
+    private JPanel panel;
+    private JLabel lblUsername, lblPassword, image;
+    private AASTextField txtUsername;
+    private JPasswordField txtPassword;
+    private AASCheckBox chxShowPassword;
+    private AASButton btnLogin;
 
     public LoginView(String title){
         frame = new JFrame(title);
