@@ -52,6 +52,7 @@ public class AdminController {
     private void comboBoxAction(){
         setTableDefaulter();
         setTableStats();
+        view.getLblModuleSelected().setText((String) view.getComboBoxModule().getSelectedItem());
 
 
         if (view.getDateChooserFrom().getDate()==null || view.getDateChooserTo().getDate()==null ){}else{
@@ -419,7 +420,7 @@ public class AdminController {
             }
 
 
-            String columns1[] = {"","Mid", "Date", "Presence"};
+            String columns1[] = {"","Module Name", "Date", "Presence"};
             view.getTableAttendance().setDataVector(data1, columns1);
 
 

@@ -182,8 +182,8 @@ public class LecturerController {
 
                     data[i][0] = String.valueOf(s.getId());
                     data[i][1] = s.getName();
-                    data[i][2] = null;
-                    data[i][3] = null;
+                    data[i][2] = false;
+                    data[i][3] = false;
                     i++;
 
                 }
