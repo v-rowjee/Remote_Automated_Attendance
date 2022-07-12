@@ -121,6 +121,7 @@ public class AdminController {
         view.getLblOptionSelected().setText("Search Student");
         view.getLblModuleSelected().setVisible(false);
         view.getLblFor().setVisible(false);
+        setAllAttendance();
     }
 
     private void showDefaulter() {
@@ -165,22 +166,32 @@ public class AdminController {
     void addLecturer() {
 
         final String query = "INSERT INTO user (name,username,password,type)VALUES (?,?,?,'lecturer')";
+        final String query1 = "SELECT name FROM user WHERE name=?";
         try {
             final String dbURL = "jdbc:mysql://localhost:3306/attendance";
             final String username = "root";
             final String password = "";
             Connection conn = DriverManager.getConnection(dbURL, username, password);
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, view.getTxtName().getText());
-            stmt.setString(2, view.getTxtUserName().getText());
-            stmt.setString(3, view.getTxtPassword().getText());
-            int rs = stmt.executeUpdate();
+            PreparedStatement stmt1 = conn.prepareStatement(query1);
+            stmt1.setString(1, view.getTxtName().getText());
+            ResultSet rs1 = stmt1.executeQuery();
 
-            if (rs == 0) {
-                JOptionPane.showMessageDialog(null, "No lecturer added!", "Error!", JOptionPane.ERROR_MESSAGE);
+            if (!rs1.next()) {
+
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, view.getTxtName().getText());
+                stmt.setString(2, view.getTxtUserName().getText());
+                stmt.setString(3, view.getTxtPassword().getText());
+                int rs = stmt.executeUpdate();
+
+                if (rs == 0) {
+                    JOptionPane.showMessageDialog(null, "No lecturer added!", "Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "lecturer added!", "SUCCESS!", JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "lecturer added!", "SUCCESS!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "lecturer already in!", "Error!", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (SQLException e) {
@@ -525,6 +536,48 @@ public class AdminController {
             e.getStackTrace();
             JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Student Table","Alert",JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    void setAllAttendance(){
+        String queryReport ="SELECT  mid,sid,date, presence FROM attendance ORDER BY date";
+
+        try{
+            Connection conn = Database.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(queryReport,ResultSet.TYPE_SCROLL_SENSITIVE,     ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
+
+
+            int rowCount =0;
+            rs.last();
+            rowCount=rs.getRow();
+            rs.beforeFirst();
+
+            Object[][] data2 = new Object[rowCount][4];
+            int i=0;
+            while(rs.next()){
+
+                data2[i][0] = rs.getInt("mid");
+                data2[i][1] = rs.getInt("sid");
+                data2[i][2] = rs.getDate("date");
+                if (rs.getInt("presence")==1){
+                    data2[i][3] = "Present";
+                }
+                else{
+                    data2[i][3] = "Absent";
+                }
+
+                i++;
+            }
+
+            String columns2[] = { "module Id", "student id","date" ,"presence"};
+            view.getTblModelAllAttendance().setDataVector(data2,columns2);
+
+        } catch (SQLException e) {
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(view.getFrame(),"Error Connecting To Database Admin Controller Student Table","Alert",JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 
