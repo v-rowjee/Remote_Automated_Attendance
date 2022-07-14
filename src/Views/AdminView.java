@@ -533,6 +533,10 @@ public class AdminView {
         return TblModelDefaulter;
     }
 
+    public AASTable getTableAllAttendance() {
+        return tableAllAttendance;
+    }
+
     public AASRadioButton getRdBtnViewLecturer() {
         return rdBtnViewLecturer;
     }
