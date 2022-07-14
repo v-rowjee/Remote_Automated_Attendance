@@ -167,17 +167,18 @@ public class AdminController {
 
         final String query = "INSERT INTO user (name,username,password,type)VALUES (?,?,?,'lecturer')";
         final String query1 = "SELECT name FROM user WHERE name=?";
+
         try {
             final String dbURL = "jdbc:mysql://localhost:3306/attendance";
             final String username = "root";
             final String password = "";
             Connection conn = DriverManager.getConnection(dbURL, username, password);
 
-            PreparedStatement stmt1 = conn.prepareStatement(query1);
-            stmt1.setString(1, view.getTxtName().getText());
-            ResultSet rs1 = stmt1.executeQuery();
+                PreparedStatement stmt1 = conn.prepareStatement(query1);
+                stmt1.setString(1, view.getTxtName().getText());
+                ResultSet rs1 = stmt1.executeQuery();
 
-            if (!rs1.next()) {
+                if (!rs1.next()) {
 
                 PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setString(1, view.getTxtName().getText());
@@ -191,8 +192,9 @@ public class AdminController {
                     JOptionPane.showMessageDialog(null, "lecturer added!", "SUCCESS!", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "lecturer already in!", "Error!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "lecturer already in!", "!", JOptionPane.INFORMATION_MESSAGE);
             }
+
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(view.getFrame(), "Error Connecting To Database", "Alert", JOptionPane.ERROR_MESSAGE);
